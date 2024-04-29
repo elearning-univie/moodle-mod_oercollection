@@ -13,4 +13,14 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+/**
+ * Mandatory public API of folder oercollection
+ *
+ * @package   mod_oercollection
+ * @author    Adrian Czermak
+ * @author    Angela Baier
+ * @copyright 2024 University of Vienna
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
+defined('MOODLE_INTERNAL') || die();

@@ -46,7 +46,7 @@ require_capability('mod/oercollection:view', $context);
 
 $oercollection = $DB->get_record('oercollection', array('id' => $cm->instance));
 
-$PAGE->set_url(new moodle_url("/mod/oercollection/view.php", ['id' => $id]));
+$PAGE->set_url(new moodle_url("/mod/oercollection/oercollectionstudentview.php", ['id' => $id]));
 $node = $PAGE->settingsnav->find('mod_oercollection', navigation_node::TYPE_SETTING);
 if ($node) {
     $node->make_active();
@@ -59,11 +59,11 @@ $PAGE->set_heading($course->shortname);
 
 
 $templatecontext = [];
-// $oerexists = false;
+$backtoteacherview = has_capability('mod/oercollection:editresources', $context);
 
 // if ($caneditresources) {
-//     $templatecontext['oerexists'] = $oerexists;
-//     $templatecontext['oerresourcelink'] = new moodle_url("/mod/oercollection/resources.php", ['id' => $id]);
+$templatecontext['backtoteacherview'] = $backtoteacherview;
+$templatecontext['backtoteacherviewlink'] = new moodle_url("/mod/oercollection/oercollectionteacherview.php", ['id' => $id]);
 //     $templatecontext['oersearchlink'] = new moodle_url("/mod/oercollection/resources.php", ['id' => $id]);
 //     $templatecontext['studentpreviewlink'] = new moodle_url("/mod/oercollection/resources.php", ['id' => $id]);
 //     if ($oerexists) {

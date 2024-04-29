@@ -28,6 +28,17 @@
 defined('MOODLE_INTERNAL') || die();
 
 /**
+ * Groups not used in course or activity
+ */
+define('NEWPAGE', 0);
+
+/**
+ * Groups used, users do not see other groups
+ */
+define('THISPAGE', 1);
+
+
+/**
  * Returns the information on whether the module supports a feature
  *
  * @param string $feature FEATURE_xx constant for requested feature
@@ -90,11 +101,9 @@ function oercollection_update_instance($data, $mform) {
     global $DB;
     
     $cmid        = $data->coursemodule;
-    $draftitemid = $data->files;
     
     $data->timemodified = time();
     $data->id           = $data->instance;
-    $data->revision++;
     
     $DB->update_record('oercollection', $data);
     

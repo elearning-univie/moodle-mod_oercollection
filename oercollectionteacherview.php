@@ -64,8 +64,8 @@ $oerexists = false;
 //if ($caneditresources) {
     $templatecontext['oerexists'] = $oerexists;
     $templatecontext['oerresourcelink'] = new moodle_url("/mod/oercollection/resources.php", ['id' => $id]);
-    $templatecontext['oersearchlink'] = new moodle_url("/mod/oercollection/resources.php", ['id' => $id]);
-    $templatecontext['studentpreviewlink'] = new moodle_url("/mod/oercollection/resources.php", ['id' => $id]);
+    $templatecontext['oersearchlink'] = new moodle_url("/mod/oercollection/searchoer.php", ['id' => $id]);
+    $templatecontext['studentpreviewlink'] = new moodle_url("/mod/oercollection/oercollectionstudentview.php", ['id' => $id]);
     if ($oerexists) {
         $templatecontext['linktext'] = 'bla';
     } else {

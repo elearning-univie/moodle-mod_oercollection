@@ -26,6 +26,11 @@
 
 $string['availableresources'] = 'Verfügbare Ressourcen';
 $string['backtoresources'] = 'Zu Ressourcen';
+$string['display'] = 'Darstellung';
+$string['displaymode'] = 'Inhalt anzeigen';
+$string['displaymode_help'] = 'Hifle für Inhalte anzeigen';
+$string['newpage'] = 'Auf seperater Seite';
+$string['thispage'] = 'Auf der Kursseite';
 $string['modulename'] = 'OER Sammlung';
 $string['modulenameplural'] = 'OER Sammlungen';
 $string['noresources'] = 'Zur Zeit sind keine Ressourcen verfügbar.';

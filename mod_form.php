@@ -31,7 +31,7 @@ require_once($CFG->dirroot.'/course/moodleform_mod.php');
 class mod_oercollection_mod_form extends moodleform_mod {
 
     function definition() {
-        global $CFG, $DB, $OUTPUT;
+        global $CFG, $DB, $OUTPUT; 
 
         $mform =& $this->_form;
 
@@ -40,6 +40,15 @@ class mod_oercollection_mod_form extends moodleform_mod {
         $mform->addRule('name', null, 'required', null, 'client');
 
         $this->standard_intro_elements();
+
+        $mform->addElement('header', 'display', get_string('display', 'oercollection'));
+        $options = array(NEWPAGE       => get_string('newpage', 'oercollection'),
+                        THISPAGE => get_string('thispage', 'oercollection'));
+        $mform->addElement('select', 'displaymode', get_string('displaymode', 'oercollection'), $options, NOGROUPS);
+        $mform->addHelpButton('displaymode', 'displaymode', 'oercollection');
+        
+        // hide group mode...for now
+        $this->_features->groups= false;
 
         // Standard Moodle course module elements (course, category, etc.).
         $this->standard_coursemodule_elements();
