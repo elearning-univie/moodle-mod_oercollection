@@ -59,3 +59,11 @@ $string['studentinfodetailed'] = '<details><summary>
 <p> Lorem ipsum dolor sit amet, consectetur adipisicing elit,
       sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
       quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p></details>';
+$string['comment'] = 'Comment';
+$string['editcomment'] = 'Edit Comment';
+$string['move'] = 'Move';
+$string['removeoer'] = 'Remove from Collection';
+$string['showoer'] = 'Show';
+$string['hideoer'] = 'Hide';
+$string['oercommentname'] = 'Comment name';
+$string['oercommentdescription'] = 'Description';
