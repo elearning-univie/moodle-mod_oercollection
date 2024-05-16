@@ -73,7 +73,7 @@ function oercollection_add_instance($data, $mform) {
     global $DB;
     
     $cmid        = $data->coursemodule;
-    $draftitemid = $data->files;
+   // $draftitemid = $data->files;
     
     $data->timemodified = time();
     // If 'showexpanded' is not set, apply the site config.

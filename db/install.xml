@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="mod/oercollection/db" VERSION="20240424" COMMENT="XMLDB file for Folder module"
+<XMLDB PATH="mod/oercollection/db" VERSION="20240516" COMMENT="XMLDB file for Folder module"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
@@ -28,7 +28,7 @@
         <FIELD NAME="oerresourceid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="can be the original OER Hub resource ID or an moodle internal ID connecting to the Hub ID"/>
         <FIELD NAME="apipluginid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="showresource" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false"/>
-        <FIELD NAME="order" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="position" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="notenameinternal" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="notetextinternal" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="resourcelink" TYPE="text" NOTNULL="false" SEQUENCE="false"/>

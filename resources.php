@@ -41,7 +41,7 @@ $context = context_module::instance($cm->id);
 require_login($course, false, $cm);
 require_capability('mod/oercollection:view', $context);
 
-$wordcloud = $DB->get_record('oercollection', array('id' => $cm->instance));
+$oerid = $DB->get_record('oercollection', array('id' => $cm->instance));
 
 $PAGE->set_url(new moodle_url("/mod/oercollection/resources.php", ['id' => $cmid]));
 $node = $PAGE->settingsnav->find('mod_oercollection', navigation_node::TYPE_SETTING);
@@ -50,15 +50,19 @@ if ($node) {
 }
 
 $pagetitle = get_string('pagetitle', 'oercollection');
-$PAGE->set_title($wordcloud->name);
+$PAGE->set_title($oerid->name);
 $PAGE->set_heading($course->shortname);
 $PAGE->add_body_class('limitedwidth');
 
+$oerentries = $DB->get_records('oercollection_resource', ['oerid' => $oerid->id]); //, "postition ASC"
 
 $templatecontext = [];
-$oerexists = false;
 
 if (has_capability('mod/oercollection:editresources', $context)) {
+    $oerexists = $oerentries ? true : false;
+    if ($oerexists) {
+        $templatecontext['oernumber'] = $DB->count_records('oercollection_resource', ['oerid' => $oerid->id]);
+    }
     $templatecontext['oerexists'] = $oerexists;
     $templatecontext['searchoer'] = new moodle_url("/mod/oercollection/searchoer.php", ['id' => $cmid]);
     $templatecontext['studentpreviewlink'] = new moodle_url("/mod/oercollection/oercollectionstudentview.php", ['id' => $cmid]);
@@ -68,6 +72,8 @@ if (has_capability('mod/oercollection:editresources', $context)) {
         $templatecontext['link'] = new moodle_url("/mod/oercollection/resources.php", ['id' => $cmid]);
     }
 }
+
+
 
 //=========== Dummy template for table
 $oerhtml1 = '<div class="d-flex flex-column p-0 text-dark">  
@@ -103,23 +109,53 @@ $oerhtml = '<div>
         Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
       </div>';
 
+
+// get oer entries
+
+
 $oerlist = [];
+
+foreach ($oerentries as $oerentry) {
+    $oerhidden = true;
+    $background = 'bg-light';
+    if($oerentry->showresource) {
+        $oerhidden = false;
+        $background = '';
+    }
+    $commentexists = true;
+    if (is_null($oerentry->notetextinternal) || empty($oerentry->notetextinternal)) {
+        $commentexists = false;
+    }
+    $commentlink = new moodle_url("/mod/oercollection/oercomment.php", ['id' => $cmid, 'oereid' => $oerentry->id]);
+    $oerlist[] = array(
+        'oerentryid' => $oerentry->id,
+        'oerhtml' => $oerhtml,
+        'oerhidden' => $oerhidden,
+        'background' => $background,
+        'commentexists' => $commentexists,
+        'commentlink' => $commentlink->out(false),
+        'commenttext' => $oerentry->notetextinternal,
+        'commentname' => $oerentry->notenameinternal,
+    );
+}
+
+
 // Testdata 1
 $oerhidden = false;
 $oerid = 1;
-$oerentryid = 1;
+$oerentryid = 11;
 $commentexists = true;
 $commentlink = new moodle_url("/mod/oercollection/oercomment.php", ['id' => $cmid, 'oereid' => $oerentryid]);
 $oerlist[] = array('oerid' => '11', 'oerhtml' => $oerhtml1, 'oerhidden' => $oerhidden, 'background' => '', 'commentexists' => $commentexists, 'commentlink' => $commentlink->out(false));
 // Testdata 2
 $oerhidden = true;
-$oerentryid = 2;
+$oerentryid = 12;
 $commentlink = new moodle_url("/mod/oercollection/oercomment.php", ['id' => $cmid, 'oereid' => $oerentryid]);
 $commentexists = true;
 $oerlist[] = array('oerid' => '11', 'oerhtml' => $oerhtml2, 'oerhidden' => $oerhidden, 'background' => 'bg-light', 'commentexists' => $commentexists, 'commentlink' => $commentlink->out(false));
 // Testdata 3
 $oerhidden=true;
-$oerentryid = 3;
+$oerentryid = 13;
 $commentexists = false;
 $commentlink = new moodle_url("/mod/oercollection/oercomment.php", ['id' => $cmid, 'oereid' => $oerentryid]);
 $oerlist[] = array('oerid' => '22', 'oerhtml' => $oerhtml, 'oerhidden' => $oerhidden, 'background' => 'bg-light', 'commentexists' => $commentexists, 'commentlink' => $commentlink->out(false));

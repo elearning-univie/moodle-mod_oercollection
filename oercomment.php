@@ -31,7 +31,7 @@ global $PAGE, $OUTPUT, $DB, $CFG;
 
 $cmid = required_param('id', PARAM_INT);
 $oerentryid = required_param('oereid', PARAM_INT);
-echo "WAAAAAAAAAAAAAAAAAAaaaa  $cmid";
+
 $url = new moodle_url("/mod/oercollection/oercomment.php", ['id' => $cmid, 'oereid' => $oerentryid]);
 $PAGE->set_url($url);
 
@@ -58,20 +58,28 @@ $PAGE->set_title("Titolooo");
 $PAGE->set_heading($course->shortname);
 $PAGE->add_body_class('limitedwidth');
 
-
+$oerentry = $DB->get_record('oercollection_resource', ['id' => $oerentryid]);
 
 
 $origin = new moodle_url("/mod/oercollection/resources.php", ['id' => $cmid]);
 
+//print_object($oerentry);
+$mform = new mod_oercollection\form\oercommentform($url->out(false), $oerentryid, $oerid, $cmid, true);
 
-$mform = new mod_oercollection\form\oercommentform($origin->out(false), $oerentryid, $oerid, $cmid);
-
-//$mform->set_data();
+$formdata = new stdClass();
+$formdata->notenameinternal = $oerentry->notenameinternal;
+$formdata->notetextinternal['text'] = $oerentry->notetextinternal;
+$mform->set_data($formdata);
 
 if ($mform->is_cancelled()) {
+    $DB->update_record('oercollection_resource', $oerentry);
     redirect($origin->out(false));
 } else if ($fromform = $mform->get_data()) {
-
+    $oerentry->notenameinternal = $fromform->notenameinternal;
+    $oerentry->notetextinternal = $fromform->notetextinternal['text'];
+   /// print_object($oerentry);
+    $DB->update_record('oercollection_resource', $oerentry);
+    redirect($origin->out(false));
 }
 
 $PAGE->set_title("Anmerkungen");
@@ -86,6 +94,7 @@ $activityheader = $PAGE->activityheader;
 //echo $OUTPUT->header();
 $renderer = $PAGE->get_renderer('core');
 echo $renderer->header();
+print_object($oerentry);
 //print_object($origin->out());
 $mform->display();
 echo $renderer->footer();

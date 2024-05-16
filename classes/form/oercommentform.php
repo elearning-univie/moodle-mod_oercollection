@@ -49,6 +49,8 @@ class oercommentform extends \moodleform {
     public $oerentryid;
     /** @var int oer activity id */
     public $oerid;
+    /** @var int cmid */
+    public $id;
     /**
      * simplequestionform constructor.
      *
@@ -65,12 +67,14 @@ class oercommentform extends \moodleform {
 
         $this->oerentryid = $oerentryid;
         $this->oerid = $oerid;
+        $this->id = $cmid;
 
+        $this->editoroptions = array('subdirs' => 1, 'maxfiles' => EDITOR_UNLIMITED_FILES,
+            'context' => $this->context);
 //         $record = $DB->get_record('question_categories',
 //                     array('id' => $question->questioncategoryid), 'contextid');
         
         $this->context = \context::instance_by_id($this->oerid);
-        echo "UUUUUUUUUUUUUUUUUUUUUUU";
 
         parent::__construct($submiturl, null, 'post', '', null, $formeditable);
     }
@@ -90,12 +94,12 @@ class oercommentform extends \moodleform {
         $mform->addElement('text', 'notenameinternal', get_string('oercommentname', 'mod_oercollection'),
                 array('size' => 50, 'maxlength' => 255));
         $mform->setType('notenameinternal', PARAM_TEXT);
-        $mform->addRule('notenameinternal', null, 'required', null, 'client');
+        //$mform->addRule('notenameinternal', null, 'required', null, 'client');
 
         $mform->addElement('editor', 'notetextinternal', get_string('oercommentdescription', 'mod_oercollection'),
                 array('rows' => 15), $this->editoroptions);
         $mform->setType('notetextinternal', PARAM_RAW);
-        $mform->addRule('notetextinternal', null, 'required', null, 'client');
+       // $mform->addRule('notetextinternal', null, 'required', null, 'client');
 
         $this->add_hidden_fields();
         $this->add_action_buttons(true, get_string('savechanges'));
@@ -121,81 +125,12 @@ class oercommentform extends \moodleform {
      */
     protected function add_hidden_fields() {
         $mform = $this->_form;
-
-        $mform->addElement('hidden', 'id');
+        
+        $mform->addElement('hidden', 'id', $this->id);
         $mform->setType('id', PARAM_INT);
 
-        $mform->addElement('hidden', 'oereid');
+        $mform->addElement('hidden', 'oereid', $this->oerentryid);
         $mform->setType('oereid', PARAM_INT);
         
-    }
-
-    /**
-     * Transforms data from the form into the question db form
-     * @param array|\stdClass $question
-     * @throws \coding_exception
-     */
-    public function set_data($question) {
-        \question_bank::get_qtype($question->qtype)->set_default_options($question);
-
-        // Prepare question text.
-        $draftid = file_get_submitted_draft_itemid('questiontext');
-
-        if (!empty($question->questiontext)) {
-            $questiontext = $question->questiontext;
-        } else {
-            $questiontext = $this->_form->getElement('questiontext')->getValue();
-            $questiontext = $questiontext['text'];
-        }
-        $questiontext = file_prepare_draft_area($draftid, $this->context->id,
-                'question', 'questiontext', empty($question->id) ? null : (int) $question->id,
-                $this->fileoptions, $questiontext);
-
-        $question->questiontext = array();
-        $question->questiontext['text'] = $questiontext;
-        $question->questiontext['format'] = empty($question->questiontextformat) ?
-                editors_get_preferred_format() : $question->questiontextformat;
-        $question->questiontext['itemid'] = $draftid;
-
-        $question = $this->data_preprocessing_answers($question, true);
-        parent::set_data($question);
-    }
-
-    /**
-     * Perform the necessary preprocessing for the fields added by
-     * {@see add_per_answer_fields()}.
-     * @param object $question the data being passed to the form.
-     * @param boolean $withanswerfiles
-     * @return object $question the modified data.
-     */
-    protected function data_preprocessing_answers($question, $withanswerfiles = false) {
-        if (empty($question->options->answers)) {
-            return $question;
-        }
-
-        $key = 0;
-        foreach ($question->options->answers as $answer) {
-            if ($withanswerfiles) {
-                // Prepare the feedback editor to display files in draft area.
-                $draftitemid = file_get_submitted_draft_itemid('answer['.$key.']');
-                $question->answer['text'] = file_prepare_draft_area(
-                        $draftitemid,
-                        $this->context->id,
-                        'question',
-                        'answer',
-                        !empty($answer->id) ? (int) $answer->id : null,
-                        $this->fileoptions,
-                        $answer->answer
-                );
-                $question->answer['itemid'] = $draftitemid;
-                $question->answer['format'] = $answer->answerformat;
-            } else {
-                $question->answer[$key] = $answer->answer;
-            }
-
-            $key++;
-        }
-
-        return $question;
     }
 }

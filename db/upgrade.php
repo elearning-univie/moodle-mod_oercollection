@@ -85,6 +85,19 @@ function xmldb_oercollection_upgrade($oldversion = 0) {
         // Oercollection savepoint reached.
         upgrade_mod_savepoint(true, 2024041703, 'oercollection');
     }
+    
+    if ($oldversion < 2024041704) {
+        
+        // Rename field position on table oercollection_resource to NEWNAMEGOESHERE.
+        $table = new xmldb_table('oercollection_resource');
+        $field = new xmldb_field('order', XMLDB_TYPE_INTEGER, '10', null, null, null, null, 'showresource');
+        
+        // Launch rename field position.
+        $dbman->rename_field($table, $field, 'position');
+        
+        // Oercollection savepoint reached.
+        upgrade_mod_savepoint(true, 2024041704, 'oercollection');
+    }
 
     // Everything has succeeded to here. Return true.
     return true;
