@@ -63,6 +63,7 @@ if (has_capability('mod/oercollection:editresources', $context)) {
     if ($oerexists) {
         $templatecontext['oernumber'] = $DB->count_records('oercollection_resource', ['oerid' => $oerid->id]);
     }
+    $templatecontext['oerid'] = $oerid->id;
     $templatecontext['oerexists'] = $oerexists;
     $templatecontext['searchoer'] = new moodle_url("/mod/oercollection/searchoer.php", ['id' => $cmid]);
     $templatecontext['studentpreviewlink'] = new moodle_url("/mod/oercollection/oercollectionstudentview.php", ['id' => $cmid]);
@@ -162,6 +163,8 @@ $oerlist[] = array('oerid' => '22', 'oerhtml' => $oerhtml, 'oerhidden' => $oerhi
 //$templatetable = [];
 $templatecontext['oerresourcelist'] = $oerlist;
 //=====================
+
+$PAGE->requires->js_call_amd('mod_oercollection/resourcecontroller', 'init');
 
 $renderer = $PAGE->get_renderer('core');
 echo $renderer->header();

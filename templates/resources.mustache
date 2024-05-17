@@ -62,7 +62,7 @@
     
        <!-- the checkbox -->
        <div class="d-flex p-2 align-self-center" style="width:5%">
-         <input type="checkbox" id="vehicle2" name="vehicle2" value="Car">
+         <input type="checkbox" id="oerentry_{{oerentryid}}" name="vehicle2" value="Car">
        </div>
     
        <div class="d-flex flex-column flex-grow-1">
@@ -109,18 +109,18 @@
             {{#pix}} a/setting, core {{/pix}}
             {{#str}}editcomment, mod_oercollection{{/str}}
         </a>
-<!--         <a class="dropdown-item" href="#" data-action="collapseallcourseindexsections">
+<!--         <a class="dropdown-item" href="mod_oercollection_set_visibility_oerentry({{oerid}},{{oerentryid}})">
             {{#pix}} i/dragdrop, core {{/pix}}
             {{#str}}move, mod_oercollection{{/str}}
         </a> -->
         {{#oerhidden}}
-        <a class="dropdown-item" href="#" data-action="collapseallcourseindexsections">
+        <a class="dropdown-item" href="#" onclick="$.mod_oercollection_set_visibility_oerentry({{oerid}},{{oerentryid}})">
             {{#pix}} i/hide, core {{/pix}}
             {{#str}}showoer, mod_oercollection{{/str}}
         </a>
         {{/oerhidden}}
         {{^oerhidden}}
-        <a class="dropdown-item" href="#" data-action="collapseallcourseindexsections">
+        <a class="dropdown-item" href="#" onclick="$.mod_oercollection_set_visibility_oerentry({{oerid}},{{oerentryid}})">
             {{#pix}} i/show, core {{/pix}}
             {{#str}}hideoer, mod_oercollection{{/str}}
         </a>

@@ -44,7 +44,7 @@ $context = \context::instance_by_id($oerid);
 require_login($course, false, $cm);
 require_capability('mod/oercollection:view', $context);
 
-//$wordcloud = $DB->get_record('oercollection', array('id' => $cm->instance, 'oereid' => $oerentryid));
+$oer = $DB->get_record('oercollection', array('id' => $cm->instance));
 
 
 $node = $PAGE->settingsnav->find('mod_oercollection', navigation_node::TYPE_SETTING);
@@ -53,8 +53,8 @@ if ($node) {
 }
 
 $pagetitle = get_string('pagetitle', 'oercollection');
-//$PAGE->set_title($wordcloud->name);
-$PAGE->set_title("Titolooo");
+$PAGE->set_title($oer->name);
+//$PAGE->set_title("Titolooo");
 $PAGE->set_heading($course->shortname);
 $PAGE->add_body_class('limitedwidth');
 
@@ -63,7 +63,6 @@ $oerentry = $DB->get_record('oercollection_resource', ['id' => $oerentryid]);
 
 $origin = new moodle_url("/mod/oercollection/resources.php", ['id' => $cmid]);
 
-//print_object($oerentry);
 $mform = new mod_oercollection\form\oercommentform($url->out(false), $oerentryid, $oerid, $cmid, true);
 
 $formdata = new stdClass();
@@ -94,8 +93,6 @@ $activityheader = $PAGE->activityheader;
 //echo $OUTPUT->header();
 $renderer = $PAGE->get_renderer('core');
 echo $renderer->header();
-print_object($oerentry);
-//print_object($origin->out());
 $mform->display();
 echo $renderer->footer();
 //echo $OUTPUT->footer();
