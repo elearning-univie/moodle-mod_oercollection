@@ -49,13 +49,48 @@ if ($node) {
     $node->make_active();
 }
 
-
-
 $pagetitle = get_string('pagetitle', 'oercollection');
 $PAGE->set_title($wordcloud->name);
 $PAGE->set_heading($course->shortname);
 $PAGE->add_body_class('limitedwidth');
 
+
+//=========== Dummy search results
+$oerhtml1 = '<div class="d-flex flex-column p-0 text-dark">
+    <div class="p-1 flex-grow-1">
+    	<a href="https://books.disney.com/book/look-out-for-the-little-guy/"><b>Look Out for the Little Guy!</b></a>
+    </div>
+    <div class="d-flex p-0 text-dark">
+    <div class="p-1" style="width:20%"><img src="https://books.disney.com/content/uploads/2023/02/Look-Out-For-the-Little-Guy-280x419.jpg" alt="W3Schools.com" width="104" height="142" style="float:left"></div>
+    <div class="p-1 flex-grow-1">
+    	<p>In Look Out for the Little Guy, Scott Lang shares with the world a bracingly honest account of his struggles and triumphs, from serving time to being a divorced dad to becoming Ant-Man and joining The Avengers.</p>
+        <p style="">Author: Scott Lang <br>
+        Veröffentlicht: 5. September 2023
+        </p>
+    </div>
+    </div>
+  </div>';
+$oerhtml2 = '<div class="d-flex flex-column p-0 text-dark">
+    <div class="p-1 flex-grow-1">
+    	<a href="https://www.imdb.com/title/tt21190556/"><b>You Can Call Me Bill</b></a>
+    </div>
+    <div class="d-flex p-0 text-dark">
+    <div class="p-1" style="width:20%"><img src="https://m.media-amazon.com/images/I/81fFryd7JdL._AC_UY218_.jpg" alt="W3Schools.com" width="104" height="142" style="float:left"></div>
+    <div class="p-1 flex-grow-1">
+    	<p>Wer kennt ihn nicht als Captain Kirk oder T.J. Hooker? Dies sind nur zwei der unvergesslichen Rollen, denen William Shatner im Laufe von sieben außergewöhnlichen Jahrzehnten auf der Bühne und vor der Kamera Leben eingehaucht hat. YOU CAN CALL ME BILL ist ein intimes Porträt von William Shatners persönlicher Reise durch neun Jahrzehnte.</p>
+        <p style="">Author: William Shatner <br>
+        Veröffentlicht: 16. März 2023
+        </p>
+    </div>
+    </div>
+  </div>';
+//===========
+
+//$oersearchresults = get_search_results();
+$oersearchresults = [];
+
+$oersearchresults[] = array('oerhubid' => 111, 'oerhtml' => $oerhtml1, 'oerresourcelink' => 'bla');
+$oersearchresults[] = array('oerhubid' => 111, 'oerhtml' => $oerhtml2, 'oerresourcelink' => 'bla');
 
 $templatecontext = [];
 $oerexists = false;
@@ -67,7 +102,7 @@ $oerexists = false;
 //}
 
 if (has_capability('mod/oercollection:editresources', $context)) {
-    $templatecontext['oerexists'] = $oerexists;
+    $templatecontext['oersearchresultlist'] = $oersearchresults;
     $templatecontext['searchoer'] = new moodle_url("/mod/oercollection/resources.php", ['id' => $id]);
     $templatecontext['studentpreviewlink'] = new moodle_url("/mod/oercollection/resources.php", ['id' => $id]);
     if ($oerexists) {

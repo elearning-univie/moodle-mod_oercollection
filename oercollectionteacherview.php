@@ -57,15 +57,32 @@ $pagetitle = get_string('pagetitle', 'oercollection');
 $PAGE->set_title($oercollection->name);
 $PAGE->set_heading($course->shortname);
 
+$oeretotalnumber = $DB->count_records('oercollection_resource', ['oerid' => $oercollection->id]);
+$oerevisiblenumber = $DB->count_records('oercollection_resource', ['oerid' => $oercollection->id, 'showresource' => 1]);
+$oerehiddennumber = $DB->count_records('oercollection_resource', ['oerid' => $oercollection->id, 'showresource' => 0]);
 
 $templatecontext = [];
 $oerexists = false;
 
 //if ($caneditresources) {
+if ($oeretotalnumber) {
+    $oerexists = true;
+    $templatecontext['oeretotalnumber'] = $oeretotalnumber;
+    $templatecontext['oerevisiblenumber'] = $oerevisiblenumber; // oerefilter=2
+    $templatecontext['oerehiddennumber'] = $oerehiddennumber; // oerefilter=3
+    $linkvisible = new moodle_url("/mod/oercollection/resources.php", ['id' => $id, 'oerefilter' => 2]);
+    $templatecontext['oerresourcelinkvisible'] = $linkvisible->out(false);
+    $linkhidden = new moodle_url("/mod/oercollection/resources.php", ['id' => $id, 'oerefilter' =>3]);
+    $templatecontext['oerresourcelinkhidden'] = $linkhidden->out(false);
+    
+}
     $templatecontext['oerexists'] = $oerexists;
     $templatecontext['oerresourcelink'] = new moodle_url("/mod/oercollection/resources.php", ['id' => $id]);
     $templatecontext['oersearchlink'] = new moodle_url("/mod/oercollection/searchoer.php", ['id' => $id]);
     $templatecontext['studentpreviewlink'] = new moodle_url("/mod/oercollection/oercollectionstudentview.php", ['id' => $id]);
+    
+    
+    
     if ($oerexists) {
         $templatecontext['linktext'] = 'bla';
     } else {

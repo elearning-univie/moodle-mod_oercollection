@@ -28,13 +28,62 @@
   </div>
   </div>
   <div class="row py-3">
-    <h3>
-      {{# str }} resources, mod_oercollection {{/ str }}
-    </h3>
+    <h4>
+      {{# str }} serachoerhub, mod_oercollection {{/ str }}
+    </h4>
   </div>
 
   <div class="row py-1">
-
+DUMMY SEARCH FORM 
   </div>
+
+
+
+<div class="row py-1"> 
+    <a href="#" onclick="$.mod_oercollection_checkall()">
+        {{#str}}checkall, mod_oercollection{{/str}}
+    </a>
+    <a href="#" onclick="$.mod_oercollection_checknone()">
+        {{#str}}checknone, mod_oercollection{{/str}}
+    </a>
+</div>
+
+{{#oersearchresultlist}}
+<div class="row py-1">  
+
+  <div class="d-flex flex-column mb-3 p-0" style="width:100%;border: 1px LightGrey solid;border-radius: 5px;">
+    <div class="d-flex" style="border: 1px LightGrey solid;">
+    
+       <!-- the checkbox -->
+       <div class="d-flex p-2 align-self-center" style="width:5%;">
+         <input class="mod-oercollection-checkbox" type="checkbox" name="selectbox" value="{{oerentryid}}" onchange="$.mod_oercollection_selected()">
+       </div>
+       <!-- the checkbox END -->    
+
+         <!-- HTML provided by the subplugin -->  
+         <div class="d-flex flex-grow-1 pr-1" style="width:60%;"> {{{oerhtml}}} </div>
+         <!-- HTML provided by the subplugin END -->  
+
+      <!-- the Buttons-->
+      <div class="p-1 flex-fill align-self-center" style="width:10%;">
+         <a class="btn btn-secondary mb-1 px-1" href="{{searchoer}}" style="width:100%;"><small>{{#str}} openresource, mod_oercollection {{/str}}</small></a><br>
+         <a class="btn btn-primary mt-1 px-1" href="{{searchoer}}" style="width:100%;"><small>{{#str}} addtocollection, mod_oercollection {{/str}}</small></a>
+      </div>
+      <!-- the Buttons END-->
+
+    </div>
+  </div>
+
+</div>
+{{/oersearchresultlist}}
+
+
+
+
+
+
+
+
+
 
 </div>

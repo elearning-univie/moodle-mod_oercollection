@@ -27,13 +27,9 @@
 require('../../config.php');
 require_once(__DIR__ . '/lib.php');
 
-// $id = required_param('id', PARAM_INT);
-// [$course, $cm] = get_course_and_cm_from_cmid($id, 'oercollection');
-// $instance = $DB->get_record('oercollection', ['id'=> $cm->instance], '*', MUST_EXIST);
+global $PAGE, $OUTPUT, $DB;
 
-global $PAGE, $OUTPUT, $DB, $CFG;
-
-$id = required_param('id', PARAM_INT);
+$id = required_param('id', PARAM_INT); //cmid!!
 $listview = optional_param('listview', 0, PARAM_INT);
 list ($course, $cm) = get_course_and_cm_from_cmid($id, 'oercollection');
 
@@ -42,7 +38,7 @@ $context = context_module::instance($cm->id);
 require_login($course, false, $cm);
 require_capability('mod/oercollection:view', $context);
 
-//$caneditresources = has_capability('mod/oercollection:editresources', $context);
+$oerid = $DB->get_record('oercollection', array('id' => $cm->instance));
 
 $oercollection = $DB->get_record('oercollection', array('id' => $cm->instance));
 
@@ -51,27 +47,60 @@ $node = $PAGE->settingsnav->find('mod_oercollection', navigation_node::TYPE_SETT
 if ($node) {
     $node->make_active();
 }
-$PAGE->add_body_class('limitedwidth');
 
-$pagetitle = get_string('pagetitle', 'oercollection');
 $PAGE->set_title($oercollection->name);
 $PAGE->set_heading($course->shortname);
+$PAGE->add_body_class('limitedwidth');
 
+$sql = 'SELECT * FROM {oercollection_resource} oerr WHERE oerr.oerid = :oerid AND oerr.showresource = 1';
+$oerentries = $DB->get_records_sql($sql, ['oerid' => $oerid->id]); //, "position ASC"
 
 $templatecontext = [];
+
+if (has_capability('mod/oercollection:editresources', $context)) {
+    $oerexists = $oerentries ? true : false;
+    if ($oerexists) {
+        $templatecontext['oernumber'] = $DB->count_records('oercollection_resource', ['oerid' => $oerid->id]);
+    }
+    $templatecontext['oerid'] = $oerid->id;
+    $templatecontext['oerexists'] = $oerexists;
+    if ($oerexists) {
+        $templatecontext['linktext'] = 'bla';
+    } else {
+        $templatecontext['link'] = new moodle_url("/mod/oercollection/resources.php", ['id' => $cm->id]);
+    }
+}
+
+//=========== Dummy template for table
+$oerhtml = '<div>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.<br>
+        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+      </div>';
+
+// get oer entries
+
+$oerlist = [];
+
+foreach ($oerentries as $oerentry) {
+    $commentexists = true;
+    if (is_null($oerentry->notetextinternal) || empty($oerentry->notetextinternal)) {
+        $commentexists = false;
+    }
+    $oerlist[] = array(
+        'oerentryid' => $oerentry->id,
+        'oerhtml' => $oerhtml,
+        'commentexists' => $commentexists,
+        'commenttext' => $oerentry->notetextinternal,
+        'commentname' => $oerentry->notenameinternal,
+    );
+}
+
+$templatecontext['oerresourcelist'] = $oerlist;
+
 $backtoteacherview = has_capability('mod/oercollection:editresources', $context);
 
-// if ($caneditresources) {
 $templatecontext['backtoteacherview'] = $backtoteacherview;
 $templatecontext['backtoteacherviewlink'] = new moodle_url("/mod/oercollection/oercollectionteacherview.php", ['id' => $id]);
-//     $templatecontext['oersearchlink'] = new moodle_url("/mod/oercollection/resources.php", ['id' => $id]);
-//     $templatecontext['studentpreviewlink'] = new moodle_url("/mod/oercollection/resources.php", ['id' => $id]);
-//     if ($oerexists) {
-//         $templatecontext['linktext'] = 'bla';
-//     } else {
-//         $templatecontext['link'] = new moodle_url("/mod/oercollection/resources.php", ['id' => $id]);
-//     }
-// }
 
 $renderer = $PAGE->get_renderer('core');
 echo $renderer->header();

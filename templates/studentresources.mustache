@@ -40,7 +40,7 @@
     </h3>
   </div>
 
-    <div class="row py-3 alert-info infobox">
+    <div class="row py-3 mb-4 alert-info infobox">
         <div>
             <div class="col">
                 {{notification}}
@@ -49,21 +49,52 @@
         </div>
     </div>
 
-  <div class="row py-3">
-      <div class="table-responsive">
-      <table class="table table-bordered">
-        <tbody>
-          <tr>
-            {{#oerexists}}
-              <td style="width:100%">{{#str}} availableresources, mod_oercollection {{/str}}</td>
-            {{/oerexists}}
-            {{^oerexists}}
-              <td style="width:100%">{{#str}} noresources, mod_oercollection {{/str}}</td>
-            {{/oerexists}}
-          </tr>
-        </tbody>
-      </table>
+
+
+
+{{# oerresourcelist}}
+<div class="row py-1">  
+
+  <div class="d-flex flex-column mb-2 p-0 {{background}}" style="width:100%;border: 1px LightGrey solid;border-radius: 5px;">
+    <div class="d-flex">
+
+       <div class="d-flex flex-column flex-grow-1 p-1">
+       
+         <!-- HTML provided by the subplugin -->  
+         <div class="d-flex flex-grow-1" {{#commentexists}}style="border-bottom: 1px solid LightGrey;"{{/commentexists}}>{{{oerhtml}}}</div>
+         <div class="d-flex flex-grow-1">
+
+           <div class="d-flex flex-grow-1">  
+              <div class="d-flex" style="width:15%">
+                 <div class="d-flex flex-column  flex-grow-1">
+                 
+                    <!-- Comment String; optional -->
+                    {{#commentexists}}
+                    <div class="d-flex">{{#str}} comment, mod_oercollection {{/str}}</div>
+                    {{/commentexists}}
+                    
+                    <!-- visibility info according in moodle style; optional -->
+                    {{#oerhidden}}
+                    <div class="d-flex p-1">
+                        <span class="badge bg-secondary text-dark">{{#str}} hiddenfromstudents {{/str}}</span>
+                    </div>
+                    {{/oerhidden}}
+                 </div>
+              </div>
+              
+              <!-- The actual comment; optional -->
+              {{#commentexists}}
+              <div class="d-flex flex-grow-1">{{{commenttext}}}</div>
+              {{/commentexists}}
+           </div>
+         </div>
+      </div>
+      
     </div>
   </div>
+
+</div>
+{{/ oerresourcelist}}
+
 
 </div>
