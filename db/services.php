@@ -61,4 +61,13 @@ $functions = array(
         'ajax' => true,
         'loginrequired' => true,
     ),
+    'mod_oercollection_add_to_collection' => array(
+        'classname' => 'mod_oercollection_external',
+        'methodname' => 'add_entry_to_collection',
+        'classpath' => 'mod/oercollection/externallib.php',
+        'description' => 'Change visibility setting of an oer collection entry',
+        'type' => 'write',
+        'ajax' => true,
+        'loginrequired' => true,
+    ),
 );

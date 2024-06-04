@@ -112,6 +112,8 @@ if (has_capability('mod/oercollection:editresources', $context)) {
     }
 }
 
+$PAGE->requires->js_call_amd('mod_oercollection/searchcontroller', 'init');
+
 $renderer = $PAGE->get_renderer('core');
 echo $renderer->header();
 echo $renderer->render_from_template('mod_oercollection/searchoer', $templatecontext);

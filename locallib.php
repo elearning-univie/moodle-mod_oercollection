@@ -25,4 +25,4 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-
+define('DEFAULT_PAGE_SIZE', 20);

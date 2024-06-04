@@ -26,14 +26,21 @@
 
 require('../../config.php');
 require_once(__DIR__ . '/lib.php');
+require_once('locallib.php');
 
 global $PAGE, $OUTPUT, $DB;
 
 $id = required_param('id', PARAM_INT); //cmid!!
-$listview = optional_param('listview', 0, PARAM_INT);
+$perpage = optional_param('perpage', DEFAULT_PAGE_SIZE, PARAM_INT);
+$filter = optional_param('oerefilter', 1, PARAM_INT);
+
 list ($course, $cm) = get_course_and_cm_from_cmid($id, 'oercollection');
 
 $context = context_module::instance($cm->id);
+
+if (!in_array($perpage, [10, 20, 50, 100, 5000], true)) {
+    $perpage = DEFAULT_PAGE_SIZE;
+}
 
 require_login($course, false, $cm);
 require_capability('mod/oercollection:view', $context);
@@ -42,7 +49,13 @@ $oerid = $DB->get_record('oercollection', array('id' => $cm->instance));
 
 $oercollection = $DB->get_record('oercollection', array('id' => $cm->instance));
 
-$PAGE->set_url(new moodle_url("/mod/oercollection/oercollectionstudentview.php", ['id' => $id]));
+$params = array();
+$params['id'] = $id;
+$params['perpage'] = $perpage;
+
+$homeurl = new moodle_url("/mod/oercollection/oercollectionstudentview.php", $params);
+$PAGE->set_url($homeurl->out(false));
+
 $node = $PAGE->settingsnav->find('mod_oercollection', navigation_node::TYPE_SETTING);
 if ($node) {
     $node->make_active();
@@ -52,6 +65,9 @@ $PAGE->set_title($oercollection->name);
 $PAGE->set_heading($course->shortname);
 $PAGE->add_body_class('limitedwidth');
 
+$offset = 0;
+
+$paginationsql = "LIMIT $perpage OFFSET $offset";
 $sql = 'SELECT * FROM {oercollection_resource} oerr WHERE oerr.oerid = :oerid AND oerr.showresource = 1';
 $oerentries = $DB->get_records_sql($sql, ['oerid' => $oerid->id]); //, "position ASC"
 
@@ -101,6 +117,10 @@ $backtoteacherview = has_capability('mod/oercollection:editresources', $context)
 
 $templatecontext['backtoteacherview'] = $backtoteacherview;
 $templatecontext['backtoteacherviewlink'] = new moodle_url("/mod/oercollection/oercollectionteacherview.php", ['id' => $id]);
+$templatecontext['selected' . $perpage] = true;
+$templatecontext['actionurl'] = $PAGE->url;
+$templatecontext['sesskey'] = sesskey();
+$templatecontext['id'] = $id;
 
 $renderer = $PAGE->get_renderer('core');
 echo $renderer->header();

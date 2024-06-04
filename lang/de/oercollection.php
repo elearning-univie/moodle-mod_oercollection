@@ -87,4 +87,6 @@ $string['linkhiddenresources'] = '{$a} - für Teilnehmer:innen ausgeblendet';
 $string['serachoerhub'] = 'Suche im OERhub';
 $string['openresource'] = 'Resource öffnen';
 $string['addtocollection'] = 'Zu Kollektion hinzufügen';
+$string['resourcesperpage'] = 'Einträge pro Seite';
+$string['dropdownall'] = 'Alle';
 

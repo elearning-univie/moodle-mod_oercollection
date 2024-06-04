@@ -100,6 +100,19 @@ class mod_oercollection_external extends external_api {
             );
     }
     /**
+     * Returns description of method parameters
+     *
+     * @return external_function_parameters
+     */
+    public static function add_entry_to_collection_parameters() {
+        return new external_function_parameters(
+            array(
+                'oerid' => new external_value(PARAM_INT, 'flashcard activity id', VALUE_REQUIRED),
+                'oerhubid' => new external_value(PARAM_INT, 'oer entry id', VALUE_REQUIRED),
+            )
+            );
+    }
+    /**
      *
      * Removes all selected questions from box 1 to box 0 for the activity
      *
@@ -185,6 +198,22 @@ class mod_oercollection_external extends external_api {
         }
     }
     /**
+     * add oerhub entry to collectyion
+     *
+     * @param int $oerid
+     * @param int $oerhubid
+     */
+    public static function add_entry_to_collection($oerid, $oerhubid) {
+        global $DB;
+        
+        $params = self::validate_parameters(self::add_entry_to_collection_parameters(),
+            array('oerid' => $oerid, 'oerhubid' => $oerhubid));
+        
+//         if ($DB->record_exists('oercollection_resource', ['id' => $oerentryid, 'oerid' => $oerid])) {
+//             $DB->delete_records('oercollection_resource', ['id' => $oerentryid, 'oerid' => $oerid]);
+//         }
+    }
+    /**
      * Returns return value description
      *
      * @return external_value
@@ -214,6 +243,14 @@ class mod_oercollection_external extends external_api {
      * @return external_value
      */
     public static function delete_selected_oerentries_returns() {
+        return null;
+    }
+    /**
+     * Returns return value description
+     *
+     * @return external_value
+     */
+    public static function add_entry_to_collection_returns() {
         return null;
     }
 }
