@@ -54,6 +54,8 @@ $PAGE->set_title($wordcloud->name);
 $PAGE->set_heading($course->shortname);
 $PAGE->add_body_class('limitedwidth');
 
+$searchform = new \oerapi_oerhub\api\general();
+
 
 //=========== Dummy search results
 $oerhtml1 = '<div class="d-flex flex-column p-0 text-dark">
@@ -116,5 +118,7 @@ $PAGE->requires->js_call_amd('mod_oercollection/searchcontroller', 'init');
 
 $renderer = $PAGE->get_renderer('core');
 echo $renderer->header();
+//echo \oerapi_oerhub_get_searchform();
+echo $searchform->get_search_form();
 echo $renderer->render_from_template('mod_oercollection/searchoer', $templatecontext);
 echo $renderer->footer();
