@@ -16,7 +16,7 @@
 
 namespace mod_oercollection\plugininfo;
 
-class oercollectionresources extends \core\plugininfo\base {
+class oerapi extends \core\plugininfo\base {
     /**
      * is_uninstall_allowed
      *

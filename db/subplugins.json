@@ -1,5 +1,5 @@
 {
   "plugintypes": {
-    "oercollectionresources": "mod\/oercollection\/resources"
+    "oerapi": "mod\/oercollection\/resources"
   }
 }
