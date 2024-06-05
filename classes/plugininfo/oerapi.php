@@ -14,23 +14,28 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * Defines the version and other meta-info about the plugin
- *
- * Setting the $plugin->version to 0 prevents the plugin from being installed.
- * See https://docs.moodle.org/dev/version.php for more info.
- *
- * @package   mod_oercollection
- * @author    Adrian Czermak
- * @author    Angela Baier
- * @copyright 2024 University of Vienna
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
+namespace mod_oercollection\plugininfo;
 
-defined('MOODLE_INTERNAL') || die();
+class oerapi extends \core\plugininfo\base {
+    /**
+     * is_uninstall_allowed
+     *
+     * {@inheritDoc}
+     * @see \core\plugininfo\base::is_uninstall_allowed()
+     */
+    public function is_uninstall_allowed()
+    {
+        return true;
+    }
 
-$plugin->component = 'mod_oercollection';
-$plugin->version = 2024041710.01;
-$plugin->release = 'v4.4.0';
-$plugin->requires = 2022041900;
-$plugin->maturity = MATURITY_ALPHA;
+    /**
+     * Pre-uninstall hook.
+     *
+     * {@inheritDoc}
+     * @see \core\plugininfo\base::uninstall_cleanup()
+     */
+    public function uninstall_cleanup()
+    {
+        // TODO
+    }
+}
