@@ -32,6 +32,7 @@ global $PAGE, $OUTPUT, $DB;
 
 $id = required_param('id', PARAM_INT); //cmid!!
 $perpage = optional_param('perpage', DEFAULT_PAGE_SIZE, PARAM_INT);
+$page = optional_param('page', 0, PARAM_INT);
 $filter = optional_param('oerefilter', 1, PARAM_INT);
 
 list ($course, $cm) = get_course_and_cm_from_cmid($id, 'oercollection');
@@ -52,6 +53,9 @@ $oercollection = $DB->get_record('oercollection', array('id' => $cm->instance));
 $params = array();
 $params['id'] = $id;
 $params['perpage'] = $perpage;
+if ($page) {
+    $params['page'] = $page;
+}
 
 $homeurl = new moodle_url("/mod/oercollection/oercollectionstudentview.php", $params);
 $PAGE->set_url($homeurl->out(false));
@@ -65,18 +69,25 @@ $PAGE->set_title($oercollection->name);
 $PAGE->set_heading($course->shortname);
 $PAGE->add_body_class('limitedwidth');
 
-$offset = 0;
 
+//pagination
+$paginationsql = "";
+$offset = ($page)*$perpage;
+$totalnumberresources = $DB->count_records('oercollection_resource', ['oerid' => $oerid->id]);
+if (($totalnumberresources/$perpage) > 1) {
+    $paginationsql = " LIMIT $perpage OFFSET $offset";
+}
 $paginationsql = "LIMIT $perpage OFFSET $offset";
-$sql = 'SELECT * FROM {oercollection_resource} oerr WHERE oerr.oerid = :oerid AND oerr.showresource = 1';
+$sql = 'SELECT * FROM {oercollection_resource} oerr WHERE oerr.oerid = :oerid AND oerr.showresource = 1 ' . $paginationsql;
 $oerentries = $DB->get_records_sql($sql, ['oerid' => $oerid->id]); //, "position ASC"
+
 
 $templatecontext = [];
 
 if (has_capability('mod/oercollection:editresources', $context)) {
     $oerexists = $oerentries ? true : false;
     if ($oerexists) {
-        $templatecontext['oernumber'] = $DB->count_records('oercollection_resource', ['oerid' => $oerid->id]);
+        $templatecontext['oernumber'] = $totalnumberresources;
     }
     $templatecontext['oerid'] = $oerid->id;
     $templatecontext['oerexists'] = $oerexists;
@@ -125,5 +136,5 @@ $templatecontext['id'] = $id;
 $renderer = $PAGE->get_renderer('core');
 echo $renderer->header();
 echo $renderer->render_from_template('mod_oercollection/studentresources', $templatecontext);
-
+echo $OUTPUT->paging_bar($totalnumberresources, $page, $perpage, $homeurl);
 echo $renderer->footer();

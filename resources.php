@@ -26,6 +26,7 @@
 
 require('../../config.php');
 require_once(__DIR__ . '/lib.php');
+require_once('locallib.php');
 
 // $id = required_param('id', PARAM_INT);
 // [$course, $cm] = get_course_and_cm_from_cmid($id, 'oercollection');
@@ -35,16 +36,31 @@ global $PAGE, $OUTPUT, $DB, $CFG;
 
 $cmid = required_param('id', PARAM_INT);
 $filter = optional_param('oerefilter', 1, PARAM_INT);
+$page = optional_param('page', 0, PARAM_INT);
+$perpage = optional_param('perpage', DEFAULT_PAGE_SIZE, PARAM_INT);
 list ($course, $cm) = get_course_and_cm_from_cmid($cmid, 'oercollection');
 
 $context = context_module::instance($cm->id);
+
+if (!in_array($perpage, [10, 20, 50, 100, 5000], true)) {
+    $perpage = DEFAULT_PAGE_SIZE;
+}
 
 require_login($course, false, $cm);
 require_capability('mod/oercollection:view', $context);
 
 $oerid = $DB->get_record('oercollection', array('id' => $cm->instance));
 
-$PAGE->set_url(new moodle_url("/mod/oercollection/resources.php", ['id' => $cmid]));
+$params = array();
+$params['id'] = $cmid;
+$params['perpage'] = $perpage;
+if ($page) {
+    $params['page'] = $page;
+}
+
+$homeurl = new moodle_url("/mod/oercollection/resources.php", $params);
+$PAGE->set_url($homeurl->out(false));
+//$PAGE->set_url(new moodle_url("/mod/oercollection/resources.php", ['id' => $cmid]));
 $node = $PAGE->settingsnav->find('mod_oercollection', navigation_node::TYPE_SETTING);
 if ($node) {
     $node->make_active();
@@ -56,8 +72,6 @@ $PAGE->set_heading($course->shortname);
 $PAGE->add_body_class('limitedwidth');
 
 
-$oerentries = $DB->get_records('oercollection_resource', ['oerid' => $oerid->id]); //, "position ASC"
-
 $sql = "SELECT *
           FROM {oercollection_resource} oer
          WHERE oer.oerid = $oerid->id";
@@ -67,13 +81,29 @@ if ($filter) {
         case 1:
             break;
         case 2: // only visible
-            $sql .= " AND oer.showresource = 1";
+            $sqlshow .= " AND oer.showresource = 1 ";
             break;
         case 3: // only hidden
-            $sql .= " AND oer.showresource = 0";
+            $sqlshow .= " AND oer.showresource = 0 ";
     }
 }
 
+$sqlcount = "SELECT COUNT(oer.id)
+          FROM {oercollection_resource} oer
+         WHERE oer.oerid = $oerid->id" .$sqlshow;
+
+$totalnumberresources = $DB->count_records_sql($sqlcount);
+
+//pagination
+$paginationsql = "";
+$offset = ($page)*$perpage;
+if (($totalnumberresources/$perpage) > 1) {
+    $paginationsql = " LIMIT $perpage OFFSET $offset";
+}
+$paginationsql = " LIMIT $perpage OFFSET $offset";
+
+$sql .= $sqlshow;
+$sql .= $paginationsql;
 //$sql .= " ORDER BY oer.position ASC";
 
 $oerentries = $DB->get_records_sql($sql);
@@ -90,6 +120,7 @@ if (has_capability('mod/oercollection:editresources', $context)) {
     if ($filter) {
         $selstring = 'selected2' . $filter;
     }
+    $templatecontext['selected' . $perpage] = true;
     $templatecontext[$selstring] = true;
     $templatecontext['sesskey'] = sesskey();
     $templatecontext['oerid'] = $oerid->id;
@@ -193,4 +224,5 @@ $renderer = $PAGE->get_renderer('core');
 echo $renderer->header();
 
 echo $renderer->render_from_template('mod_oercollection/resources', $templatecontext);
+echo $OUTPUT->paging_bar($totalnumberresources, $page, $perpage, $homeurl);
 echo $renderer->footer();

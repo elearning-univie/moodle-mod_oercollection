@@ -119,6 +119,7 @@ $PAGE->requires->js_call_amd('mod_oercollection/searchcontroller', 'init');
 $renderer = $PAGE->get_renderer('core');
 echo $renderer->header();
 //echo \oerapi_oerhub_get_searchform();
+echo $renderer->render_from_template('mod_oercollection/searchoerbuttons', $templatecontext);
 echo $searchform->get_search_form();
 echo $renderer->render_from_template('mod_oercollection/searchoer', $templatecontext);
 echo $renderer->footer();
