@@ -89,3 +89,7 @@ $string['openresource'] = 'Resource öffnen';
 $string['addtocollection'] = 'Zu Kollektion hinzufügen';
 $string['resourcesperpage'] = 'Einträge pro Seite';
 $string['dropdownall'] = 'All';
+
+$string['settings'] = 'settings';
+$string['oerapiplugins'] = 'Oerapi plugins';
+$string['manageoerapiplugins'] = 'manageoerapiplugins';
