@@ -42,7 +42,7 @@ list ($course, $cm) = get_course_and_cm_from_cmid($cmid, 'oercollection');
 
 $context = context_module::instance($cm->id);
 
-if (!in_array($perpage, [10, 20, 50, 100, 5000], true)) {
+if (!in_array($perpage, [5, 10, 20, 50, 100, 5000], true)) {
     $perpage = DEFAULT_PAGE_SIZE;
 }
 
@@ -76,6 +76,7 @@ $sql = "SELECT *
           FROM {oercollection_resource} oer
          WHERE oer.oerid = $oerid->id";
 
+$sqlshow = "";
 if ($filter) {
     switch ($filter) {
         case 1:
@@ -103,10 +104,21 @@ if (($totalnumberresources/$perpage) > 1) {
 $paginationsql = " LIMIT $perpage OFFSET $offset";
 
 $sql .= $sqlshow;
+$sql .= " ORDER BY oer.position ASC ";
 $sql .= $paginationsql;
-//$sql .= " ORDER BY oer.position ASC";
 
 $oerentries = $DB->get_records_sql($sql);
+
+$sql = "SELECT *
+          FROM {oercollection_resource} oer
+         WHERE oer.oerid = $oerid->id
+      ORDER BY oer.position ASC ";
+$resourcestotal = $DB->get_records_sql($sql);
+$sql = "SELECT COUNT(oer.id)
+          FROM {oercollection_resource} oer
+         WHERE oer.oerid = $oerid->id
+      ORDER BY oer.position ASC ";
+$rtotal = $DB->count_records_sql($sql);
 
 $templatecontext = [];
 
@@ -186,6 +198,7 @@ foreach ($oerentries as $oerentry) {
         'oerentryid' => $oerentry->id,
         'oerhtml' => $oerhtml,
         'oerhidden' => $oerhidden,
+        'resourcelink' => $oerentry->resourcelink,
         'background' => $background,
         'commentexists' => $commentexists,
         'commentlink' => $commentlink->out(false),
@@ -195,26 +208,58 @@ foreach ($oerentries as $oerentry) {
 }
 
 
-// Testdata 1
-// $oerhidden = false;
-// $oerid = 1;
-// $oerentryid = 11;
-// $commentexists = true;
-// $commentlink = new moodle_url("/mod/oercollection/oercomment.php", ['id' => $cmid, 'oereid' => $oerentryid]);
-// $oerlist[] = array('oerid' => '11', 'oerhtml' => $oerhtml1, 'oerhidden' => $oerhidden, 'background' => '', 'commentexists' => $commentexists, 'commentlink' => $commentlink->out(false));
-// // Testdata 2
-// $oerhidden = true;
-// $oerentryid = 12;
-// $commentlink = new moodle_url("/mod/oercollection/oercomment.php", ['id' => $cmid, 'oereid' => $oerentryid]);
-// $commentexists = true;
-// $oerlist[] = array('oerid' => '11', 'oerhtml' => $oerhtml2, 'oerhidden' => $oerhidden, 'background' => 'bg-light', 'commentexists' => $commentexists, 'commentlink' => $commentlink->out(false));
-// // Testdata 3
-// $oerhidden=true;
-// $oerentryid = 13;
-// $commentexists = false;
-// $commentlink = new moodle_url("/mod/oercollection/oercomment.php", ['id' => $cmid, 'oereid' => $oerentryid]);
-// $oerlist[] = array('oerid' => '22', 'oerhtml' => $oerhtml, 'oerhidden' => $oerhidden, 'background' => 'bg-light', 'commentexists' => $commentexists, 'commentlink' => $commentlink->out(false));
-//$templatetable = [];
+// dummy data fuer modal test
+$ll[] = ['id' => 1, 'name' => 'bla1', 'isorigin' => false];
+$ll[] =  ['id' => 2, 'name' => 'bla2', 'isorigin' => true];
+$ll[] = ['id' => 3, 'name' => 'bla3', 'isorigin' => false];
+$page1['lines'] = $ll;
+$page1['title'] = 'Page 1';
+$page1['pnr'] = 1;
+$page1['open'] = true;
+unset($ll);
+$ll[] = ['id' => 4, 'name' => 'bla4', 'isorigin' => false];
+$ll[] = ['id' => 5, 'name' => 'bla5', 'isorigin' => false];
+$ll[] = ['id' => 6, 'name' => 'bla6', 'isorigin' => false];
+$page2['lines'] = $ll;
+$page2['title'] = 'Page 2';
+$page2['pnr'] = 2;
+$page2['open'] = false;
+unset($ll);
+$ll[] = ['id' => 7, 'name' => 'bla7', 'isorigin' => false];
+$ll[] = ['id' => 8, 'name' => 'bla8', 'isorigin' => false];
+$page3['lines'] = $ll;
+$page3['title'] = 'Page 3';
+$page3['pnr'] = 3;
+$page3['open'] = false;
+$rr[] = $page1;
+$rr[] = $page2;
+$rr[] = $page3;
+
+$templatecontext['page'] = $rr;
+
+//Modal data loop
+// $i=0;
+// $pagenr = 1;
+// $ll = array();
+// $page = array();
+// $rr = array();
+// while ($i < $rtotal) {
+//     for ($x = $i; $x < ($i+$perpage); $x++) {
+//         $ll[] = ['id' => $resourcestotal->id, 'name' => $resourcestotal->resourcename];
+//     }
+//     $page['lines'] = $ll;
+//     $page['title'] = 'Page ' . $pagenr;
+//     $page['pnr'] = 1;
+//     $page['open'] = true;
+//     $rr[] = $page;
+//     unset($ll);
+//     unset($page);
+//     $pagenr++;
+//     $i+=$perpage;
+// }
+// $templatecontext['page'] = $rr;
+//Modal data loop end
+
 $templatecontext['oerresourcelist'] = $oerlist;
 //=====================
 
@@ -223,6 +268,8 @@ $PAGE->requires->js_call_amd('mod_oercollection/resourcecontroller', 'init');
 $renderer = $PAGE->get_renderer('core');
 echo $renderer->header();
 
+
 echo $renderer->render_from_template('mod_oercollection/resources', $templatecontext);
+//echo $renderer->render_from_template('mod_oercollection/moveresourcemodal', $templatecontext);
 echo $OUTPUT->paging_bar($totalnumberresources, $page, $perpage, $homeurl);
 echo $renderer->footer();
