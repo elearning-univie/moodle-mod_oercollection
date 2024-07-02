@@ -99,6 +99,21 @@ class mod_oercollection_external extends external_api {
             )
             );
     }
+
+    /**
+     * Returns description of method parameters
+     *
+     * @return external_function_parameters
+     */
+    public static function move_resource_parameters() {
+        return new external_function_parameters(
+            array(
+                'oerid' => new external_value(PARAM_INT, 'flashcard activity id', VALUE_REQUIRED),
+                'oeoereidtomoverid' => new external_value(PARAM_INT, 'flashcard activity id', VALUE_REQUIRED),
+                'oereidmoveafter' => new external_value(PARAM_INT, 'oer entry id', VALUE_REQUIRED),
+            )
+            );
+    }
     /**
      * Returns description of method parameters
      *
@@ -182,6 +197,31 @@ class mod_oercollection_external extends external_api {
         }
     }
     /**
+     * deletes all selected oer entries from collection
+     *
+     * @param int $oerid
+     * @param int $oerentryid
+     */
+    public static function move_resource($oerid, $oereidtomove, $oereidmoveafter) {
+//         global $DB;
+        
+        $params = self::validate_parameters(self::move_resource_parameters(),
+            array('oerid' => $oerid, 'oereidtomove' => $oereidtomove, 'oereidmoveafter' => $oereidmoveafter));
+        
+        $sql = "SELECT *
+                  FROM {oercollection_resource} oer
+                 WHERE oer.oerid = $oerid->id
+              ORDER BY oer.position ASC ";
+        $resourcestotal = $DB->get_records_sql($sql);
+        
+        if ($oereidtomove > $oereidmoveafter) {
+//             foreach ()
+        }
+        if ($oereidtomove < $oereidmoveafter) {
+            
+        }
+    }
+    /**
      * Removes all selected questions from box 1 to box 0 for the activity
      *
      * @param int $oerid
@@ -197,6 +237,7 @@ class mod_oercollection_external extends external_api {
             $DB->delete_records('oercollection_resource', ['id' => $oerentryid, 'oerid' => $oerid]);
         }
     }
+
     /**
      * add oerhub entry to collectyion
      *
@@ -251,6 +292,14 @@ class mod_oercollection_external extends external_api {
      * @return external_value
      */
     public static function add_entry_to_collection_returns() {
+        return null;
+    }
+    /**
+     * Returns return value description
+     *
+     * @return external_value
+     */
+    public static function move_resource_returns() {
         return null;
     }
 }

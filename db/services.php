@@ -70,4 +70,13 @@ $functions = array(
         'ajax' => true,
         'loginrequired' => true,
     ),
+    'mod_oercollection_move_resource' => array(
+        'classname' => 'mod_oercollection_external',
+        'methodname' => 'move_resource',
+        'classpath' => 'mod/oercollection/externallib.php',
+        'description' => 'Change visibility setting of an oer collection entry',
+        'type' => 'write',
+        'ajax' => true,
+        'loginrequired' => true,
+    ),
 );

@@ -71,8 +71,9 @@
        <!-- the checkbox -->
        <div class="d-flex p-2 align-self-center" style="width:5%">
          <input class="mod-oercollection-checkbox" type="checkbox" name="selectbox" value="{{oerentryid}}" onchange="$.mod_oercollection_selected()">
+         <a id="resourcelink{{oerentryid}}" href="{{resourcelink}}" target="_blank"></a>
        </div>
-    
+
        <div class="d-flex flex-column flex-grow-1">
        
          <!-- HTML provided by the subplugin -->  
@@ -117,10 +118,18 @@
             {{#pix}} a/setting, core {{/pix}}
             {{#str}}editcomment, mod_oercollection{{/str}}
         </a>
-<!--         <a class="dropdown-item" href="mod_oercollection_set_visibility_oerentry({{oerid}},{{oerentryid}})">
+        
+
+      <a class="dropdown-item" href="#" data-toggle="modal" data-target="#myModal">
             {{#pix}} i/dragdrop, core {{/pix}}
             {{#str}}move, mod_oercollection{{/str}}
-        </a> -->
+        </a>
+
+
+    <!--      <a class="dropdown-item" href="#" onclick="$.mod_oercollection_move_resource()">
+            {{#pix}} i/dragdrop, core {{/pix}}
+            {{#str}}move, mod_oercollection{{/str}}
+        </a>-->
         {{#oerhidden}}
         <a class="dropdown-item" href="#" onclick="$.mod_oercollection_set_visibility_oerentry({{oerid}},{{oerentryid}})">
             {{#pix}} i/hide, core {{/pix}}
@@ -140,11 +149,71 @@
        </div>
        </div>
 
+
+
       </div>
     </div>
   </div>
 
 </div>
+<!-- The Modal -->
+  <div class="modal moodle-has-zindex" id="myModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h5 class="modal-title">{{#str}}moveresource, mod_oercollection{{/str}}</h5>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+
+        <!-- Modal body -->
+        <div class="modal-body">
+         <div class="container">
+          {{#page}} 
+  <div class="row">
+<h5>
+    <a class="icons-collapse-expand notextdecoration" data-toggle="collapse" href="#collapseOptions{{pnr}}" aria-expanded="false" aria-controls="collapseOptions">
+        <span class="collapsed-icon icon-no-margin mr-1"
+              title="{{#str}} expand, core {{/str}}">
+                <span class="dir-rtl-hide">{{#pix}} t/collapsedchevron, core {{/pix}}</span>
+                <span class="dir-ltr-hide">{{#pix}} t/collapsedchevron_rtl, core {{/pix}}</span>
+                <span class="sr-only">{{#str}} expand, core {{/str}}</span>
+            </span>
+        <span class="expanded-icon icon-no-margin mr-1"
+              title="{{#str}} collapse, core {{/str}}">
+                {{#pix}} t/expandedchevron, core {{/pix}}
+            <span class="sr-only">{{#str}} collapse, core {{/str}}</span>
+        </span>
+        {{title}}
+    </a>
+</h5>
+</div>    
+
+<div class="collapse {{#open}}show{{/open}}" id="collapseOptions{{pnr}}">
+ {{#lines}}
+  {{#.}}
+  <div class="row">
+    <ul style="list-style-type:none;">
+     <li>
+     <a href="#" onclick="$.mod_oercollection_move_resource_action({{id}}, {{oerentryid}})" data-dismiss="modal">
+        {{name}}
+     </a>
+    </li>
+    </ul>
+  </div>
+  {{/.}}
+ {{/lines}}
+</div>
+{{/page}}
+</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+<!-- The Modal End -->
+
 {{/ oerresourcelist}}
 
 <div class="row py-1"> 
@@ -213,6 +282,7 @@
         </div>
         <div class="p-1">
            <select class="custom-select" id="perpage" name="perpage" onchange="this.form.submit()">
+              <option value="5" title="5" {{#selected5}}selected{{/selected5}}>5</option>
               <option value="10" title="10" {{#selected10}}selected{{/selected10}}>10</option>
               <option value="20" title="20" {{#selected20}}selected{{/selected20}}>20</option>
               <option value="50" title="50" {{#selected50}}selected{{/selected50}}>50</option>

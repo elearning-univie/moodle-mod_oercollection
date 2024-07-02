@@ -89,3 +89,4 @@ $string['openresource'] = 'Resource öffnen';
 $string['addtocollection'] = 'Zu Kollektion hinzufügen';
 $string['resourcesperpage'] = 'Einträge pro Seite';
 $string['dropdownall'] = 'All';
+$string['moveresource'] = 'Move resource';
