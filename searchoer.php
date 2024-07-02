@@ -34,6 +34,7 @@ require_once(__DIR__ . '/lib.php');
 global $PAGE, $OUTPUT, $DB, $CFG;
 
 $id = required_param('id', PARAM_INT);
+$searchstring = optional_param('searchstring', null, PARAM_TEXT);
 list ($course, $cm) = get_course_and_cm_from_cmid($id, 'oercollection');
 
 $context = context_module::instance($cm->id);
@@ -54,7 +55,7 @@ $PAGE->set_title($wordcloud->name);
 $PAGE->set_heading($course->shortname);
 $PAGE->add_body_class('limitedwidth');
 
-$searchform = new \oerapi_oerhub\api\general();
+$searchform = new \oerapi_oerhub\api\general($PAGE->url);
 
 
 //=========== Dummy search results
@@ -120,6 +121,7 @@ $renderer = $PAGE->get_renderer('core');
 echo $renderer->header();
 //echo \oerapi_oerhub_get_searchform();
 echo $renderer->render_from_template('mod_oercollection/searchoerbuttons', $templatecontext);
-echo $searchform->get_search_form();
+
+echo $searchform->get_search_form($searchstring);
 echo $renderer->render_from_template('mod_oercollection/searchoer', $templatecontext);
 echo $renderer->footer();
