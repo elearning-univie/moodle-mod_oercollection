@@ -113,7 +113,7 @@ $sql = "SELECT *
           FROM {oercollection_resource} oer
          WHERE oer.oerid = $oerid->id
       ORDER BY oer.position ASC ";
-$resourcestotal = $DB->get_records_sql($sql);
+$resourcesmodal = $DB->get_records_sql($sql);
 $sql = "SELECT COUNT(oer.id)
           FROM {oercollection_resource} oer
          WHERE oer.oerid = $oerid->id
@@ -231,18 +231,39 @@ $page3['lines'] = $ll;
 $page3['title'] = 'Page 3';
 $page3['pnr'] = 3;
 $page3['open'] = false;
-$rr[] = $page1;
-$rr[] = $page2;
-$rr[] = $page3;
+$rr2[] = $page1;
+$rr2[] = $page2;
+$rr2[] = $page3;
 
-$templatecontext['page'] = $rr;
+// $templatecontext['page'] = $rr2;
 
 //Modal data loop
-// $i=0;
-// $pagenr = 1;
-// $ll = array();
-// $page = array();
-// $rr = array();
+$resourcestemp = [];
+foreach ($resourcesmodal as $remod) {
+    $resourcestemp[] = ['id' => $remod->id, 'name' => $remod->resourcename];
+}
+
+$i=0;
+$pagenr = 1;
+$ll = [];
+$pg = [];
+$rr = [];
+while ($i < $rtotal) {
+    for ($x = $i; $x < ($i+$perpage); $x++) {
+        if (array_key_exists($x,$resourcestemp)) {
+            $ll[] = $resourcestemp[$x];
+        }
+    }
+    $pg['lines'] = $ll;
+    $pg['title'] = 'Page ' . $pagenr;
+    $pg['pnr'] = 1;
+    $pg['open'] = true;
+    $rr[] = $pg;
+    unset($ll);
+    unset($pg);
+    $pagenr++;
+    $i+=$perpage;
+}
 // while ($i < $rtotal) {
 //     for ($x = $i; $x < ($i+$perpage); $x++) {
 //         $ll[] = ['id' => $resourcestotal->id, 'name' => $resourcestotal->resourcename];
@@ -257,7 +278,7 @@ $templatecontext['page'] = $rr;
 //     $pagenr++;
 //     $i+=$perpage;
 // }
-// $templatecontext['page'] = $rr;
+$templatecontext['page'] = $rr;
 //Modal data loop end
 
 $templatecontext['oerresourcelist'] = $oerlist;
@@ -267,8 +288,7 @@ $PAGE->requires->js_call_amd('mod_oercollection/resourcecontroller', 'init');
 
 $renderer = $PAGE->get_renderer('core');
 echo $renderer->header();
-
-
+//print_object($resourcestemp);
 echo $renderer->render_from_template('mod_oercollection/resources', $templatecontext);
 //echo $renderer->render_from_template('mod_oercollection/moveresourcemodal', $templatecontext);
 echo $OUTPUT->paging_bar($totalnumberresources, $page, $perpage, $homeurl);

@@ -32,7 +32,7 @@ global $PAGE, $OUTPUT, $DB;
 
 $id = required_param('id', PARAM_INT); //cmid!!
 $perpage = optional_param('perpage', DEFAULT_PAGE_SIZE, PARAM_INT);
-$page = optional_param('page', 0, PARAM_INT);
+$pg = optional_param('page', 0, PARAM_INT);
 $filter = optional_param('oerefilter', 1, PARAM_INT);
 
 list ($course, $cm) = get_course_and_cm_from_cmid($id, 'oercollection');
@@ -53,8 +53,8 @@ $oercollection = $DB->get_record('oercollection', array('id' => $cm->instance));
 $params = array();
 $params['id'] = $id;
 $params['perpage'] = $perpage;
-if ($page) {
-    $params['page'] = $page;
+if ($pg) {
+    $params['page'] = $pg;
 }
 
 $homeurl = new moodle_url("/mod/oercollection/oercollectionstudentview.php", $params);
@@ -72,7 +72,7 @@ $PAGE->add_body_class('limitedwidth');
 
 //pagination
 $paginationsql = "";
-$offset = ($page)*$perpage;
+$offset = ($pg)*$perpage;
 $totalnumberresources = $DB->count_records('oercollection_resource', ['oerid' => $oerid->id]);
 if (($totalnumberresources/$perpage) > 1) {
     $paginationsql = " LIMIT $perpage OFFSET $offset";
@@ -136,5 +136,5 @@ $templatecontext['id'] = $id;
 $renderer = $PAGE->get_renderer('core');
 echo $renderer->header();
 echo $renderer->render_from_template('mod_oercollection/studentresources', $templatecontext);
-echo $OUTPUT->paging_bar($totalnumberresources, $page, $perpage, $homeurl);
+echo $OUTPUT->paging_bar($totalnumberresources, $pg, $perpage, $homeurl);
 echo $renderer->footer();
