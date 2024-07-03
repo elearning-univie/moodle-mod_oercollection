@@ -1,16 +1,6 @@
 import $ from "jquery";
 import ajax from "core/ajax";
-//import {call as fetchMany} from 'core/ajax';
-import ModalFactory from "core/modal_factory";
 import notification from "core/notification";
-import ModalEvents from "core/modal_events";
-import {get_string as getString} from 'core/str';
-//import ModalForm from 'core_form/modalform';
-//import Notification from 'core/notification';
-//import Pending from 'core/pending';
-///import SortableList from 'core/sortable_list';
-import Templates from 'core/templates';
-//import jQuery from 'jquery';
 
 export const init = () => {
     $.mod_oercollection_set_visibility_oerentry = function(oer, oerentryid) {
@@ -43,7 +33,6 @@ export const init = () => {
                 checkboxesChecked.push(checkboxes[i]);
             }
         }
-        //alert("is " + listi);
     };
     $.mod_oercollection_select_all = function(selected) {
         $('input:checkbox').not(selected).prop('checked', selected.checked);
@@ -60,35 +49,6 @@ export const init = () => {
         for (var i=0; i<checkboxes.length; i++) {
             checkboxes[i].checked = false;
         }
-    };
-    $.mod_oercollection_move_resource = function(data) {
-
-ModalFactory.create({
-                type: ModalFactory.types.SAVE_CANCEL,
-                title: getString('moveresource', 'mod_oercollection'),
-                body: Templates.render('mod_oercollection/moveresourcemodal', data),
-            }).then(function (modal) {
-                modal.getRoot().on(ModalEvents.save, function() {
-                    alert('LALALAMMMMAAAAA');
-                });
-
-                modal.getRoot().on(ModalEvents.cancel, () => {
-                    location.reload();
-                });
-
-                modal.getRoot().on(ModalEvents.hidden, () => {
-                    modal.destroy();
-                });
-
-//modal.addEventListener(modal.events.FORM_SUBMITTED, () => {
-//alert('LALALAMMMMAAAAA');
-//    });
-
-
-                modal.show();
-            });
-
-
     };
 
     $.mod_oercollection_move_resource_action = function(oer, oereidtomove, oereidmoveafter) {
