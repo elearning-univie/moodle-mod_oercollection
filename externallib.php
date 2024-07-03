@@ -109,7 +109,7 @@ class mod_oercollection_external extends external_api {
         return new external_function_parameters(
             array(
                 'oerid' => new external_value(PARAM_INT, 'flashcard activity id', VALUE_REQUIRED),
-                'oeoereidtomoverid' => new external_value(PARAM_INT, 'flashcard activity id', VALUE_REQUIRED),
+                'oereidtomove' => new external_value(PARAM_INT, 'flashcard activity id', VALUE_REQUIRED),
                 'oereidmoveafter' => new external_value(PARAM_INT, 'oer entry id', VALUE_REQUIRED),
             )
             );
@@ -203,22 +203,46 @@ class mod_oercollection_external extends external_api {
      * @param int $oerentryid
      */
     public static function move_resource($oerid, $oereidtomove, $oereidmoveafter) {
-//         global $DB;
+         global $DB;
         
         $params = self::validate_parameters(self::move_resource_parameters(),
             array('oerid' => $oerid, 'oereidtomove' => $oereidtomove, 'oereidmoveafter' => $oereidmoveafter));
-        
+
         $sql = "SELECT *
                   FROM {oercollection_resource} oer
-                 WHERE oer.oerid = $oerid->id
+                 WHERE oer.oerid = $oerid
               ORDER BY oer.position ASC ";
-        $resourcestotal = $DB->get_records_sql($sql);
-        
-        if ($oereidtomove > $oereidmoveafter) {
-//             foreach ()
-        }
+        $resourcelist = $DB->get_records_sql($sql);
+
+        $sql = "SELECT oer.position
+                  FROM {oercollection_resource} oer
+                 WHERE oer.oerid = $oerid
+                   AND id = $oereidtomove
+              ORDER BY oer.position ASC ";
+        $resourcetomove = $DB->get_record_sql($sql);
+        $sql = "SELECT oer.position
+                  FROM {oercollection_resource} oer
+                 WHERE oer.oerid = $oerid
+                   AND id = $oereidmoveafter
+              ORDER BY oer.position ASC ";
+        $resourcemoveafter =  $DB->get_record_sql($sql);
+
+        $xx = 0;
         if ($oereidtomove < $oereidmoveafter) {
-            
+            $xx = 1;
+        }
+        
+        $move = array_splice($resourcelist, ($resourcetomove->position - 1), 1);
+        $newlist = array_merge(
+            array_slice( $resourcelist, 0, ($resourcemoveafter->position - $xx)),
+            $move,
+            array_slice( $resourcelist, ($resourcemoveafter->position - $xx))
+            );
+        $ctr = 1;
+        foreach ($newlist as $n) {
+            $n->position = $ctr;
+            $DB->update_record('oercollection_resource', $n);
+            $ctr++;
         }
     }
     /**

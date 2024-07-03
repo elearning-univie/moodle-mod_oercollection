@@ -120,7 +120,7 @@
         </a>
         
 
-      <a class="dropdown-item" href="#" data-toggle="modal" data-target="#myModal">
+      <a class="dropdown-item" href="#" data-toggle="modal" data-target="#myModal{{oerentryid}}">
             {{#pix}} i/dragdrop, core {{/pix}}
             {{#str}}move, mod_oercollection{{/str}}
         </a>
@@ -157,7 +157,7 @@
 
 </div>
 <!-- The Modal -->
-  <div class="modal moodle-has-zindex" id="myModal" tabindex="-1">
+  <div class="modal moodle-has-zindex" id="myModal{{oerentryid}}" tabindex="-1">
     <div class="modal-dialog">
       <div class="modal-content">
 
@@ -169,44 +169,49 @@
 
         <!-- Modal body -->
         <div class="modal-body">
+        <div class="row ml-2" style="margin-bottom: 15px;">
+          <span> {{#str}}insertafter, mod_oercollection{{/str}} </span>
+        </div>
          <div class="container">
+         
           {{#page}} 
-  <div class="row">
-<h5>
-    <a class="icons-collapse-expand notextdecoration" data-toggle="collapse" href="#collapseOptions{{pnr}}" aria-expanded="false" aria-controls="collapseOptions">
-        <span class="collapsed-icon icon-no-margin mr-1"
-              title="{{#str}} expand, core {{/str}}">
-                <span class="dir-rtl-hide">{{#pix}} t/collapsedchevron, core {{/pix}}</span>
-                <span class="dir-ltr-hide">{{#pix}} t/collapsedchevron_rtl, core {{/pix}}</span>
-                <span class="sr-only">{{#str}} expand, core {{/str}}</span>
-            </span>
-        <span class="expanded-icon icon-no-margin mr-1"
-              title="{{#str}} collapse, core {{/str}}">
-                {{#pix}} t/expandedchevron, core {{/pix}}
-            <span class="sr-only">{{#str}} collapse, core {{/str}}</span>
-        </span>
-        {{title}}
-    </a>
-</h5>
-</div>    
+        <div class="row ml-2 mb-4">
+        <h5>
+            <a class="icons-collapse-expand notextdecoration" data-toggle="collapse" href="#collapseOptions{{pnr}}" aria-expanded="false" aria-controls="collapseOptions">
+                <span class="collapsed-icon icon-no-margin mr-1"
+                      title="{{#str}} expand, core {{/str}}">
+                        <span class="dir-rtl-hide">{{#pix}} t/collapsedchevron, core {{/pix}}</span>
+                        <span class="dir-ltr-hide">{{#pix}} t/collapsedchevron_rtl, core {{/pix}}</span>
+                        <span class="sr-only">{{#str}} expand, core {{/str}}</span>
+                </span>
+                <span class="expanded-icon icon-no-margin mr-1"
+                      title="{{#str}} collapse, core {{/str}}">
+                        {{#pix}} t/expandedchevron, core {{/pix}}
+                  <span class="sr-only">{{#str}} collapse, core {{/str}}</span>
+               </span>
+                {{title}}
+            </a>
+        </h5>
+        </div>    
 
-<div class="collapse {{#open}}show{{/open}}" id="collapseOptions{{pnr}}">
- {{#lines}}
-  {{#.}}
-  <div class="row">
-    <ul style="list-style-type:none;">
-     <li>
-     <a href="#" onclick="$.mod_oercollection_move_resource_action({{id}}, {{oerentryid}})" data-dismiss="modal">
-        {{name}}
-     </a>
-    </li>
-    </ul>
-  </div>
-  {{/.}}
- {{/lines}}
-</div>
-{{/page}}
-</div>
+         <div class="collapse {{#open}}show{{/open}}" id="collapseOptions{{pnr}}">
+          {{#lines}}
+           {{#.}}
+           <div class="row">
+             <ul style="list-style-type:none;">
+              <li>
+              <a href="#" onclick="$.mod_oercollection_move_resource_action({{oerid}},{{oerentryid}},{{id}})" data-dismiss="modal">
+                 {{name}}
+              </a>
+             </li>
+             </ul>
+           </div>
+           {{/.}}
+          {{/lines}}
+         </div>
+         {{/page}}
+        
+         </div>
         </div>
 
       </div>

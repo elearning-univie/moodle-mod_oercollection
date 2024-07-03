@@ -90,3 +90,4 @@ $string['addtocollection'] = 'Zu Kollektion hinzufügen';
 $string['resourcesperpage'] = 'Einträge pro Seite';
 $string['dropdownall'] = 'All';
 $string['moveresource'] = 'Move resource';
+$string['insertafter'] = 'Insert resource after:';

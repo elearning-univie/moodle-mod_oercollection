@@ -50,7 +50,7 @@ class oerapi extends \core\plugininfo\base {
     public static function get_enabled_plugins() {
         global $DB;
 
-        $plugins = core_plugin_manager::instance()->get_installed_plugins('oerapi');
+        $plugins = \core_plugin_manager::instance()->get_installed_plugins('oerapi');
         if (!$plugins) {
             return array();
         }

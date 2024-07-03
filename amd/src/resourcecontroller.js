@@ -91,10 +91,10 @@ ModalFactory.create({
 
     };
 
-    $.mod_oercollection_move_resource_action = function(oer, oerentryid) {
+    $.mod_oercollection_move_resource_action = function(oer, oereidtomove, oereidmoveafter) {
             ajax.call([{
-                methodname: 'mod_oercollection_set_visibility_oerentry',
-                args: {oerid: oer, oerentryid: oerentryid},
+                methodname: 'mod_oercollection_move_resource',
+                args: {oerid: oer, oereidtomove: oereidtomove, oereidmoveafter: oereidmoveafter},
                 done: function () {
                     location.reload();
                 },
