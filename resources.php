@@ -212,4 +212,5 @@ $renderer = $PAGE->get_renderer('core');
 echo $renderer->header();
 echo $renderer->render_from_template('mod_oercollection/resources', $templatecontext);
 echo $OUTPUT->paging_bar($totalnumberresources, $page, $perpage, $homeurl);
+echo $renderer->render_from_template('mod_oercollection/resourcesactionsandoptions', $templatecontext);
 echo $renderer->footer();
