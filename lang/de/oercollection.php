@@ -91,4 +91,4 @@ $string['resourcesperpage'] = 'Einträge pro Seite';
 $string['dropdownall'] = 'Alle';
 $string['moveresource'] = 'Resource verschieben';
 $string['insertafter'] = 'Resource einfügen nach:';
-
+$string['manageoerapiplugins'] = '';

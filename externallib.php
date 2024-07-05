@@ -228,7 +228,7 @@ class mod_oercollection_external extends external_api {
         $resourcemoveafter =  $DB->get_record_sql($sql);
 
         $xx = 0;
-        if ($oereidtomove < $oereidmoveafter) {
+        if ($resourcetomove->position < $resourcemoveafter->position) {
             $xx = 1;
         }
         

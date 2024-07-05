@@ -147,3 +147,126 @@ function oercollection_extend_settings_navigation(settings_navigation $settingsn
         $oercollectionnode->add(get_string('resources', 'mod_oercollection'), $url, navigation_node::TYPE_SETTING, null, 'mod_wordcloud_list');
     }
 }
+
+/**
+ * Given a coursemodule object, this function returns the extra
+ * information needed to print this activity in various places.
+ *
+ * If folder needs to be displayed inline we store additional information
+ * in customdata, so functions {@link folder_cm_info_dynamic()} and
+ * {@link folder_cm_info_view()} do not need to do DB queries
+ *
+ * @param cm_info $cm
+ * @return cached_cm_info info
+ */
+function oercollection_get_coursemodule_info($cm) {
+    global $DB;
+    if (!($oercollection = $DB->get_record('oercollection', array('id' => $cm->instance)))) {
+        return NULL;
+    }
+    $cminfo = new cached_cm_info();
+    $cminfo->name = $oercollection->name;
+    if ($oercollection->displaymode == 1) {
+        // prepare folder object to store in customdata
+        $oerdata = new stdClass();
+        if ($cm->showdescription && strlen(trim($oercollection->intro))) {
+            $oerdata->intro = $oercollection->intro;
+            if ($oercollection->introformat != FORMAT_MOODLE) {
+                $oerdata->introformat = $oercollection->introformat;
+            }
+        }
+       $cminfo->customdata = $oerdata;
+    } else {
+        if ($cm->showdescription) {
+            // Convert intro to html. Do not filter cached version, filters run at display time.
+            $cminfo->content = format_module_intro('oercollection', $oercollection, $cm->id, false);
+        }
+    }
+    return $cminfo;
+}
+/**
+ * Sets dynamic information about a course module
+ *
+ * This function is called from cm_info when displaying the module
+ * mod_folder can be displayed inline on course page and therefore have no course link
+ *
+ * @param cm_info $cm
+ */
+function oercollection_cm_info_dynamic(cm_info $cm) {
+//     if ($cm->get_custom_data()) {
+//         // the field 'customdata' is not empty IF AND ONLY IF we display contens inline
+//         $cm->set_no_view_link();
+//     }
+}
+/**
+ * Overwrites the content in the course-module object with the folder files list
+ * if folder.display == FOLDER_DISPLAY_INLINE
+ *
+ * @param cm_info $cm
+ */
+function oercollection_cm_info_view(cm_info $cm) {
+    global $PAGE, $DB;
+    
+    $templatecontext = [];
+    if (!($oercollection = $DB->get_record('oercollection', array('id' => $cm->instance)))) {
+        return NULL;
+    }
+    //$cminfo = new cached_cm_info();
+    $oerdata = new stdClass();
+    if ($cm->showdescription && strlen(trim($oercollection->intro))) {
+        $oerdata->intro = $oercollection->intro;
+        if ($oercollection->introformat != FORMAT_MOODLE) {
+            $oerdata->introformat = $oercollection->introformat;
+        }
+    }
+    $templatecontext['intro'] = $oerdata->intro;
+    if ($cm->uservisible && $cm->customdata) {
+            // Restore folder object from customdata.
+            // Note the field 'customdata' is not empty IF AND ONLY IF we display contens inline.
+            // Otherwise the content is default.
+            $folder = $cm->customdata;
+            $folder->id = (int)$cm->instance;
+            $folder->course = (int)$cm->course;
+            $folder->display = FOLDER_DISPLAY_INLINE;
+            $folder->name = $cm->name;
+            if (empty($folder->intro)) {
+                $folder->intro = '';
+            }
+            if (empty($folder->introformat)) {
+                $folder->introformat = FORMAT_MOODLE;
+            }
+            
+            $oerhtml = '<div>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.<br>
+        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+      </div>';
+            
+            // get oer entries
+            $sql = 'SELECT * FROM {oercollection_resource} oerr WHERE oerr.oerid = :oerid AND oerr.showresource = 1 ORDER BY oerr.position ASC';
+            $oerentries = $DB->get_records_sql($sql, ['oerid' => $cm->instance]); //, "position ASC"
+
+
+            $oerlist = [];
+            
+            foreach ($oerentries as $oerentry) {
+                $commentexists = true;
+                if (is_null($oerentry->notetextinternal) || empty($oerentry->notetextinternal)) {
+                    $commentexists = false;
+                }
+                $oerlist[] = array(
+                    'oerentryid' => $oerentry->id,
+                    'oerhtml' => $oerhtml,
+                    'commentexists' => $commentexists,
+                    'commenttext' => $oerentry->notetextinternal,
+                    'commentname' => $oerentry->notenameinternal,
+                );
+            }
+            $templatecontext['oerresourcelist'] = $oerlist;
+
+            // display folder
+            $renderer = $PAGE->get_renderer('core');
+            $oerlist = $renderer->render_from_template('mod_oercollection/oercourseinfo', $templatecontext);
+            //$cm->content = $oerlist;
+            $cm->set_content($oerlist, false);
+        }
+}
