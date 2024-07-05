@@ -21,5 +21,5 @@ abstract class general {
 
     abstract public function get_search_form();
 
-    abstract public function get_results();
+    abstract public function get_results($searchstring);
 }
