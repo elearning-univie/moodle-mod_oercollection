@@ -92,3 +92,4 @@ $string['dropdownall'] = 'All';
 $string['moveresource'] = 'Move resource';
 $string['insertafter'] = 'Insert resource after:';
 $string['manageoerapiplugins'] = '';
+$string['oerapiplugins'] = '';
