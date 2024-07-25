@@ -24,6 +24,23 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+$services = [
+    'oercollectionservice' => [
+        'functions' => [
+            'mod_oercollection_set_visibility_oerentry',
+            'mod_oercollection_set_visibility_all',
+            'mod_oercollection_delete_oerentry',
+            'mod_oercollection_delete_selected_oerentries',
+            'mod_oercollection_add_to_collection',
+            'mod_oercollection_move_resource',
+        ],
+        'shortname' => 'oercollection',
+        'requiredcapability' => 'mod/oercollection:addinstance',
+        'restrictedusers' => 0,
+        'enabled' => 1,
+    ],
+];
+
 $functions = array(
     'mod_oercollection_set_visibility_oerentry' => array(
         'classname' => 'mod_oercollection_external',

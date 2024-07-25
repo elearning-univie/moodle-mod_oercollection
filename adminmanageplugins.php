@@ -13,16 +13,22 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-/**
- * Mandatory public API of folder oercollection
- *
- * @package   mod_oercollection
- * @author    Adrian Czermak
- * @author    Angela Baier
- * @copyright 2024 University of Vienna
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
 
-defined('MOODLE_INTERNAL') || die();
+require_once(__DIR__ . '/../../config.php');
+require_once($CFG->dirroot.'/mod/oercollection/adminlib.php');
 
-define('DEFAULT_PAGE_SIZE', 5000);
+$subtype = required_param('subtype', PARAM_PLUGIN);
+$action = optional_param('action', null, PARAM_PLUGIN);
+$plugin = optional_param('plugin', null, PARAM_PLUGIN);
+
+if (!empty($plugin)) {
+    require_sesskey();
+}
+
+// Create the class for this controller.
+$pluginmanager = new oer_plugin_manager($subtype);
+
+$PAGE->set_context(context_system::instance());
+
+// Execute the controller.
+$pluginmanager->execute($action, $plugin);

@@ -24,10 +24,10 @@ export const init = () => {
             checkboxes[i].checked = true;
         }
     };
-    $.mod_oercollection_add_to_collection = function(oer, oerhubid) {
+    $.mod_oercollection_add_to_collection = function(oer, oerhubid, resourcelink, resourcename) {
         ajax.call([{
             methodname: 'mod_oercollection_add_to_collection',
-            args: {oerid: oer, oerhubid: oerhubid},
+            args: {oerid: oer, oerhubid: oerhubid, resourcelink: resourcelink, resourcename: resourcename},
             done: function () {
                 location.reload();
             },

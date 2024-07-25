@@ -21,52 +21,28 @@
     {
     }
 }}
-<div id="region-main-box">
-<div class="row py-1"> 
-    <a href="#" onclick="$.mod_oersearch_checkall()">
-        {{#str}}checkall, mod_oercollection{{/str}}
-    </a>
-    <a href="#" onclick="$.mod_oersearch_checknone()">
-        {{#str}}checknone, mod_oercollection{{/str}}
-    </a>
-</div>
+<p>{{#searchoer}}<a class="btn btn-secondary" href="{{searchoer}}">{{#str}} backtoresources, mod_oercollection {{/str}}</a>{{/searchoer}}</p>
+<h4>{{# str }} serachoerhub, mod_oercollection {{/ str }}</h4>
 
-{{#oersearchresultlist}}
-<div class="row py-1">  
+<form action="{{actionurl}}" method="post" id="searchform" onsubmit="packData()">
+    <input type="hidden" name="filterdata" id="filterdata">
+    {{{searchform}}}
 
-  <div class="d-flex flex-column mb-3 p-0" style="width:100%;border: 1px LightGrey solid;border-radius: 5px;">
-    <div class="d-flex" style="border: 1px LightGrey solid;">
-    
-       <!-- the checkbox -->
-       <div class="d-flex p-2 align-self-center" style="width:5%;">
-         <input class="mod-oercollection-checkbox" type="checkbox" name="selectbox" value="{{oerentryid}}" onchange="$.mod_oersearch_selected()">
-       </div>
-       <!-- the checkbox END -->    
+    {{{resultlist}}}
+</form>
+{{#js}}
+    packData = () => {
+        const selectElements = document.querySelectorAll('select.filterdata');
+        const selectedValues = {};
 
-         <!-- HTML provided by the subplugin -->  
-         <div class="d-flex flex-grow-1 pr-1" style="width:60%;"> {{{oerhtml}}} </div>
-         <!-- HTML provided by the subplugin END -->  
+        selectElements.forEach(select => {
+            const id = select.id;
+            const selectedValue = select.value;
 
-      <!-- the Buttons-->
-      <div class="p-1 flex-fill align-self-center" style="width:10%;">
-         <a class="btn btn-secondary mb-1 px-1" href="{{oerhublink}}" target="_blank"  style="width:100%;"><small>{{#str}} openresource, mod_oercollection {{/str}}</small></a><br>
-         <a class="btn btn-primary mt-1 px-1" href="#" onclick="$.mod_oercollection_add_to_collection({{oerhubid}})" style="width:100%;"><small>{{#str}} addtocollection, mod_oercollection {{/str}}</small></a>
-      </div>
-      <!-- the Buttons END-->
+            selectedValues[id] = selectedValue;
+        });
 
-    </div>
-  </div>
-
-</div>
-{{/oersearchresultlist}}
-
-
-
-
-
-
-
-
-
-
-</div>
+        document.getElementById('filterdata').value = JSON.stringify(selectedValues);
+        window.console.log(selectedValues);
+    }
+{{/js}}

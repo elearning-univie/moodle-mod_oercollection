@@ -52,7 +52,7 @@ if ($node) {
     $node->make_active();
 }
 
-$pagetitle = get_string('pagetitle', 'oercollection');
+$pagetitle = get_string('pagetitle', 'mod_oercollection');
 $PAGE->set_title($oer->name);
 //$PAGE->set_title("Titolooo");
 $PAGE->set_heading($course->shortname);
@@ -80,6 +80,7 @@ if ($mform->is_cancelled()) {
     $DB->update_record('oercollection_resource', $oerentry);
     redirect($origin->out(false));
 }
+$pageheading = get_string('editcomment', 'mod_oercollection');
 
 $PAGE->set_title("Anmerkungen");
 $PAGE->set_heading($COURSE->fullname);
@@ -90,9 +91,10 @@ $activityheader = $PAGE->activityheader;
 //     'hidecompletion' => true,
 // ]);
 
-//echo $OUTPUT->header();
 $renderer = $PAGE->get_renderer('core');
-echo $renderer->header();
+//echo $renderer->header();
+echo $OUTPUT->header();
+echo $OUTPUT->heading_with_help($pageheading, '','');
 $mform->display();
 echo $renderer->footer();
 //echo $OUTPUT->footer();

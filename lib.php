@@ -219,7 +219,10 @@ function oercollection_cm_info_view(cm_info $cm) {
             $oerdata->introformat = $oercollection->introformat;
         }
     }
-    $templatecontext['intro'] = $oerdata->intro;
+    $templatecontext['intro'] = '';
+    if (isset($oerdata->intro)) {
+        $templatecontext['intro'] = $oerdata->intro;
+    }
     if ($cm->uservisible && $cm->customdata) {
             // Restore folder object from customdata.
             // Note the field 'customdata' is not empty IF AND ONLY IF we display contens inline.
@@ -235,18 +238,14 @@ function oercollection_cm_info_view(cm_info $cm) {
             if (empty($folder->introformat)) {
                 $folder->introformat = FORMAT_MOODLE;
             }
-            
-            $oerhtml = '<div>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.<br>
-        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-      </div>';
-            
+
             // get oer entries
             $sql = 'SELECT * FROM {oercollection_resource} oerr WHERE oerr.oerid = :oerid AND oerr.showresource = 1 ORDER BY oerr.position ASC';
             $oerentries = $DB->get_records_sql($sql, ['oerid' => $cm->instance]); //, "position ASC"
 
 
             $oerlist = [];
+            $oerapi = new \oerapi_oerhub\api\general($PAGE->url, $cm->instance);
             
             foreach ($oerentries as $oerentry) {
                 $commentexists = true;
@@ -255,7 +254,7 @@ function oercollection_cm_info_view(cm_info $cm) {
                 }
                 $oerlist[] = array(
                     'oerentryid' => $oerentry->id,
-                    'oerhtml' => $oerhtml,
+                    'oerhtml' => $oerapi->get_resource_html($oerentry->oerresourceid),
                     'commentexists' => $commentexists,
                     'commenttext' => $oerentry->notetextinternal,
                     'commentname' => $oerentry->notenameinternal,

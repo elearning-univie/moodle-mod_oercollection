@@ -34,6 +34,7 @@ $cmid = required_param('id', PARAM_INT);
 $filter = optional_param('oerefilter', 1, PARAM_INT);
 $page = optional_param('page', 0, PARAM_INT);
 $perpage = optional_param('perpage', DEFAULT_PAGE_SIZE, PARAM_INT);
+$deleted = optional_param('del', 0, PARAM_INT);
 list ($course, $cm) = get_course_and_cm_from_cmid($cmid, 'oercollection');
 
 $context = context_module::instance($cm->id);
@@ -49,6 +50,7 @@ $oerid = $DB->get_record('oercollection', array('id' => $cm->instance));
 
 $params = array();
 $params['id'] = $cmid;
+$params['del'] = $deleted;
 $params['perpage'] = $perpage;
 if ($page) {
     $params['page'] = $page;
@@ -111,8 +113,7 @@ $sql = "SELECT *
 $resourcesmodal = $DB->get_records_sql($sql);
 $sql = "SELECT COUNT(oer.id)
           FROM {oercollection_resource} oer
-         WHERE oer.oerid = $oerid->id
-      ORDER BY oer.position ASC ";
+         WHERE oer.oerid = $oerid->id";
 $rtotal = $DB->count_records_sql($sql);
 
 $templatecontext = [];
@@ -124,6 +125,7 @@ if (has_capability('mod/oercollection:editresources', $context)) {
     }
     $templatecontext['actionurl'] = $PAGE->url;
     $templatecontext['id'] = $cmid;
+    $templatecontext['deleted'] = $deleted;
     if ($filter) {
         $selstring = 'selected2' . $filter;
     }
@@ -141,12 +143,9 @@ if (has_capability('mod/oercollection:editresources', $context)) {
     }
 }
 
-$oerhtml = '<div>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.<br>
-        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-      </div>';
-
 $oerlist = [];
+
+$oerapi = new \oerapi_oerhub\api\general($PAGE->url, $oerid->id);
 
 foreach ($oerentries as $oerentry) {
     $oerhidden = true;
@@ -160,9 +159,9 @@ foreach ($oerentries as $oerentry) {
         $commentexists = false;
     }
     $commentlink = new moodle_url("/mod/oercollection/oercomment.php", ['id' => $cmid, 'oereid' => $oerentry->id]);
-    $oerlist[] = array(
+    $oerlist[] = [
         'oerentryid' => $oerentry->id,
-        'oerhtml' => $oerhtml,
+        'oerhtml' => $oerapi->get_resource_html($oerentry->oerresourceid),
         'oerhidden' => $oerhidden,
         'resourcelink' => $oerentry->resourcelink,
         'background' => $background,
@@ -170,7 +169,7 @@ foreach ($oerentries as $oerentry) {
         'commentlink' => $commentlink->out(false),
         'commenttext' => $oerentry->notetextinternal,
         'commentname' => $oerentry->notenameinternal,
-    );
+    ];
 }
 
 //Modal data loop
@@ -210,6 +209,10 @@ $PAGE->requires->js_call_amd('mod_oercollection/resourcecontroller', 'init');
 
 $renderer = $PAGE->get_renderer('core');
 echo $renderer->header();
+// print_object($deleted);
+// if ($deleted) {
+// echo $OUTPUT->notification('Da is was gelöscht worden', 'info');
+// }
 echo $renderer->render_from_template('mod_oercollection/resources', $templatecontext);
 echo $OUTPUT->paging_bar($totalnumberresources, $page, $perpage, $homeurl);
 echo $renderer->render_from_template('mod_oercollection/resourcesactionsandoptions', $templatecontext);

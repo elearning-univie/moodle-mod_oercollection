@@ -1,8 +1,10 @@
 import $ from "jquery";
 import ajax from "core/ajax";
 import notification from "core/notification";
+import {getString} from 'core/str';
 
 export const init = () => {
+
     $.mod_oercollection_set_visibility_oerentry = function(oer, oerentryid) {
             ajax.call([{
                 methodname: 'mod_oercollection_set_visibility_oerentry',
@@ -14,14 +16,29 @@ export const init = () => {
             }]);
     };
     $.mod_oercollection_delete_oerentry = function(oer, oerentryid) {
-            ajax.call([{
-                methodname: 'mod_oercollection_delete_oerentry',
-                args: {oerid: oer, oerentryid: oerentryid},
-                done: function () {
-                    location.reload();
-                },
-                fail: notification.exception
-            }]);
+ //                 notification.addNotification({
+ //               message: "hellooooo",
+  //              type: "info"
+ //           });
+        getString('deletewarning', 'mod_oercollection').then(function (warningmessage) {
+            if (confirm(warningmessage) ) {
+                ajax.call([{
+                    methodname: 'mod_oercollection_delete_oerentry',
+                    args: {oerid: oer, oerentryid: oerentryid},
+                    done: function () {
+                        let currentUrl = new URL(window.location.href);
+                        let params = new URLSearchParams(currentUrl.search);
+                        params.set('deleted', 1);
+                        window.location.href = currentUrl;
+                       // let currentUrl = window.location.href + '\&deleted=1';
+                        //params.append("deleted", 1);
+                        //window.location.href = window.location.href + 'deleted=1';
+                        location.reload();
+                    },
+                    fail: notification.exception
+                }]);
+            }
+        });
     };
     $.mod_oercollection_selected = function() {
         var checkboxes = document.getElementsByName('selectbox');

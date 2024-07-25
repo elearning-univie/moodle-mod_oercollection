@@ -46,9 +46,7 @@ if (!in_array($perpage, [10, 20, 50, 100, 5000], true)) {
 require_login($course, false, $cm);
 require_capability('mod/oercollection:view', $context);
 
-$oerid = $DB->get_record('oercollection', array('id' => $cm->instance));
-
-$oercollection = $DB->get_record('oercollection', array('id' => $cm->instance));
+$oercollection = $DB->get_record('oercollection', ['id' => $cm->instance]);
 
 $params = array();
 $params['id'] = $id;
@@ -69,18 +67,16 @@ $PAGE->set_title($oercollection->name);
 $PAGE->set_heading($course->shortname);
 $PAGE->add_body_class('limitedwidth');
 
-
 //pagination
 $paginationsql = "";
 $offset = ($pg)*$perpage;
-$totalnumberresources = $DB->count_records('oercollection_resource', ['oerid' => $oerid->id]);
+$totalnumberresources = $DB->count_records('oercollection_resource', ['oerid' => $oercollection->id]);
 if (($totalnumberresources/$perpage) > 1) {
     $paginationsql = " LIMIT $perpage OFFSET $offset";
 }
 $paginationsql = "LIMIT $perpage OFFSET $offset";
 $sql = 'SELECT * FROM {oercollection_resource} oerr WHERE oerr.oerid = :oerid AND oerr.showresource = 1 ' . $paginationsql;
-$oerentries = $DB->get_records_sql($sql, ['oerid' => $oerid->id]); //, "position ASC"
-
+$oerentries = $DB->get_records_sql($sql, ['oerid' => $oercollection->id]); //, "position ASC"
 
 $templatecontext = [];
 
@@ -89,7 +85,7 @@ if (has_capability('mod/oercollection:editresources', $context)) {
     if ($oerexists) {
         $templatecontext['oernumber'] = $totalnumberresources;
     }
-    $templatecontext['oerid'] = $oerid->id;
+    $templatecontext['oerid'] = $oercollection->id;
     $templatecontext['oerexists'] = $oerexists;
     if ($oerexists) {
         $templatecontext['linktext'] = 'bla';
@@ -98,15 +94,10 @@ if (has_capability('mod/oercollection:editresources', $context)) {
     }
 }
 
-//=========== Dummy template for table
-$oerhtml = '<div>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.<br>
-        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-      </div>';
-
 // get oer entries
 
 $oerlist = [];
+$oerapi = new \oerapi_oerhub\api\general($PAGE->url, $oercollection->id);
 
 foreach ($oerentries as $oerentry) {
     $commentexists = true;
@@ -115,7 +106,7 @@ foreach ($oerentries as $oerentry) {
     }
     $oerlist[] = array(
         'oerentryid' => $oerentry->id,
-        'oerhtml' => $oerhtml,
+        'oerhtml' => $oerapi->get_resource_html($oerentry->oerresourceid),
         'commentexists' => $commentexists,
         'commenttext' => $oerentry->notetextinternal,
         'commentname' => $oerentry->notenameinternal,

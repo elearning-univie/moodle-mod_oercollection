@@ -100,7 +100,7 @@ class oerapi extends \core\plugininfo\base {
      * @return moodle_url
      */
     public static function get_manage_url() {
-        return new moodle_url('/mod/assign/adminmanageplugins.php', array('subtype'=>'assignsubmission'));
+        return new \moodle_url('/mod/oercollection/adminmanageplugins.php', array('subtype'=>'oerapi'));
     }
 
     public function get_settings_section_name() {
