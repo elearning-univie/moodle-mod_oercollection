@@ -25,7 +25,7 @@
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="oerid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
-        <FIELD NAME="oerresourceid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="can be the original OER Hub resource ID or an moodle internal ID connecting to the Hub ID"/>
+        <FIELD NAME="oerresourceid" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false"/>
         <FIELD NAME="apipluginid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="showresource" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false"/>
         <FIELD NAME="position" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>

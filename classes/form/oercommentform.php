@@ -83,15 +83,13 @@ class oercommentform extends \moodleform {
      * @throws coding_exception
      */
     public function definition() {
-        global $PAGE;
 
         $mform = $this->_form;
-
-        $mform->addElement('header', 'generalheader', get_string("general", 'form'));
 
         $mform->addElement('text', 'notenameinternal', get_string('oercommentname', 'mod_oercollection'),
                 array('size' => 50, 'maxlength' => 255));
         $mform->setType('notenameinternal', PARAM_TEXT);
+        $mform->setDefault('notenameinternal', get_string('comment', 'oercollection'));
 
         $mform->addElement('editor', 'notetextinternal', get_string('oercommentdescription', 'mod_oercollection'),
                 array('rows' => 15), $this->editoroptions);

@@ -93,3 +93,7 @@ $string['moveresource'] = 'Resource verschieben';
 $string['insertafter'] = 'Resource einfügen nach:';
 $string['manageoerapiplugins'] = '';
 $string['oerapiplugins'] = '';
+$string['deletewarning'] = 'Resource löschen?';
+$string['subplugintype_oerapi_plural'] = 'Oerapis';
+$string['editcomment'] = 'Anmerkung bearbeiten';
+

@@ -27,22 +27,19 @@
 require('../../config.php');
 require_once(__DIR__ . '/lib.php');
 
-// $id = required_param('id', PARAM_INT);
-// [$course, $cm] = get_course_and_cm_from_cmid($id, 'oercollection');
-// $instance = $DB->get_record('oercollection', ['id'=> $cm->instance], '*', MUST_EXIST);
-
 global $PAGE, $OUTPUT, $DB, $CFG;
 
 $id = required_param('id', PARAM_INT);
 $searchstring = optional_param('searchstring', null, PARAM_TEXT);
-list ($course, $cm) = get_course_and_cm_from_cmid($id, 'oercollection');
+$filter = optional_param('filterdata', null, PARAM_TEXT);
 
+list ($course, $cm) = get_course_and_cm_from_cmid($id, 'oercollection');
 $context = context_module::instance($cm->id);
 
-require_login($course, false, $cm);
-require_capability('mod/oercollection:view', $context);
+require_login($course, true, $cm);
+require_capability('mod/oercollection:editresources', $context);
 
-$wordcloud = $DB->get_record('oercollection', array('id' => $cm->instance));
+$oercollection = $DB->get_record('oercollection', array('id' => $cm->instance));
 
 $PAGE->set_url(new moodle_url("/mod/oercollection/searchoer.php", ['id' => $id]));
 $node = $PAGE->settingsnav->find('mod_oercollection', navigation_node::TYPE_SETTING);
@@ -51,51 +48,26 @@ if ($node) {
 }
 
 $pagetitle = get_string('pagetitle', 'oercollection');
-$PAGE->set_title($wordcloud->name);
+$PAGE->set_title($oercollection->name);
 $PAGE->set_heading($course->shortname);
 $PAGE->add_body_class('limitedwidth');
-
-$templatecontext = [];
-$oerexists = false;
-
-//if ($isteacher) {
-$overviewlink = new moodle_url('/mod/oercollection/resources.php', ['id' => $id]);
-//$templatestablecontext['isteacher'] = 1;
-$templatecontext['resourceslink'] = $overviewlink->out(false);
-//}
-
-if (has_capability('mod/oercollection:editresources', $context)) {
-    $templatecontext['searchoer'] = new moodle_url("/mod/oercollection/resources.php", ['id' => $id]);
-    $templatecontext['studentpreviewlink'] = new moodle_url("/mod/oercollection/resources.php", ['id' => $id]);
-    if ($oerexists) {
-        $templatecontext['linktext'] = 'bla';
-    } else {
-        $templatecontext['link'] = new moodle_url("/mod/oercollection/resources.php", ['id' => $id]);
-    }
-}
 
 $PAGE->requires->js_call_amd('mod_oercollection/searchcontroller', 'init');
 
 $renderer = $PAGE->get_renderer('core');
 echo $renderer->header();
-echo $renderer->render_from_template('mod_oercollection/searchoerbuttons', $templatecontext);
 
-$searchform = new \oerapi_oerhub\api\general($PAGE->url);
-echo $searchform->get_search_form();
+$searchform = new \oerapi_oerhub\api\general($PAGE->url, $oercollection->id);
+$templatecontext = [
+    'searchoer' => new moodle_url("/mod/oercollection/resources.php", ['id' => $id]),
+    'searchform' => $searchform->get_search_form($searchstring),
+    'actionurl' => $PAGE->url,
+];
 
 if (!is_null($searchstring)) {
     $oersearchresults = [];
-    $results = $searchform->get_results($searchstring);
-
-    if (count($results) != 0) {
-        foreach ($results as $result) {
-            $oersearchresults[] = array('oerhubid' => 111, 'oerhtml' => $result, 'oerresourcelink' => 'bla');
-        }
-        $templatecontext['oersearchresultlist'] = $oersearchresults;
-        echo $renderer->render_from_template('mod_oercollection/searchoer', $templatecontext);
-    } else {
-        echo "nothing found";
-    }
+    $templatecontext['resultlist'] = $searchform->get_results($searchstring, $filter);
 }
 
+echo $renderer->render_from_template('mod_oercollection/searchoer', $templatecontext);
 echo $renderer->footer();
