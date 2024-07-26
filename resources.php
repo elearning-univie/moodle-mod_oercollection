@@ -164,6 +164,7 @@ foreach ($oerentries as $oerentry) {
         'oerhtml' => $oerapi->get_resource_html($oerentry->oerresourceid),
         'oerhidden' => $oerhidden,
         'resourcelink' => $oerentry->resourcelink,
+        'resourcename' => "'" . $oerentry->resourcename . "'",
         'background' => $background,
         'commentexists' => $commentexists,
         'commentlink' => $commentlink->out(false),

@@ -4,7 +4,24 @@ import notification from "core/notification";
 import {getString} from 'core/str';
 
 export const init = () => {
+    window.onload = function() {
+      // Construct URLSearchParams object instance from current URL querystring.
+      var queryParams = new URLSearchParams(window.location.search);
 
+      if (queryParams.get("delete") == 1) {
+        getString('deleteinfomessage', 'mod_oercollection').then(function (infomessage) {
+              notification.addNotification({
+              message: infomessage,
+              type: "info"
+            });
+        // Set new or modify existing parameter value
+        queryParams.set("delete", "0");
+
+        // Replace current querystring with the new one.
+        history.replaceState(null, null, "?"+queryParams.toString());
+        });
+      }
+    };
     $.mod_oercollection_set_visibility_oerentry = function(oer, oerentryid) {
             ajax.call([{
                 methodname: 'mod_oercollection_set_visibility_oerentry',
@@ -15,28 +32,26 @@ export const init = () => {
                 fail: notification.exception
             }]);
     };
-    $.mod_oercollection_delete_oerentry = function(oer, oerentryid) {
- //                 notification.addNotification({
- //               message: "hellooooo",
-  //              type: "info"
- //           });
-        getString('deletewarning', 'mod_oercollection').then(function (warningmessage) {
-            if (confirm(warningmessage) ) {
+    $.mod_oercollection_delete_oerentry = function(oer, oerentryid, resourcename) {
+        getString('deletepopup', 'mod_oercollection', resourcename).then(function (warningmessage) {
+            if(confirm(warningmessage) ) {
                 ajax.call([{
                     methodname: 'mod_oercollection_delete_oerentry',
                     args: {oerid: oer, oerentryid: oerentryid},
-                    done: function () {
-                        let currentUrl = new URL(window.location.href);
-                        let params = new URLSearchParams(currentUrl.search);
-                        params.set('deleted', 1);
-                        window.location.href = currentUrl;
-                       // let currentUrl = window.location.href + '\&deleted=1';
-                        //params.append("deleted", 1);
-                        //window.location.href = window.location.href + 'deleted=1';
+                    done: function() {
+                        var queryParams = new URLSearchParams(window.location.search);
+                        queryParams.set("delete", "1");
+                        history.replaceState(null, null, "?"+queryParams.toString());
                         location.reload();
                     },
                     fail: notification.exception
                 }]);
+            } else {
+                var uri = window.location.toString();
+                if (uri.indexOf("#")) {
+                  var clean_uri = uri.substring(0, uri.indexOf("#"));
+                  window.history.replaceState({}, document.title, clean_uri);
+                }
             }
         });
     };
