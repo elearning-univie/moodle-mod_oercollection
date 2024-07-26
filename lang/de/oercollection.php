@@ -96,6 +96,5 @@ $string['oerapiplugins'] = '';
 $string['deletewarning'] = 'Resource löschen?';
 $string['subplugintype_oerapi_plural'] = 'Oerapis';
 $string['editcomment'] = 'Anmerkung bearbeiten';
-$string['deleteinfomessage'] = '1 Ressource wurde gelöscht';
+$string['deleteinfomessage'] = '{$a} Ressource(n) wurde(n) gelöscht';
 $string['deletepopup'] = 'Hiermit wird die Ressource "{$a}" aus der Kollektion entfernt. Vorhandene Anmerkungen werden unwiderruflich gelöscht!';
-

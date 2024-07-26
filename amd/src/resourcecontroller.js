@@ -8,8 +8,8 @@ export const init = () => {
       // Construct URLSearchParams object instance from current URL querystring.
       var queryParams = new URLSearchParams(window.location.search);
 
-      if (queryParams.get("delete") == 1) {
-        getString('deleteinfomessage', 'mod_oercollection').then(function (infomessage) {
+      if (queryParams.get("delete") > 0) {
+        getString('deleteinfomessage', 'mod_oercollection', queryParams.get("delete")).then(function (infomessage) {
               notification.addNotification({
               message: infomessage,
               type: "info"
@@ -98,8 +98,10 @@ export const init = () => {
         var checkboxes = document.getElementsByName('selectbox');
         var oerids = [];
         var rlinks = [];
+        var todelete = 0;
         for (var i = 0; i < checkboxes.length; i++) {
             if (checkboxes[i].checked == true) {
+                todelete++;
                 oerids[i] = checkboxes[i].value;
                 rlinks[i] = document.getElementById('resourcelink' + checkboxes[i].value).href;
             }
@@ -130,6 +132,9 @@ export const init = () => {
                 methodname: 'mod_oercollection_delete_selected_oerentries',
                 args: {oerid: oer, oerentryids: oerids},
                 done: function () {
+                    var queryParams = new URLSearchParams(window.location.search);
+                    queryParams.set("delete", todelete);
+                    history.replaceState(null, null, "?"+queryParams.toString());
                     location.reload();
                 },
                 fail: notification.exception
