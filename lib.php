@@ -200,7 +200,7 @@ function oercollection_cm_info_dynamic(cm_info $cm) {
 }
 /**
  * Overwrites the content in the course-module object with the folder files list
- * if folder.display == FOLDER_DISPLAY_INLINE
+ * if folder.display == 1
  *
  * @param cm_info $cm
  */
@@ -230,7 +230,7 @@ function oercollection_cm_info_view(cm_info $cm) {
             $folder = $cm->customdata;
             $folder->id = (int)$cm->instance;
             $folder->course = (int)$cm->course;
-            $folder->display = FOLDER_DISPLAY_INLINE;
+            $folder->display = 1;
             $folder->name = $cm->name;
             if (empty($folder->intro)) {
                 $folder->intro = '';
