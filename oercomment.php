@@ -8,7 +8,7 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// MERCHANTABILITY or FITNE SS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
@@ -38,11 +38,10 @@ $PAGE->set_url($url);
 //list ($course, $cm) = get_course_and_cm_from_cmid($oerid, 'oercollection');
 list ($course, $cm) = get_course_and_cm_from_cmid($cmid, 'oercollection');
 $oerid = $cm->instance;
-$context = \context::instance_by_id($oerid);
+$context = context_module::instance($cm->id);
 
-//context = \context::instance_by_id($this->oerid);
 require_login($course, false, $cm);
-require_capability('mod/oercollection:view', $context);
+require_capability('mod/oercollection:editresources', $context);
 
 $oer = $DB->get_record('oercollection', array('id' => $cm->instance));
 

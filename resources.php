@@ -44,7 +44,7 @@ if (!in_array($perpage, [5, 10, 20, 50, 100, 5000], true)) {
 }
 
 require_login($course, false, $cm);
-require_capability('mod/oercollection:view', $context);
+require_capability('mod/oercollection:editresources', $context);
 
 $oerid = $DB->get_record('oercollection', array('id' => $cm->instance));
 
