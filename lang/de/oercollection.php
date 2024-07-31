@@ -25,6 +25,7 @@
  */
 
 $string['availableresources'] = 'Verfügbare Ressourcen';
+$string['availableresourcesnumberinfo'] = '{$a->total} Ressourcen vorhanden ( davon {$a->hidden} ausgeblendet)';
 $string['backtoresources'] = 'Zu Ressourcen';
 $string['display'] = 'Darstellung';
 $string['displaymode'] = 'Inhalt anzeigen';
@@ -52,7 +53,6 @@ $string['overviewinfo'] = '<details><summary>
 <p> Lorem ipsum dolor sit amet, consectetur adipisicing elit,
       sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
       quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p></details>';
-$string['studentinfoshort'] = 'Bitte erarbeiten Sie sich das Thema der nächsten Einheit anhand der hier verlinkten Inhalte.';
 $string['studentinfodetailed'] = '<details><summary>
     <i class="icon fa fa-info-circle fa-fw" aria-hidden="true"></i><strong>Get to know more about the open education resources (OERs) listed here...</strong>
 </summary>
@@ -98,3 +98,7 @@ $string['subplugintype_oerapi_plural'] = 'Oerapis';
 $string['editcomment'] = 'Anmerkung bearbeiten';
 $string['deleteinfomessage'] = '{$a} Ressource(n) wurde(n) gelöscht';
 $string['deletepopup'] = 'Hiermit wird die Ressource "{$a}" aus der Kollektion entfernt. Vorhandene Anmerkungen werden unwiderruflich gelöscht!';
+$string['notenameinternal'] = '';
+$string['notenameinternal_help'] = 'Info';
+$string['notetextinternal'] = '';
+$string['notetextinternal_help'] = 'Info';

@@ -39,7 +39,7 @@
         <tbody>
           <tr>
             {{#oerexists}}
-              <td style="width:100%;font-weight: bold;padding-left: 0px;">{{#str}} availableresources, mod_oercollection {{/str}} {{oernumber}}</td>
+              <td style="width:100%;font-weight: bold;padding-left: 0px;">{{#str}} availableresourcesnumberinfo, mod_oercollection, { "total": {{oernumber}}, "hidden": {{oernumberhidden}} } {{/str}} </td>
             {{/oerexists}}
             {{^oerexists}}
               <td style="width:100%;font-weight: bold;padding-left: 0px;">{{#str}} noresources, mod_oercollection {{/str}}</td>

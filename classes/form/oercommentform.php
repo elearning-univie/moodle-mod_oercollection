@@ -90,11 +90,13 @@ class oercommentform extends \moodleform {
                 array('size' => 50, 'maxlength' => 255));
         $mform->setType('notenameinternal', PARAM_TEXT);
         $mform->setDefault('notenameinternal', get_string('comment', 'oercollection'));
-
+        $mform->addHelpButton('notenameinternal', 'notenameinternal', 'oercollection');
+        
         $mform->addElement('editor', 'notetextinternal', get_string('oercommentdescription', 'mod_oercollection'),
                 array('rows' => 15), $this->editoroptions);
         $mform->setType('notetextinternal', PARAM_RAW);
-
+        $mform->addHelpButton('notetextinternal', 'notetextinternal', 'oercollection');
+        
         $this->add_hidden_fields();
         $this->add_action_buttons(true, get_string('savechanges'));
     }

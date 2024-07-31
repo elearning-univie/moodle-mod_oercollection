@@ -122,6 +122,7 @@ if (has_capability('mod/oercollection:editresources', $context)) {
     $oerexists = $oerentries ? true : false;
     if ($oerexists) {
         $templatecontext['oernumber'] = $DB->count_records('oercollection_resource', ['oerid' => $oerid->id]);
+        $templatecontext['oernumberhidden'] = $DB->count_records('oercollection_resource', ['oerid' => $oerid->id, 'showresource' => 0]);
     }
     $templatecontext['actionurl'] = $PAGE->url;
     $templatecontext['id'] = $cmid;
