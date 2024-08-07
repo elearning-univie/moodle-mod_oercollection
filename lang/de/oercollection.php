@@ -25,7 +25,7 @@
  */
 
 $string['availableresources'] = 'Vorhandene Ressourcen';
-$string['availableresourcesnumberinfo'] = '{$a->total} Ressourcen vorhanden ( davon {$a->hidden} ausgeblendet)';
+$string['availableresourcesnumberinfo'] = '{$a->total} Ressourcen vorhanden (davon {$a->hidden} ausgeblendet)';
 $string['backtoresources'] = 'Zurück';
 $string['display'] = 'Darstellung';
 $string['displaymode'] = 'Inhalt anzeigen';
