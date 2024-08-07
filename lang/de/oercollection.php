@@ -24,27 +24,27 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['availableresources'] = 'Verfügbare Ressourcen';
+$string['availableresources'] = 'Vorhandene Ressourcen';
 $string['availableresourcesnumberinfo'] = '{$a->total} Ressourcen vorhanden ( davon {$a->hidden} ausgeblendet)';
-$string['backtoresources'] = 'Zu Ressourcen';
+$string['backtoresources'] = 'Zurück';
 $string['display'] = 'Darstellung';
 $string['displaymode'] = 'Inhalt anzeigen';
-$string['displaymode_help'] = 'Hifle für Inhalte anzeigen';
+$string['displaymode_help'] = 'Wenn der Inhalt der OER-Kollektion auf der Kursseite angezeigt werden soll, wird kein Link zu einer separaten Seite erstellt. (Wird nicht für Kollektionen mit vielen Ressourcen empfohlen!) Die Beschreibung wird nur angezeigt, wenn \'Beschreibung im Kurs zeigen\' angekreuzt ist. Beachten Sie, dass Zugriffe nicht protokolliert werden können, wenn der Inhalt offen auf der Kursseite dargestellt ist.';
 $string['newpage'] = 'Auf seperater Seite';
 $string['thispage'] = 'Auf der Kursseite';
-$string['modulename'] = 'OER Sammlung';
-$string['modulenameplural'] = 'OER Sammlungen';
+$string['modulename'] = 'OER-Kollektion';
+$string['modulenameplural'] = 'OER-Kollektionen';
 $string['noresources'] = 'Zur Zeit sind keine Ressourcen verfügbar.';
-$string['oercollectionname'] = 'OER Sammlung Name';
-$string['oercollection:addinstance'] = 'Add OER Collection activity';
-$string['oercollection:editresources'] = 'Edit OER Collection resources';
-$string['oercollection:view'] = 'View OER Collection activity'; 
+$string['oercollectionname'] = 'Name';
+$string['oercollection:addinstance'] = 'OER-Kollektion hinzufügen';
+$string['oercollection:editresources'] = 'OER-Kollektion bearbeiten';
+$string['oercollection:view'] = 'OER-Kollektion anzeigen';
 $string['oerresourcelink'] = 'Ressourcen verwalten';
-$string['oersearchlink'] = 'Ressourcen im OERHub suchen';
-$string['pluginname'] = 'OER Sammlung';
-$string['privacy:metadata'] = 'The OER collection resource plugin does not store any personal data.';
-$string['pluginadministration'] = 'OER Collection Administration'; 
-$string['pagetitle'] = 'Moodle OER Collection';
+$string['oersearchlink'] = 'Ressourcen im OERhub suchen';
+$string['pluginname'] = 'OER-Kollektion';
+$string['privacy:metadata'] = 'Das Plugin \'OER-Kollektion\' speichert keine personenbezogenen Daten.';
+$string['pluginadministration'] = 'OER-Kollektion - Administration';
+$string['pagetitle'] = 'OER-Kollektion';
 $string['resources'] = 'Ressourcen'; 
 $string['studentpreviewlink'] = 'Studierenden-Vorschau';
 $string['overviewinfo'] = '<details><summary>
@@ -53,12 +53,7 @@ $string['overviewinfo'] = '<details><summary>
 <p> Lorem ipsum dolor sit amet, consectetur adipisicing elit,
       sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
       quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p></details>';
-$string['studentinfodetailed'] = '<details><summary>
-    <i class="icon fa fa-info-circle fa-fw" aria-hidden="true"></i><strong>Get to know more about the open education resources (OERs) listed here...</strong>
-</summary>
-<p> Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-      sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-      quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p></details>';
+$string['studentinfodetailed'] = '<details><summary> <i class="icon fa fa-info-circle fa-fw" aria-hidden="true"></i><strong>Erfahren Sie mehr über die hier angezeigten offenen Bildungsressourcen (OER)...</strong> </summary> <p> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p></details>';
 $string['comment'] = 'Anmerkung';
 $string['editcomment'] = 'Anmerkung bearbeiten';
 $string['move'] = 'Verschieben';
@@ -70,35 +65,36 @@ $string['oercommentdescription'] = 'Beschreibung';
 $string['checkall'] = 'Alle/';
 $string['checknone'] = 'Keine';
 $string['selectdotdot'] = 'Mit Auswahl...';
-$string['openselected'] = 'Ausgewählte Resourcen öffnen';
-$string['showselected'] = 'Ausgewählte Resourcen einblenden';
-$string['hideselected'] = 'Ausgewählte Resourcen ausblenden';
+$string['openselected'] = 'Ausgewählte Ressourcen öffnen';
+$string['showselected'] = 'Ausgewählte Ressourcen einblenden';
+$string['hideselected'] = 'Ausgewählte Ressourcen ausblenden';
 $string['removeselected'] = 'Aus Kollektion entfernen';
 $string['start'] = 'Start';
 $string['filter'] = 'Filter';
 $string['nofilters'] = 'Keine Filter';
-$string['onlyhidden'] = 'Ausgeblendete Resources';
-$string['onlyvisible'] = 'Eingeblendete Resources';
+$string['onlyhidden'] = 'Ausgeblendete Ressourcen';
+$string['onlyvisible'] = 'Eingeblendete Ressourcen';
 $string['options'] = 'Optionen';
 $string['linkallresources'] = '{$a} insgesamt';
 $string['of'] = ", davon:";
-$string['linkvisibleresources'] = '{$a} - für Teilnehmer:innen eingeblendet';
-$string['linkhiddenresources'] = '{$a} - für Teilnehmer:innen ausgeblendet';
+$string['linkhiddenresources'] = '{$a} - für Teilnehmer/innen ausgeblendet';
+$string['linkvisibleresources'] = '{$a} - für Teilnehmer/innen eingeblendet';
 $string['serachoerhub'] = 'Suche im OERhub';
-$string['openresource'] = 'Resource öffnen';
+$string['openresource'] = 'Ressource öffnen';
 $string['addtocollection'] = 'Zu Kollektion hinzufügen';
 $string['resourcesperpage'] = 'Einträge pro Seite';
 $string['dropdownall'] = 'Alle';
-$string['moveresource'] = 'Resource verschieben';
-$string['insertafter'] = 'Resource einfügen nach:';
-$string['manageoerapiplugins'] = '';
-$string['oerapiplugins'] = '';
-$string['deletewarning'] = 'Resource löschen?';
-$string['subplugintype_oerapi_plural'] = 'Oerapis';
+$string['moveresource'] = 'Ressource verschieben';
+$string['insertafter'] = 'Ressource einfügen nach:';
+$string['manageoerapiplugins'] = 'Plugins der OER-API verwalten';
+$string['oerapiplugins'] = 'Plugins der OER-API';
+$string['deletewarning'] = 'Ressource löschen?';
+$string['subplugintype_oerapi_plural'] = 'OER-APIs';
 $string['editcomment'] = 'Anmerkung bearbeiten';
 $string['deleteinfomessage'] = '{$a} Ressource(n) wurde(n) gelöscht';
 $string['deletepopup'] = 'Hiermit wird die Ressource "{$a}" aus der Kollektion entfernt. Vorhandene Anmerkungen werden unwiderruflich gelöscht!';
-$string['notenameinternal'] = '';
-$string['notenameinternal_help'] = 'Info';
-$string['notetextinternal'] = '';
-$string['notetextinternal_help'] = 'Info';
+$string['notenameinternal'] = 'Name der Anmerkung';
+$string['notenameinternal_help'] = 'Vergeben Sie einen individuellen Namen für Ihre Anmerkungen. Darüber können Sie gezielt anzeigen, welche Art von Information in der Beschreibung der Anmerkungen enthalten ist.';
+$string['notetextinternal'] = 'Beschreibung';
+$string['notetextinternal_help'] = 'Fügen Sie konkrete Information zu einer Ressource hinzu, um Teilnehmer/innen auf etwas hinzuweisen.';
+
