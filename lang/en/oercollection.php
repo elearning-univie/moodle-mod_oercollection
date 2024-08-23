@@ -83,11 +83,8 @@ $string['options'] = 'Options';
 $string['linkallresources'] = '{$a} in total';
 $string['of'] = ", of:";
 $string['linkvisibleresources'] = '{$a} - visible for students';
-
-$string['linkhiddenresources'] = '{$a} - für Teilnehmer:innen ausgeblendet';
-$string['serachoerhub'] = 'Suche im OERhub';
+$string['linkhiddenresources'] = '{$a} - hidden for students';
 $string['serachoerhub'] = 'Search in OERhub';
-
 $string['openresource'] = 'Open resource';
 $string['addtocollection'] = 'Add to collection';
 $string['resourcesperpage'] = 'Entries per page';
