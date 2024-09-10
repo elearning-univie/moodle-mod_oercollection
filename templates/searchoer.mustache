@@ -38,11 +38,18 @@
         selectElements.forEach(select => {
             const id = select.id;
             const selectedValue = select.value;
-
+            if (id === 'yearfrom' || id === 'yearto') {
+                if (document.getElementById(id + 'checkbox').checked == false) {
+                    return;
+                }
+            }
             selectedValues[id] = selectedValue;
         });
 
         document.getElementById('filterdata').value = JSON.stringify(selectedValues);
         window.console.log(selectedValues);
-    }
+    };
+    require(['mod_oercollection/defaultcontroller'], function(defaultcontroller) {
+        defaultcontroller.init();
+    });
 {{/js}}
