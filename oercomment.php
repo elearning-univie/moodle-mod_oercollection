@@ -73,7 +73,11 @@ if ($mform->is_cancelled()) {
     $DB->update_record('oercollection_resource', $oerentry);
     redirect($origin->out(false));
 } else if ($fromform = $mform->get_data()) {
-    $oerentry->notenameinternal = $fromform->notenameinternal;
+    if ($fromform->notenameinternal == "" || $fromform->notenameinternal == NULL) {
+        $oerentry->notenameinternal = get_string('comment', 'oercollection');
+    } else {
+        $oerentry->notenameinternal = $fromform->notenameinternal;
+    }
     $oerentry->notetextinternal = $fromform->notetextinternal['text'];
    /// print_object($oerentry);
     $DB->update_record('oercollection_resource', $oerentry);
