@@ -44,7 +44,11 @@ if (!in_array($perpage, [5, 10, 20, 50, 100, 5000], true)) {
 }
 
 require_login($course, false, $cm);
-require_capability('mod/oercollection:editresources', $context);
+//require_capability('mod/oercollection:editresources', $context);
+if (!has_capability('mod/oercollection:editresources', $context)) {
+    $url = new moodle_url("/mod/oercollection/oercollectionstudentview.php", ['id' => $cmid]);
+    redirect($url);
+}
 
 $oerid = $DB->get_record('oercollection', array('id' => $cm->instance));
 
@@ -111,6 +115,7 @@ $sql = "SELECT *
          WHERE oer.oerid = $oerid->id
       ORDER BY oer.position ASC ";
 $resourcesmodal = $DB->get_records_sql($sql);
+//$resourcesmodal = $oerentries;
 $sql = "SELECT COUNT(oer.id)
           FROM {oercollection_resource} oer
          WHERE oer.oerid = $oerid->id";
@@ -177,7 +182,11 @@ foreach ($oerentries as $oerentry) {
 //Modal data loop
 $resourcestemp = [];
 foreach ($resourcesmodal as $remod) {
-    $resourcestemp[] = ['id' => $remod->id, 'name' => $remod->resourcename];
+    $oerhidden = true;
+    if($remod->showresource) {
+        $oerhidden = false;
+    }
+    $resourcestemp[] = ['id' => $remod->id, 'name' => $remod->resourcename, 'hidden' => $oerhidden];
 }
 
 $i=0;

@@ -75,7 +75,9 @@ if (($totalnumberresources/$perpage) > 1) {
     $paginationsql = " LIMIT $perpage OFFSET $offset";
 }
 $paginationsql = "LIMIT $perpage OFFSET $offset";
-$sql = 'SELECT * FROM {oercollection_resource} oerr WHERE oerr.oerid = :oerid AND oerr.showresource = 1 ' . $paginationsql;
+$sql = 'SELECT * FROM {oercollection_resource} oerr WHERE oerr.oerid = :oerid AND oerr.showresource = 1 ';
+$sql .= " ORDER BY oerr.position ASC ";
+$sql .= $paginationsql;
 $oerentries = $DB->get_records_sql($sql, ['oerid' => $oercollection->id]); //, "position ASC"
 
 $templatecontext = [];

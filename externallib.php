@@ -161,16 +161,17 @@ class mod_oercollection_external extends external_api {
         
         $params = self::validate_parameters(self::set_visibility_all_parameters(),
             array('oerid' => $oerid, 'oerentryids' => $oerentryids, 'show' => $show));
-        
-       // $DB->get_in_or_equal($items);
-        list($inids, $oereids) = $DB->get_in_or_equal($oerentryids);
-        $sql = "SELECT * FROM {oercollection_resource}
-                        WHERE id $inids";
-        $oerentries = $DB->get_records_sql($sql, $oereids);
-        foreach ($oerentries as $oerentry) {
-            if ($oerentry) {
-                $oerentry->showresource = $show;
-                $DB->update_record('oercollection_resource', $oerentry);
+
+        if ($oerentryids) {
+            list($inids, $oereids) = $DB->get_in_or_equal($oerentryids);
+            $sql = "SELECT * FROM {oercollection_resource}
+                            WHERE id $inids";
+            $oerentries = $DB->get_records_sql($sql, $oereids);
+            foreach ($oerentries as $oerentry) {
+                if ($oerentry) {
+                    $oerentry->showresource = $show;
+                    $DB->update_record('oercollection_resource', $oerentry);
+                }
             }
         }
     }
@@ -234,9 +235,9 @@ class mod_oercollection_external extends external_api {
         
         $move = array_splice($resourcelist, ($resourcetomove->position - 1), 1);
         $newlist = array_merge(
-            array_slice( $resourcelist, 0, ($resourcemoveafter->position - $xx)),
+            array_slice( $resourcelist, 0, ($resourcemoveafter->position - 1 - $xx)),
             $move,
-            array_slice( $resourcelist, ($resourcemoveafter->position - $xx))
+            array_slice( $resourcelist, ($resourcemoveafter->position - 1 - $xx))
             );
         
         $ctr = 1;
