@@ -52,10 +52,11 @@ if (!has_capability('mod/oercollection:editresources', $context)) {
 
 $oerid = $DB->get_record('oercollection', array('id' => $cm->instance));
 
-$params = array();
-$params['id'] = $cmid;
-$params['del'] = $deleted;
-$params['perpage'] = $perpage;
+$params = [
+    'id' => $cmid,
+    'del' => $deleted,
+    'perpage' => $perpage,
+];
 if ($page) {
     $params['page'] = $page;
 }
@@ -72,82 +73,51 @@ $PAGE->set_title($oerid->name);
 $PAGE->set_heading($course->shortname);
 $PAGE->add_body_class('limitedwidth');
 
+switch ($filter) {
+    case 2: // Only visible.
+        $sqlshow = " AND oer.showresource = 1 ";
+        break;
+    case 3: // Only hidden.
+        $sqlshow = " AND oer.showresource = 0 ";
+        break;
+    default:
+        $sqlshow = "";
+}
+
+//pagination
+$offset = ($page * $perpage);
 
 $sql = "SELECT *
           FROM {oercollection_resource} oer
-         WHERE oer.oerid = $oerid->id";
+         WHERE oer.oerid = $oerid->id" . $sqlshow . " ORDER BY oer.position ASC";
 
-$sqlshow = "";
-if ($filter) {
-    switch ($filter) {
-        case 1:
-            break;
-        case 2: // only visible
-            $sqlshow .= " AND oer.showresource = 1 ";
-            break;
-        case 3: // only hidden
-            $sqlshow .= " AND oer.showresource = 0 ";
-    }
-}
-
-$sqlcount = "SELECT COUNT(oer.id)
-          FROM {oercollection_resource} oer
-         WHERE oer.oerid = $oerid->id" .$sqlshow;
-
-$totalnumberresources = $DB->count_records_sql($sqlcount);
-
-//pagination
-$paginationsql = "";
-$offset = ($page)*$perpage;
-if (($totalnumberresources/$perpage) > 1) {
-    $paginationsql = " LIMIT $perpage OFFSET $offset";
-}
-$paginationsql = " LIMIT $perpage OFFSET $offset";
-
-$sql .= $sqlshow;
-$sql .= " ORDER BY oer.position ASC ";
-$sql .= $paginationsql;
-
-$oerentries = $DB->get_records_sql($sql);
+$filteredentries = $DB->get_records_sql($sql);
+$oerentries = array_slice($filteredentries, $offset, $perpage);
 
 $sql = "SELECT *
           FROM {oercollection_resource} oer
          WHERE oer.oerid = $oerid->id
       ORDER BY oer.position ASC ";
 $resourcesmodal = $DB->get_records_sql($sql);
-//$resourcesmodal = $oerentries;
-$sql = "SELECT COUNT(oer.id)
-          FROM {oercollection_resource} oer
-         WHERE oer.oerid = $oerid->id";
-$rtotal = $DB->count_records_sql($sql);
+$rtotal = count($resourcesmodal);
 
-$templatecontext = [];
+$selstring = 'selected2' . $filter;
+$oerexists = count($oerentries) ? true : false;
 
-if (has_capability('mod/oercollection:editresources', $context)) {
-    $oerexists = $oerentries ? true : false;
-    if ($oerexists) {
-        $templatecontext['oernumber'] = $DB->count_records('oercollection_resource', ['oerid' => $oerid->id]);
-        $templatecontext['oernumberhidden'] = $DB->count_records('oercollection_resource', ['oerid' => $oerid->id, 'showresource' => 0]);
-    }
-    $templatecontext['actionurl'] = $PAGE->url;
-    $templatecontext['id'] = $cmid;
-    $templatecontext['deleted'] = $deleted;
-    if ($filter) {
-        $selstring = 'selected2' . $filter;
-    }
-    $templatecontext['selected' . $perpage] = true;
-    $templatecontext[$selstring] = true;
-    $templatecontext['sesskey'] = sesskey();
-    $templatecontext['oerid'] = $oerid->id;
-    $templatecontext['oerexists'] = $oerexists;
-    $templatecontext['searchoer'] = new moodle_url("/mod/oercollection/searchoer.php", ['id' => $cmid]);
-    $templatecontext['studentpreviewlink'] = new moodle_url("/mod/oercollection/oercollectionstudentview.php", ['id' => $cmid]);
-    if ($oerexists) {
-        $templatecontext['linktext'] = 'bla';
-    } else {
-        $templatecontext['link'] = new moodle_url("/mod/oercollection/resources.php", ['id' => $cmid]);
-    }
-}
+$templatecontext = [
+    'oernumber' => $rtotal,
+    'oernumberhidden' => $DB->count_records('oercollection_resource', ['oerid' => $oerid->id, 'showresource' => 0]),
+    'actionurl' => $PAGE->url,
+    'id' => $cmid,
+    'deleted' => $deleted,
+    'selected' . $perpage => true,
+    $selstring => true,
+    'sesskey' => sesskey(),
+    'oerid' => $oerid->id,
+    'oerexists' => $oerexists,
+    'searchoer' => new moodle_url("/mod/oercollection/searchoer.php", ['id' => $cmid]),
+    'studentpreviewlink' => new moodle_url("/mod/oercollection/oercollectionstudentview.php", ['id' => $cmid])
+];
 
 $oerlist = [];
 
@@ -216,15 +186,10 @@ $templatecontext['page'] = $rr;
 
 $templatecontext['oerresourcelist'] = $oerlist;
 
-$PAGE->requires->js_call_amd('mod_oercollection/resourcecontroller', 'init');
-
 $renderer = $PAGE->get_renderer('core');
 echo $renderer->header();
-// print_object($deleted);
-// if ($deleted) {
-// echo $OUTPUT->notification('Da is was gelöscht worden', 'info');
-// }
+
 echo $renderer->render_from_template('mod_oercollection/resources', $templatecontext);
-echo $OUTPUT->paging_bar($totalnumberresources, $page, $perpage, $homeurl);
+echo $OUTPUT->paging_bar(count($filteredentries), $page, $perpage, $homeurl);
 echo $renderer->render_from_template('mod_oercollection/resourcesactionsandoptions', $templatecontext);
 echo $renderer->footer();
