@@ -97,4 +97,4 @@ $string['notenameinternal'] = 'Name der Anmerkung';
 $string['notenameinternal_help'] = 'Vergeben Sie einen individuellen Namen für Ihre Anmerkungen. Darüber können Sie gezielt anzeigen, welche Art von Information in der Beschreibung der Anmerkungen enthalten ist.';
 $string['notetextinternal'] = 'Beschreibung';
 $string['notetextinternal_help'] = 'Fügen Sie konkrete Information zu einer Ressource hinzu, um Teilnehmer/innen auf etwas hinzuweisen.';
-
+$string['noselection'] = 'Nichts ausgewählt';

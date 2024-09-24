@@ -28,6 +28,7 @@ use core_external\external_api;
 use core_external\external_function_parameters;
 use core_external\external_value;
 use core_external\external_multiple_structure;
+use core\notification;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -67,7 +68,7 @@ class mod_oercollection_external extends external_api {
                 'oerentryids' => new external_multiple_structure(
                     new external_value(PARAM_INT, 'id array of questions')
                     ),
-                'show' => new external_value(PARAM_INT, 'oer entry id', VALUE_REQUIRED),
+                'show' => new external_value(PARAM_BOOL, 'visibility value', VALUE_REQUIRED),
             )
             );
     }
