@@ -96,7 +96,6 @@ if (!is_null($searchstring)) {
 echo $renderer->render_from_template('mod_oercollection/searchoer', $templatecontext);
 
 if (!is_null($searchstring)) {
-    //print_object($templatecontext['resultlist']);
     echo $OUTPUT->paging_bar($resultsarray['foundcount'], $page, 20, $PAGE->url);
 }
 echo $renderer->footer();
