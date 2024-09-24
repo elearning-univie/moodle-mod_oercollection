@@ -1,6 +1,7 @@
 import $ from "jquery";
 import ajax from "core/ajax";
 import notification from "core/notification";
+import {getString} from 'core/str';
 
 export const init = () => {
     $.mod_oercollection_setall = function(status) {
@@ -15,13 +16,21 @@ export const init = () => {
         const oerids = [];
         const rlinks = [];
 
+        var empty = 0;
         checkboxes.forEach(checkbox => {
+        empty++;
             oerids.push(checkbox.value);
             const linkElement = document.getElementById(`resourcelink${checkbox.value}`);
             if (linkElement) {
                 rlinks.push(linkElement.href);
             }
         });
+
+        if (empty == 0) {
+            getString('noselection', 'mod_oercollection').then(function (warningmessage) {
+            alert(warningmessage);
+            });
+        }
 
         const bulkaction = parseInt(document.getElementById("editoptionselect").value, 10);
 
@@ -58,7 +67,7 @@ export const init = () => {
     function setVisibility(oer, oerids, show) {
         ajax.call([{
             methodname: 'mod_oercollection_set_visibility_all',
-            args: { oerid: oer, oerentryids: oerids, show },
+            args: { oerid: oer, oerentryids: oerids, show: show },
             done: () => location.reload(),
             fail: notification.exception
         }]);

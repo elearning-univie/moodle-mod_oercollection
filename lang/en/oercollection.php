@@ -102,3 +102,4 @@ $string['notenameinternal'] = 'Annotation name';
 $string['notenameinternal_help'] = 'Define an individual name for your annotations. You can use this to indicate specifically what type of information is contained in the description of the annotations.';
 $string['notetextinternal'] = 'Description';
 $string['notetextinternal_help'] = 'Add specific information to a resource to draw participants\' attention to something.';
+$string['noselection'] = 'Nothing selected';

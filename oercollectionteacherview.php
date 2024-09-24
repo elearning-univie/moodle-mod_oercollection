@@ -44,6 +44,11 @@ require_capability('mod/oercollection:view', $context);
 
 $caneditresources = has_capability('mod/oercollection:editresources', $context);
 
+if (!has_capability('mod/oercollection:editresources', $context)) {
+    $url = new moodle_url("/mod/oercollection/oercollectionstudentview.php", ['id' => $cm->id]);
+    redirect($url);
+}
+
 $oercollection = $DB->get_record('oercollection', array('id' => $cm->instance));
 
 $PAGE->set_url(new moodle_url("/mod/oercollection/view.php", ['id' => $id]));

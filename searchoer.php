@@ -38,6 +38,10 @@ $reset = optional_param('reset', null, PARAM_TEXT);
 list ($course, $cm) = get_course_and_cm_from_cmid($id, 'oercollection');
 $context = context_module::instance($cm->id);
 
+if (!has_capability('mod/oercollection:editresources', $context)) {
+    $url = new moodle_url("/mod/oercollection/oercollectionstudentview.php", ['id' => $cm->id]);
+    redirect($url);
+}
 require_login($course, true, $cm);
 require_capability('mod/oercollection:editresources', $context);
 
