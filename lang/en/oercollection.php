@@ -74,6 +74,7 @@ $string['openselected'] = 'Open selected resources';
 $string['showselected'] = 'Show selected resources';
 $string['hideselected'] = 'Hide selected resources';
 $string['removeselected'] = 'Remove from collection';
+$string['addselected'] = 'Add to collection';
 $string['start'] = 'Start';
 $string['filter'] = 'Filter';
 $string['nofilters'] = 'No filters';

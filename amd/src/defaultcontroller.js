@@ -38,7 +38,6 @@ export const init = () => {
             case 1:
                 // Open each link in a new tab
                 rlinks.forEach(link => window.open(link, '_blank'));
-                location.reload();
                 break;
             case 2:
                 // Set visibility to show

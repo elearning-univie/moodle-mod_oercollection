@@ -44,10 +44,11 @@ if (!in_array($perpage, [5, 10, 20, 50, 100, 5000], true)) {
 }
 
 require_login($course, false, $cm);
-//require_capability('mod/oercollection:editresources', $context);
+
 if (!has_capability('mod/oercollection:editresources', $context)) {
     $url = new moodle_url("/mod/oercollection/oercollectionstudentview.php", ['id' => $cmid]);
     redirect($url);
+    die();
 }
 
 $oerid = $DB->get_record('oercollection', array('id' => $cm->instance));
