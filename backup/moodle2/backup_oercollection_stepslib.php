@@ -44,9 +44,9 @@ class backup_oercollection_activity_structure_step extends backup_activity_struc
         $oercollection = new backup_nested_element('oercollection', ['id'],
             [ 'name', 'course', 'intro', 'introformat', 'timemodified', 'displaymode']);
 
-        $resources = new backup_nested_element('oercollection_resources');
+        $resources = new backup_nested_element('resources');
         
-        $resource = new backup_nested_element('oercollection_resource', ['id'],
+        $resource = new backup_nested_element('resource', ['id'],
             [ 'oerid', 'oerresourceid', 'apipluginid', 'showresource', 'position',
                 'notenameinternal', 'notetextinternal', 'resourcelink', 'resourcename']);
 

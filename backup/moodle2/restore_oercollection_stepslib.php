@@ -43,7 +43,7 @@ class restore_oercollection_activity_structure_step extends restore_activity_str
 
         $paths = array();
         $paths[] = new restore_path_element('oercollection', '/activity/oercollection');
-        $paths[] = new restore_path_element('oercollection_resource', '/activity/wordcloud/resources/resource');
+        $paths[] = new restore_path_element('oercollection_resource', '/activity/oercollection/resources/resource');
         
         return $this->prepare_activity_structure($paths);
     }
