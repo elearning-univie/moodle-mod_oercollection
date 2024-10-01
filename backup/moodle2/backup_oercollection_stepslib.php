@@ -44,9 +44,26 @@ class backup_oercollection_activity_structure_step extends backup_activity_struc
         $oercollection = new backup_nested_element('oercollection', ['id'],
             [ 'name', 'course', 'intro', 'introformat', 'timemodified', 'displaymode']);
 
-        $oercollection->set_source_table('oercollection', array('id' => backup::VAR_ACTIVITYID));
-        $oercollection->annotate_files('mod_oercollection', 'intro', null);
+        $resources = new backup_nested_element('oercollection_resources');
+        
+        $resource = new backup_nested_element('oercollection_resource', ['id'],
+            [ 'oerid', 'oerresourceid', 'apipluginid', 'showresource', 'position',
+                'notenameinternal', 'notetextinternal', 'resourcelink', 'resourcename']);
 
+        $oercollection->add_child($resources);
+        $resources->add_child($resource);
+        
+        $oercollection->set_source_table('oercollection', array('id' => backup::VAR_ACTIVITYID));
+        
+        $resource->set_source_sql('
+            SELECT *
+              FROM {oercollection_resource}
+             WHERE oerid = ?',
+            array(backup::VAR_PARENTID));
+        
+       // $oercollection->annotate_files('mod_oercollection', 'intro', null);
+        //$resource->annotate_ids('oercollection', 'oerid');
+        
         return $this->prepare_activity_structure($oercollection);
     }
 }

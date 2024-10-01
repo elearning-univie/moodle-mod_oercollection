@@ -188,13 +188,15 @@ class mod_oercollection_external extends external_api {
         $params = self::validate_parameters(self::delete_selected_oerentries_parameters(),
             array('oerid' => $oerid, 'oerentryids' => $oerentryids));
 
-        list($inids, $oereids) = $DB->get_in_or_equal($oerentryids);
-        $sql = "SELECT * FROM {oercollection_resource} oer
-                        WHERE oer.id $inids";
-        $oerentries = $DB->get_records_sql($sql, $oereids);
-        foreach ($oerentries as $oerentry) {
-            if ($oerentry) {
-                $DB->delete_records('oercollection_resource', ['id' => $oerentry->id, 'oerid' => $oerid]);
+        if ($oerentryids) {
+            list($inids, $oereids) = $DB->get_in_or_equal($oerentryids);
+            $sql = "SELECT * FROM {oercollection_resource} oer
+                            WHERE oer.id $inids";
+            $oerentries = $DB->get_records_sql($sql, $oereids);
+            foreach ($oerentries as $oerentry) {
+                if ($oerentry) {
+                    $DB->delete_records('oercollection_resource', ['id' => $oerentry->id, 'oerid' => $oerid]);
+                }
             }
         }
     }

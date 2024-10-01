@@ -43,7 +43,8 @@ class restore_oercollection_activity_structure_step extends restore_activity_str
 
         $paths = array();
         $paths[] = new restore_path_element('oercollection', '/activity/oercollection');
-
+        $paths[] = new restore_path_element('oercollection_resource', '/activity/wordcloud/resources/resource');
+        
         return $this->prepare_activity_structure($paths);
     }
 
@@ -66,6 +67,23 @@ class restore_oercollection_activity_structure_step extends restore_activity_str
         $this->apply_activity_instance($newitemid);
     }
 
+    /**
+     * Process the given restore path element data
+     *
+     * @param array $data parsed element data
+     */
+    protected function process_oercollection_resource($data) {
+        global $DB;
+       
+        $data = (object)$data;
+        $data->course = $this->get_courseid();
+        $oldid = $data->id;
+
+        $newoerid = $this->get_new_parentid('oercollection');
+        $data->oerid = $newoerid;
+        $newitemid = $DB->insert_record('oercollection_resource', $data);
+        $this->set_mapping('oercollection_resource', $oldid, $newitemid, true);
+    }
     /**
      * Post-execution actions
      */
