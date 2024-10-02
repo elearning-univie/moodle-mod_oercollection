@@ -129,7 +129,7 @@ function oercollection_delete_instance($id) {
     \core_completion\api::update_completion_date_event($cm->id, 'oercollection', $oercollection->id, null);
     
     // note: all context files are deleted automatically
-    
+    $DB->delete_records('oercollection_resource', array('oerid'=>$oercollection->id));
     $DB->delete_records('oercollection', array('id'=>$oercollection->id));
     
     return true;
