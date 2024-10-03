@@ -72,7 +72,7 @@ class oercommentform extends \moodleform {
         $this->editoroptions = array('subdirs' => 1, 'maxfiles' => EDITOR_UNLIMITED_FILES,
             'context' => $this->context);
 
-        $this->context = \context::instance_by_id($this->oerid);
+        $this->context = \context::instance_by_id($this->id);
 
         parent::__construct($submiturl, null, 'post', '', null, $formeditable);
     }
@@ -90,12 +90,12 @@ class oercommentform extends \moodleform {
                 array('size' => 50, 'maxlength' => 255));
         $mform->setType('notenameinternal', PARAM_TEXT);
         $mform->setDefault('notenameinternal', get_string('comment', 'oercollection'));
-        $mform->addHelpButton('notenameinternal', 'notenameinternal', 'oercollection');
+        $mform->addHelpButton('notenameinternal', 'oercommentname', 'oercollection');
         
         $mform->addElement('editor', 'notetextinternal', get_string('oercommentdescription', 'mod_oercollection'),
                 array('rows' => 15), $this->editoroptions);
         $mform->setType('notetextinternal', PARAM_RAW);
-        $mform->addHelpButton('notetextinternal', 'notetextinternal', 'oercollection');
+        $mform->addHelpButton('notetextinternal', 'oercommentdescription', 'oercollection');
         
         $this->add_hidden_fields();
         $this->add_action_buttons(true, get_string('savechanges'));
