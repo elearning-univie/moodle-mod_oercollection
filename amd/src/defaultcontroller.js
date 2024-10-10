@@ -41,11 +41,11 @@ export const init = () => {
                 break;
             case 2:
                 // Set visibility to show
-                setVisibility(oer, oerids, true);
+                setVisibility(oer, oerids, true, checkboxes.length);
                 break;
             case 3:
                 // Set visibility to hide
-                setVisibility(oer, oerids, false);
+                setVisibility(oer, oerids, false, checkboxes.length);
                 break;
             case 4:
                 // Delete selected entries
@@ -62,12 +62,22 @@ export const init = () => {
      * @param {string} oer - The ID of the OER (Open Educational Resource) to act upon.
      * @param {Array<string>} oerids - Array of IDs of the OER entries to update visibility for.
      * @param {boolean} show - Whether to show (true) or hide (false) the entries.
+     * @param {number} vn - Number of elements shown or hidden
      */
-    function setVisibility(oer, oerids, show) {
+    function setVisibility(oer, oerids, show, vn) {
         ajax.call([{
             methodname: 'mod_oercollection_set_visibility_all',
             args: { oerid: oer, oerentryids: oerids, show: show },
-            done: () => location.reload(),
+            done: () => {
+                const queryParams = new URLSearchParams(window.location.search);
+                if (show == 1) {
+                    queryParams.set("vyes", vn);
+                } else {
+                    queryParams.set("vno", vn);
+                }
+                history.replaceState(null, null, `?${queryParams.toString()}`);
+                location.reload();
+            },
             fail: notification.exception
         }]);
     }
