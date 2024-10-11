@@ -56,6 +56,9 @@ $pagetitle = get_string('pagetitle', 'oercollection');
 $PAGE->set_title($oercollection->name);
 $PAGE->set_heading($course->shortname);
 
+// Completion.
+oercollection_view($oercollection, $course, $cm, $context);
+
 $oeretotalnumber = $DB->count_records('oercollection_resource', ['oerid' => $oercollection->id]);
 $oerevisiblenumber = $DB->count_records('oercollection_resource', ['oerid' => $oercollection->id, 'showresource' => 1]);
 $oerehiddennumber = $DB->count_records('oercollection_resource', ['oerid' => $oercollection->id, 'showresource' => 0]);
