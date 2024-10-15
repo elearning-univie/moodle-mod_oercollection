@@ -58,6 +58,10 @@ function oercollection_supports($feature) {
             return true;
         case FEATURE_MOD_PURPOSE:
             return MOD_PURPOSE_CONTENT;
+        case FEATURE_COMPLETION_TRACKS_VIEWS:
+            return true;
+        case FEATURE_COMPLETION_HAS_RULES:
+            return true;
         default:
             return null;
     }
@@ -268,4 +272,33 @@ function oercollection_cm_info_view(cm_info $cm) {
             //$cm->content = $oerlist;
             $cm->set_content($oerlist, false);
         }
+}
+
+/**
+ * Mark the activity completed (if required) and trigger the course_module_viewed event.
+ *
+ * @param  stdClass $oercollection   oercollection object
+ * @param  stdClass $course  course object
+ * @param  stdClass $cm      course module object
+ * @param  stdClass $context context object
+ * @since Moodle 2.9
+ */
+function oercollection_view($oercollection, $course, $cm, $context) {
+
+    //Todo: erweitern sobald es möglich is zu tracken ob einzelne Resourcen aufgerufen wurden. 
+        // Completion.
+        $completion = new completion_info($course);
+        $completion->set_module_viewed($cm);
+
+        // Trigger
+        $params = array(
+            'context' => $context,
+            'objectid' => $oercollection->id
+        );
+        
+        $event = \mod_forum\event\course_module_viewed::create($params);
+        $event->add_record_snapshot('course_modules', $cm);
+        $event->add_record_snapshot('course', $course);
+        $event->add_record_snapshot('oercollection', $oercollection);
+        $event->trigger();
 }

@@ -55,6 +55,9 @@ if ($pg) {
     $params['page'] = $pg;
 }
 
+// Completion.
+oercollection_view($oercollection, $course, $cm, $context);
+
 $homeurl = new moodle_url("/mod/oercollection/oercollectionstudentview.php", $params);
 $PAGE->set_url($homeurl->out(false));
 
