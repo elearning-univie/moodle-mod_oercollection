@@ -81,6 +81,7 @@ $templatecontext = [
     'searchoer' => new moodle_url("/mod/oercollection/resources.php", ['id' => $id]),
     'searchform' => $searchform->get_search_form($searchstring),
     'actionurl' => $PAGE->url,
+    'oerid' => $oercollection->id,
 ];
 
 if (!is_null($reset)) {

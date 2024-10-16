@@ -118,6 +118,7 @@ $string['deleteinfomessage'] = '{$a} Ressource(n) wurde(n) gelöscht';
 $string['visibilityyesinfomessage'] = '{$a} Ressource(n) wurde(n) eingeblendet!.';
 $string['visibilitynoinfomessage'] = '{$a} Ressource(n) wurde(n) ausgeblendet!.';
 $string['movedinfomessage'] = 'Eine Resource wurde verschoben!.';
+$string['addedinfomessage'] = '{$a} Ressource(n) wurde(n) zur Sammlung hinzugefügt.';
 $string['deletepopup'] = 'Hiermit wird die Ressource "{$a}" aus der Kollektion entfernt. Vorhandene Anmerkungen werden unwiderruflich gelöscht!';
 $string['oercommentname'] = 'Name der Anmerkung';
 $string['oercommentname_help'] = 'Vergeben Sie einen individuellen Namen für Ihre Anmerkungen. Darüber können Sie gezielt anzeigen, welche Art von Information in der Beschreibung der Anmerkungen enthalten ist.';

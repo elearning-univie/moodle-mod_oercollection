@@ -15,15 +15,25 @@ export const init = () => {
         const checkboxes = document.querySelectorAll('input[name="selectbox"]:checked');
         const oerids = [];
         const rlinks = [];
+        const rtitles = [];
 
         var empty = 0;
         checkboxes.forEach(checkbox => {
-        empty++;
+            empty++;
             oerids.push(checkbox.value);
             const linkElement = document.getElementById(`resourcelink${checkbox.value}`);
             if (linkElement) {
                 rlinks.push(linkElement.href);
+            } else {
+                rlinks.push("");
             }
+            const titleElement = document.getElementById(`title${checkbox.value}`);
+            if (titleElement) {
+                rtitles.push(titleElement.value);
+            } else {
+                rtitles.push("");
+            }
+            checkbox.checked = false;
         });
 
         if (empty == 0) {
@@ -51,6 +61,10 @@ export const init = () => {
                 // Delete selected entries
                 deleteSelectedEntries(oer, oerids, checkboxes.length);
                 break;
+            case 5:
+                // Delete selected entries
+                addSelectedEntries(oer, oerids, rlinks, rtitles, checkboxes.length);
+                break;
             default:
                 break;
         }
@@ -67,7 +81,7 @@ export const init = () => {
     function setVisibility(oer, oerids, show, vn) {
         ajax.call([{
             methodname: 'mod_oercollection_set_visibility_all',
-            args: { oerid: oer, oerentryids: oerids, show: show },
+            args: { oerid: oer, oerentryids: oerids, show: show},
             done: () => {
                 const queryParams = new URLSearchParams(window.location.search);
                 if (show == 1) {
@@ -98,6 +112,33 @@ export const init = () => {
                 queryParams.set("delete", todelete);
                 history.replaceState(null, null, `?${queryParams.toString()}`);
                 location.reload();
+            },
+            fail: notification.exception
+        }]);
+    }
+    /**
+     * Deletes the selected OER entries.
+     *
+     * @param {string} oerid - The ID of the OER (Open Educational Resource) to act upon.
+     * @param {Array<string>} oerhubids - The number of entries to be deleted.
+     * @param {Array<string>} resourcelinks - The ID of the OER (Open Educational Resource) to act upon.
+     * @param {Array<string>} resourcenames - The ID of the OER (Open Educational Resource) to act upon.
+     * @param {number} nadded - The number of entries to be deleted.
+     */
+    function addSelectedEntries(oerid, oerhubids, resourcelinks, resourcenames, nadded) {
+        ajax.call([{
+            methodname: 'mod_oercollection_add_selected_oerentries',
+            args: {oerid: oerid, oerhubids: oerhubids, resourcelinks: resourcelinks, resourcenames: resourcenames},
+            done: () => {
+                const queryParams = new URLSearchParams(window.location.search);
+                queryParams.set("nadded", nadded);
+                history.replaceState(null, null, `?${queryParams.toString()}`);
+                getString('addedinfomessage', 'mod_oercollection', nadded).then(function (infomessage) {
+                notification.addNotification({
+                message: infomessage,
+                type: "info"
+                });
+              });
             },
             fail: notification.exception
         }]);

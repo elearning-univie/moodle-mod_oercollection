@@ -129,6 +129,27 @@ class mod_oercollection_external extends external_api {
         ]);
     }
     /**
+     * Returns description of method parameters
+     *
+     * @return external_function_parameters
+     */
+    public static function add_entries_to_collection_parameters() {
+        return new external_function_parameters(
+            array(
+                'oerid' => new external_value(PARAM_INT, 'oerid', VALUE_REQUIRED),
+                'oerhubids' => new external_multiple_structure(
+                    new external_value(PARAM_TEXT, 'id array of hub resources')
+                    ),
+                'resourcelinks' => new external_multiple_structure(
+                    new external_value(PARAM_URL, 'id array of resourcelinks')
+                    ),
+                'resourcenames' => new external_multiple_structure(
+                    new external_value(PARAM_TEXT, 'id array of resourcetitles')
+                    ),
+            )
+            );
+    }
+    /**
      *
      * Removes all selected questions from box 1 to box 0 for the activity
      *
@@ -274,7 +295,7 @@ class mod_oercollection_external extends external_api {
      * @param int $oerhubid
      */
     public static function add_entry_to_collection($oerid, $oerhubid, $resourcelink, $resourcename) {
-        global $DB;
+        global $DB, $OUTPUT;
         
         $params = self::validate_parameters(self::add_entry_to_collection_parameters(), [
                 'oerid' => $oerid,
@@ -310,8 +331,85 @@ class mod_oercollection_external extends external_api {
                'resourcename' => $params['resourcename'],
                'position' => ($maxpos +1),
            ]);
+        } else {
+            //echo $OUTPUT->notification('OBACHT', \core\output\notification::NOTIFY_ERROR);
         }
     }
+    
+    //add_entries_to_collection
+    /**
+     * add oerhub entry to collectyion
+     *
+     * @param int $oerid
+     * @param int $oerhubid
+     */
+    public static function add_entries_to_collection($oerid, $oerhubids, $resourcelinks, $resourcenames) {
+        global $DB;
+        
+        $params = self::validate_parameters(self::add_entries_to_collection_parameters(), [
+            'oerid' => $oerid,
+            'oerhubids' => $oerhubids,
+            'resourcelinks' => $resourcelinks,
+            'resourcenames' => $resourcenames,
+        ]);
+        
+        $cm = get_coursemodule_from_instance('oercollection', $params['oerid'], 0, false, MUST_EXIST);
+        $course = $DB->get_record('course', ['id' => $cm->course], '*', MUST_EXIST);
+        $context = context_module::instance($cm->id);
+        
+        self::validate_context($context);
+        require_login($course, false, $cm);
+        require_capability('mod/oercollection:addinstance', $context);
+        
+        $ctr = 0;
+        foreach ($oerhubids as $oerhubid) {
+            $sqlwhere = 'oerid = :oerid and oerresourceid = ' . $DB->sql_compare_text(':oerresourceid');
+            $sqlparams = ['oerid' => $params['oerid'], 'oerresourceid' => $oerhubid];
+            
+            $maxpossql = "SELECT MAX(oerr.position)
+                       FROM {oercollection_resource} oerr
+                      WHERE oerr.oerid = $oerid";
+            $maxpos = $DB->get_field_sql($maxpossql);
+            if (!$maxpos) {
+                $maxpos = 0;
+            }
+            if (!$DB->get_record_select('oercollection_resource', $sqlwhere, $sqlparams)) {
+                $DB->insert_record('oercollection_resource', [
+                    'oerid' => $oerid,
+                    'oerresourceid' => $oerhubid,
+                    'resourcelink' => $resourcelinks[$ctr],
+                    'resourcename' => $resourcenames[$ctr],
+                    'position' => ($maxpos +1),
+                ]);
+            }
+            $ctr++;
+        }
+        
+
+//         $sqlwhere = 'oerid = :oerid and oerresourceid = ' . $DB->sql_compare_text(':oerresourceid');
+//         $sqlparams = ['oerid' => $params['oerid'], 'oerresourceid' => $params['oerhubid']];
+        
+//         $maxpossql = "SELECT MAX(oerr.position)
+//                        FROM {oercollection_resource} oerr
+//                       WHERE oerr.oerid = $oerid";
+//         $maxpos = $DB->get_field_sql($maxpossql);
+//         if (!$maxpos) {
+//             $maxpos = 0;
+//         }
+        
+//         if (!$DB->get_record_select('oercollection_resource', $sqlwhere, $sqlparams)) {
+//             $DB->insert_record('oercollection_resource', [
+//                 'oerid' => $params['oerid'],
+//                 'oerresourceid' => $params['oerhubid'],
+//                 'resourcelink' => $params['resourcelink'],
+//                 'resourcename' => $params['resourcename'],
+//                 'position' => ($maxpos +1),
+//             ]);
+//         }
+        
+        
+    }
+    
     /**
      * Returns return value description
      *
@@ -350,6 +448,14 @@ class mod_oercollection_external extends external_api {
      * @return external_value
      */
     public static function add_entry_to_collection_returns() {
+        return null;
+    }
+    /**
+     * Returns return value description
+     *
+     * @return external_value
+     */
+    public static function add_entries_to_collection_returns() {
         return null;
     }
     /**

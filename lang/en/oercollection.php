@@ -115,6 +115,7 @@ $string['deleteinfomessage'] = '{$a} resource(s) has(have) been deleted.';
 $string['visibilityyesinfomessage'] = '{$a} resource(s) has(have) been set to visible.';
 $string['visibilitynoinfomessage'] = '{$a} resource(s) has(have) been hidden.';
 $string['movedinfomessage'] = 'A resource has been moved.';
+$string['addedinfomessage'] = '{$a} resource(s) has(have) been added to the collection.';
 $string['deletepopup'] = 'This will remove the resource "{$a}" from the collection. Existing annotations are irrevocably deleted!';
 $string['oercommentname'] = 'Annotation name';
 $string['oercommentname_help'] = 'Define an individual name for your annotations. You can use this to indicate specifically what type of information is contained in the description of the annotations.';
