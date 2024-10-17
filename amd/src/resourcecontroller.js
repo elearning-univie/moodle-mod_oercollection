@@ -15,8 +15,46 @@ export const init = () => {
               type: "info"
             });
         // Set new or modify existing parameter value
-        queryParams.set("delete", "0");
-
+        //queryParams.set("delete", "0");
+        queryParams.delete("delete");
+        // Replace current querystring with the new one.
+        history.replaceState(null, null, "?"+queryParams.toString());
+        });
+      }
+      if (queryParams.get("vyes") > 0) {
+        getString('visibilityyesinfomessage', 'mod_oercollection', queryParams.get("vyes")).then(function (infomessage) {
+              notification.addNotification({
+              message: infomessage,
+              type: "info"
+            });
+        // Set new or modify existing parameter value
+        //queryParams.set("vyes", "0");
+        queryParams.delete("vyes");
+        // Replace current querystring with the new one.
+        history.replaceState(null, null, "?"+queryParams.toString());
+        });
+      }
+      if (queryParams.get("vno") > 0) {
+        getString('visibilitynoinfomessage', 'mod_oercollection', queryParams.get("vno")).then(function (infomessage) {
+              notification.addNotification({
+              message: infomessage,
+              type: "info"
+            });
+        // Set new or modify existing parameter value
+        //queryParams.set("vno", "0");
+        queryParams.delete("vno");
+        // Replace current querystring with the new one.
+        history.replaceState(null, null, "?"+queryParams.toString());
+        });
+      }
+      if (queryParams.get("moved") > 0) {
+        getString('movedinfomessage', 'mod_oercollection').then(function (infomessage) {
+              notification.addNotification({
+              message: infomessage,
+              type: "info"
+            });
+        // Set new or modify existing parameter value
+        queryParams.delete("moved");
         // Replace current querystring with the new one.
         history.replaceState(null, null, "?"+queryParams.toString());
         });
@@ -60,7 +98,10 @@ export const init = () => {
         ajax.call([{
             methodname: 'mod_oercollection_move_resource',
             args: {oerid: oer, oereidtomove: oereidtomove, oereidmoveafter: oereidmoveafter},
-            done: function () {
+            done: () => {
+                const queryParams = new URLSearchParams(window.location.search);
+                queryParams.set("moved", 1);
+                history.replaceState(null, null, `?${queryParams.toString()}`);
                 location.reload();
             },
             fail: notification.exception

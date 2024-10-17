@@ -32,6 +32,7 @@ $services = [
             'mod_oercollection_delete_oerentry',
             'mod_oercollection_delete_selected_oerentries',
             'mod_oercollection_add_to_collection',
+            'mod_oercollection_add_selected_oerentries',
             'mod_oercollection_move_resource',
         ],
         'shortname' => 'oercollection',
@@ -87,6 +88,16 @@ $functions = array(
         'ajax' => true,
         'loginrequired' => true,
     ),
+    'mod_oercollection_add_selected_oerentries' => array(
+        'classname' => 'mod_oercollection_external',
+        'methodname' => 'add_entries_to_collection',
+        'classpath' => 'mod/oercollection/externallib.php',
+        'description' => 'Change visibility setting of an oer collection entry',
+        'type' => 'write',
+        'ajax' => true,
+        'loginrequired' => true,
+    ),
+    
     'mod_oercollection_move_resource' => array(
         'classname' => 'mod_oercollection_external',
         'methodname' => 'move_resource',
