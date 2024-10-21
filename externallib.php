@@ -229,7 +229,7 @@ class mod_oercollection_external extends external_api {
      */
     public static function move_resource($oerid, $oereidtomove, $oereidmoveafter) {
          global $DB;
-        
+
         $params = self::validate_parameters(self::move_resource_parameters(),
             array('oerid' => $oerid, 'oereidtomove' => $oereidtomove, 'oereidmoveafter' => $oereidmoveafter));
 
@@ -256,14 +256,14 @@ class mod_oercollection_external extends external_api {
         if ($resourcetomove->position < $resourcemoveafter->position) {
             $xx = 1;
         }
-        
+
         $move = array_splice($resourcelist, ($resourcetomove->position - 1), 1);
         $newlist = array_merge(
             array_slice( $resourcelist, 0, ($resourcemoveafter->position - 1 - $xx)),
             $move,
             array_slice( $resourcelist, ($resourcemoveafter->position - 1 - $xx))
             );
-        
+
         $ctr = 1;
         foreach ($newlist as $n) {
             $n->position = $ctr;
@@ -282,9 +282,17 @@ class mod_oercollection_external extends external_api {
 
         $params = self::validate_parameters(self::delete_oerentry_parameters(),
             array('oerid' => $oerid, 'oerentryid' => $oerentryid));
-        
+
+        $cm = get_coursemodule_from_instance('oercollection', $params['oerid'], 0, false, MUST_EXIST);
+
         if ($DB->record_exists('oercollection_resource', ['id' => $oerentryid, 'oerid' => $oerid])) {
             $DB->delete_records('oercollection_resource', ['id' => $oerentryid, 'oerid' => $oerid]);
+            $params = array(
+                'objectid' => $oerid,
+                'context' => context_module::instance($cm->id),
+            );
+            $event = \mod_oercollection\event\oer_resource_removed::create($params);
+            $event->trigger();
         }
     }
 
@@ -334,6 +342,12 @@ class mod_oercollection_external extends external_api {
         } else {
             //echo $OUTPUT->notification('OBACHT', \core\output\notification::NOTIFY_ERROR);
         }
+        $params = array(
+            'objectid' => $oerid,
+            'context' => context_module::instance($cm->id),
+        );
+        $event = \mod_oercollection\event\oer_resource_added::create($params);
+        $event->trigger();
     }
     
     //add_entries_to_collection
@@ -384,30 +398,6 @@ class mod_oercollection_external extends external_api {
             }
             $ctr++;
         }
-        
-
-//         $sqlwhere = 'oerid = :oerid and oerresourceid = ' . $DB->sql_compare_text(':oerresourceid');
-//         $sqlparams = ['oerid' => $params['oerid'], 'oerresourceid' => $params['oerhubid']];
-        
-//         $maxpossql = "SELECT MAX(oerr.position)
-//                        FROM {oercollection_resource} oerr
-//                       WHERE oerr.oerid = $oerid";
-//         $maxpos = $DB->get_field_sql($maxpossql);
-//         if (!$maxpos) {
-//             $maxpos = 0;
-//         }
-        
-//         if (!$DB->get_record_select('oercollection_resource', $sqlwhere, $sqlparams)) {
-//             $DB->insert_record('oercollection_resource', [
-//                 'oerid' => $params['oerid'],
-//                 'oerresourceid' => $params['oerhubid'],
-//                 'resourcelink' => $params['resourcelink'],
-//                 'resourcename' => $params['resourcename'],
-//                 'position' => ($maxpos +1),
-//             ]);
-//         }
-        
-        
     }
     
     /**

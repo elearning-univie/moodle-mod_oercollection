@@ -296,7 +296,7 @@ function oercollection_view($oercollection, $course, $cm, $context) {
             'objectid' => $oercollection->id
         );
         
-        $event = \mod_forum\event\course_module_viewed::create($params);
+        $event = \mod_oercollection\event\course_module_viewed::create($params);
         $event->add_record_snapshot('course_modules', $cm);
         $event->add_record_snapshot('course', $course);
         $event->add_record_snapshot('oercollection', $oercollection);

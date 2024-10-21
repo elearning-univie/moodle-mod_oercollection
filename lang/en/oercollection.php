@@ -122,3 +122,5 @@ $string['oercommentname_help'] = 'Define an individual name for your annotations
 $string['oercommentdescription'] = 'Description';
 $string['oercommentdescription_help'] = 'Add specific information to a resource to draw participants\' attention to something.';
 $string['noselection'] = 'Nothing selected';
+$string['eventoerresourceadded'] = 'One or more OER resources have been added.';
+$string['eventoerresourceremoved'] = 'One or more OER resources have been removed.';

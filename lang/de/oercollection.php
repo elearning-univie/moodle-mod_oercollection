@@ -125,3 +125,5 @@ $string['oercommentname_help'] = 'Vergeben Sie einen individuellen Namen für Ih
 $string['oercommentdescription'] = 'Beschreibung';
 $string['oercommentdescription_help'] = 'Fügen Sie konkrete Information zu einer Ressource hinzu, um Teilnehmer/innen auf etwas hinzuweisen.';
 $string['noselection'] = 'Nichts ausgewählt';
+$string['eventoerresourceadded'] = 'Eine oder mehrere OER Resourcen wurden hinzugefügt.';
+$string['eventoerresourceremoved'] = 'Eine oder mehrere OER Resourcen wurden entfernt.';
