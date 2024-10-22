@@ -47,6 +47,7 @@ export const init = () => {
         switch (bulkaction) {
             case 1:
                 // Open each link in a new tab
+               // rlinks.forEach(link => link.click());
                 rlinks.forEach(link => window.open(link, '_blank'));
                 break;
             case 2:

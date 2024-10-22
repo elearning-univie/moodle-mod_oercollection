@@ -55,6 +55,15 @@ class oer_resource_removed extends \core\event\base {
     }
 
     /**
+     * Returns description of what happened.
+     *
+     * @return string
+     */
+    public function get_description() {
+        return "The user with id '$this->userid' removed an OER resource from the collection with the id '$this->objectid'.";
+    }
+
+    /**
      * Returns relevant URL.
      *
      * @return \moodle_url
