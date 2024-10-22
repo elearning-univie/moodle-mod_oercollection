@@ -320,7 +320,7 @@ class mod_oercollection_external extends external_api {
                 'resourcename' => $resourcename,
             ]);
 
-        $cm = get_coursemodule_from_instance('oercollection', $params['oerid'], 0, false, MUST_EXIST);
+        $cm = get_coursemodule_from_instance('oercollection', $oerid, 0, false, MUST_EXIST);
         $course = $DB->get_record('course', ['id' => $cm->course], '*', MUST_EXIST);
         $context = context_module::instance($cm->id);
 
@@ -329,7 +329,7 @@ class mod_oercollection_external extends external_api {
         require_capability('mod/oercollection:addinstance', $context);
 
         $sqlwhere = 'oerid = :oerid and oerresourceid = ' . $DB->sql_compare_text(':oerresourceid');
-        $sqlparams = ['oerid' => $params['oerid'], 'oerresourceid' => $params['oerhubid']];
+        $sqlparams = ['oerid' => $oerid, 'oerresourceid' => $oerhubid];
 
         $maxpossql = "SELECT MAX(oerr.position)
                        FROM {oercollection_resource} oerr
@@ -346,10 +346,10 @@ class mod_oercollection_external extends external_api {
 
         if (!$DB->get_record_select('oercollection_resource', $sqlwhere, $sqlparams)) {
            $DB->insert_record('oercollection_resource', [
-               'oerid' => $params['oerid'],
-               'oerresourceid' => $params['oerhubid'],
-               'resourcelink' => $params['resourcelink'],
-               'resourcename' => $params['resourcename'],
+               'oerid' => $oerid,
+               'oerresourceid' => $oerhubid,
+               'resourcelink' => $resourcelink,
+               'resourcename' => $resourcename,
                'position' => ($maxpos +1),
            ]);
            $event = \mod_oercollection\event\oer_resource_added::create($params);
