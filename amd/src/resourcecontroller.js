@@ -60,11 +60,18 @@ export const init = () => {
         });
       }
     };
-    $.mod_oercollection_set_visibility_oerentry = function(oer, oerentryid) {
+    $.mod_oercollection_set_visibility_oerentry = function(oer, oerentryid, show) {
         ajax.call([{
             methodname: 'mod_oercollection_set_visibility_oerentry',
             args: {oerid: oer, oerentryid: oerentryid},
-            done: function () {
+            done: () => {
+                const queryParams = new URLSearchParams(window.location.search);
+                if (show == 1) {
+                    queryParams.set("vyes", 1);
+                } else {
+                    queryParams.set("vno", 1);
+                }
+                history.replaceState(null, null, `?${queryParams.toString()}`);
                 location.reload();
             },
             fail: notification.exception

@@ -130,14 +130,14 @@
 
                             {{#oerhidden}}
                                 <a class="dropdown-item" href="#"
-                                   onclick="$.mod_oercollection_set_visibility_oerentry({{oerid}},{{oerentryid}})">
+                                   onclick="$.mod_oercollection_set_visibility_oerentry({{oerid}},{{oerentryid}}, 1)">
                                     {{#pix}} i/hide, core {{/pix}}
                                     {{#str}}showoer, mod_oercollection{{/str}}
                                 </a>
                             {{/oerhidden}}
                             {{^oerhidden}}
                                 <a class="dropdown-item" href="#"
-                                   onclick="$.mod_oercollection_set_visibility_oerentry({{oerid}},{{oerentryid}})">
+                                   onclick="$.mod_oercollection_set_visibility_oerentry({{oerid}},{{oerentryid}}, 0)">
                                     {{#pix}} i/show, core {{/pix}}
                                     {{#str}}hideoer, mod_oercollection{{/str}}
                                 </a>
