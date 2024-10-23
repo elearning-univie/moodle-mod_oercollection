@@ -137,7 +137,7 @@ export const init = () => {
                 getString('addedinfomessage', 'mod_oercollection', nadded).then(function (infomessage) {
                 notification.addNotification({
                 message: infomessage,
-                type: "info"
+                type: "success"
                 });
               });
             },
