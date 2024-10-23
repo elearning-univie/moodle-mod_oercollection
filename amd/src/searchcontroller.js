@@ -12,7 +12,7 @@ export const init = () => {
               getString('addedinfomessage', 'mod_oercollection', 1).then(function (infomessage) {
               notification.addNotification({
               message: infomessage,
-              type: "info"
+              type: "success"
               });
             });
             },
