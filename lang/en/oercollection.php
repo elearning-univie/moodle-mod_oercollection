@@ -110,6 +110,7 @@ $string['manageoerapiplugins'] = 'Manage OER-API plugins';
 $string['oerapiplugins'] = 'Plugins of OER-API';
 $string['deletewarning'] = 'Delete resource?';
 $string['subplugintype_oerapi_plural'] = 'OER-APIs';
+$string['subplugintype_oerapi'] = 'OER-API';
 $string['editcomment'] = 'Edit annotation';
 $string['deleteinfomessage'] = '{$a} resource(s) has(have) been deleted.';
 $string['visibilityyesinfomessage'] = '{$a} resource(s) has(have) been set to visible.';

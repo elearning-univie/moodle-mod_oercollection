@@ -113,6 +113,7 @@ $string['manageoerapiplugins'] = 'Plugins der OER-API verwalten';
 $string['oerapiplugins'] = 'Plugins der OER-API';
 $string['deletewarning'] = 'Ressource löschen?';
 $string['subplugintype_oerapi_plural'] = 'OER-APIs';
+$string['subplugintype_oerapi'] = 'OER-API';
 $string['editcomment'] = 'Anmerkung bearbeiten';
 $string['deleteinfomessage'] = '{$a} Ressource(n) wurde(n) gelöscht';
 $string['visibilityyesinfomessage'] = '{$a} Ressource(n) wurde(n) eingeblendet!';
