@@ -124,3 +124,4 @@ $string['oercommentdescription_help'] = 'Add specific information to a resource 
 $string['noselection'] = 'Nothing selected';
 $string['eventoerresourceadded'] = 'An OER resource has been added.';
 $string['eventoerresourceremoved'] = 'An OER resource has been removed.';
+$string['popupblockmessage'] = 'ACHTUNG! Ihr Popup Blocker ist aktiviert! Um mehrere Links gleichzeitig zu öffnen, deaktivieren sie den Popup Blocker.';
