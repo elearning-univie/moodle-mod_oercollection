@@ -47,8 +47,19 @@ export const init = () => {
         switch (bulkaction) {
             case 1:
                 // Open each link in a new tab
-               // rlinks.forEach(link => link.click());
-                rlinks.forEach(link => window.open(link, '_blank'));
+                //rlinks.forEach(link => window.open(link, '_blank'));
+                for (let link of rlinks) {
+                   var newWin = window.open(link);
+                   if(!newWin || newWin.closed || typeof newWin.closed=='undefined') {
+                      getString('popupblockmessage', 'mod_oercollection').then(function (infomessage) {
+                         notification.addNotification({
+                         message: infomessage,
+                         type: "danger"
+                         });
+                      });
+                      break;
+                   }
+                }
                 break;
             case 2:
                 // Set visibility to show
