@@ -60,9 +60,8 @@ class mod_oercollection_mod_form extends moodleform_mod {
     function validation($data, $files) {
         $errors = array();
 
-        // Validate the 'name' field.
-        if (empty($data['name'])) {
-            $errors['name'] = get_string('errornoname', 'oercollection');
+        if ($data['displaymode'] == THISPAGE && $data['completionview'] == 1) {
+            $errors['displaymode'] = get_string('errordisplaymode', 'oercollection');
         }
 
         return $errors;
