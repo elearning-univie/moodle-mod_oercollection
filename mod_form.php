@@ -60,10 +60,11 @@ class mod_oercollection_mod_form extends moodleform_mod {
     function validation($data, $files) {
         $errors = array();
 
-        if ($data['displaymode'] == THISPAGE && $data['completionview'] == 1) {
-            $errors['displaymode'] = get_string('errordisplaymode', 'oercollection');
+        if (array_key_exists('completionview', $data)){
+            if ($data['displaymode'] == THISPAGE && $data['completionview'] == 1) {
+                $errors['displaymode'] = get_string('errordisplaymode', 'oercollection');
+            }
         }
-
         return $errors;
     }
 }
