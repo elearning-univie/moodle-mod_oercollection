@@ -141,16 +141,28 @@ export const init = () => {
         ajax.call([{
             methodname: 'mod_oercollection_add_selected_oerentries',
             args: {oerid: oerid, oerhubids: oerhubids, resourcelinks: resourcelinks, resourcenames: resourcenames},
-            done: () => {
+            done: function (returnval) {
                 const queryParams = new URLSearchParams(window.location.search);
                 queryParams.set("nadded", nadded);
                 history.replaceState(null, null, `?${queryParams.toString()}`);
-                getString('addedinfomessage', 'mod_oercollection', nadded).then(function (infomessage) {
-                notification.addNotification({
-                message: infomessage,
-                type: "success"
-                });
-              });
+                if (returnval.incollectionnr >= 1) {
+                    var added = nadded - returnval.incollectionnr;
+                    var notadded = returnval.incollectionnr;
+                    getString('multiaddedinfomessage', 'mod_oercollection', {added: added, notadded: notadded}).then(
+                       function (infomessage) {
+                       notification.addNotification({
+                       message: infomessage,
+                       type: "warning"
+                       });
+                    });
+                } else {
+                    getString('addedinfomessage', 'mod_oercollection', nadded).then(function (infomessage) {
+                       notification.addNotification({
+                       message: infomessage,
+                       type: "success"
+                       });
+                    });
+              }
             },
             fail: notification.exception
         }]);

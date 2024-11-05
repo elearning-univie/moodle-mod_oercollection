@@ -344,6 +344,7 @@ class mod_oercollection_external extends external_api {
             'context' => context_module::instance($cm->id),
         );
 
+        $incollectionctr = 0;
         if (!$DB->get_record_select('oercollection_resource', $sqlwhere, $sqlparams)) {
            $DB->insert_record('oercollection_resource', [
                'oerid' => $oerid,
@@ -355,8 +356,9 @@ class mod_oercollection_external extends external_api {
            $event = \mod_oercollection\event\oer_resource_added::create($params);
            $event->trigger();
         } else {
-            //echo $OUTPUT->notification('OBACHT', \core\output\notification::NOTIFY_ERROR);
+            $incollectionctr++;
         }
+        return ['alreadyincollection' => $incollectionctr];
     }
     
     //add_entries_to_collection
@@ -390,6 +392,7 @@ class mod_oercollection_external extends external_api {
         );
 
         $ctr = 0;
+        $incollectionctr = 0;
         foreach ($oerhubids as $oerhubid) {
             $sqlwhere = 'oerid = :oerid and oerresourceid = ' . $DB->sql_compare_text(':oerresourceid');
             $sqlparams = ['oerid' => $params['oerid'], 'oerresourceid' => $oerhubid];
@@ -411,9 +414,12 @@ class mod_oercollection_external extends external_api {
                 ]);
                 $event = \mod_oercollection\event\oer_resource_added::create($eventparams);
                 $event->trigger();
+            } else {
+                $incollectionctr++;
             }
             $ctr++;
         }
+        return ['incollectionnr' => $incollectionctr];
     }
     
     /**
@@ -454,7 +460,9 @@ class mod_oercollection_external extends external_api {
      * @return external_value
      */
     public static function add_entry_to_collection_returns() {
-        return null;
+        return new external_single_structure(array(
+            'alreadyincollection' => new external_value(PARAM_INT, 'total number of words submitted'),
+        ));
     }
     /**
      * Returns return value description
@@ -462,7 +470,9 @@ class mod_oercollection_external extends external_api {
      * @return external_value
      */
     public static function add_entries_to_collection_returns() {
-        return null;
+        return new external_single_structure(array(
+            'incollectionnr' => new external_value(PARAM_INT, 'total number of words submitted'),
+        ));
     }
     /**
      * Returns return value description
