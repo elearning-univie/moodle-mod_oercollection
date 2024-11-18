@@ -21,9 +21,18 @@
     {
     }
 }}
-<p>{{#searchoer}}<a class="btn btn-secondary" href="{{searchoer}}">{{#str}} backtoresources, mod_oercollection {{/str}}</a>{{/searchoer}}</p>
-<h4>{{# str }} searchoerhub, mod_oercollection {{/ str }}</h4>
-
+<div id="region-main-box">
+    <div class="row">
+        {{#searchoer}}<a class="btn btn-secondary" href="{{searchoer}}">{{#str}} backtoresources, mod_oercollection {{/str}}</a>{{/searchoer}}
+    </div>
+    <div class="row py-3">
+        <h4>{{# str }} searchoerhub, mod_oercollection {{/ str }}</h4>
+        <a class="btn btn-link p-0" role="button" data-container="body" data-toggle="popover" data-placement="right" data-content="{{searchinfotext}}"
+         data-html="true" tabindex="0" data-trigger="focus" aria-label="Hilfe" data-original-title="" title="">
+         <i class="icon fa fa-question-circle text-info fa-fw " title="Hilfe für Suchen" role="img" aria-label="Hilfe für Suchen"></i>
+         </a>
+    </div>
+</div>
 <form action="{{actionurl}}" method="post" id="searchform" onsubmit="packData()">
     <input type="hidden" name="filterdata" id="filterdata">
     {{{searchform}}}
@@ -47,6 +56,7 @@
     </div>	
 
 </form>
+
 {{#js}}
     packData = () => {
         const selectElements = document.querySelectorAll('select.filterdata');

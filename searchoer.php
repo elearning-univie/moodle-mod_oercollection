@@ -82,6 +82,7 @@ $templatecontext = [
     'searchform' => $searchform->get_search_form($searchstring),
     'actionurl' => $PAGE->url,
     'oerid' => $oercollection->id,
+    'searchinfotext' => get_string('searchoerhub_help', 'oercollection'),
 ];
 
 if (!is_null($reset)) {
