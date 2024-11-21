@@ -34,9 +34,14 @@ $searchstring = optional_param('searchstring', null, PARAM_TEXT);
 $filter = optional_param('filterdata', null, PARAM_TEXT);
 $page = optional_param('page', 0, PARAM_INT);
 $reset = optional_param('reset', null, PARAM_TEXT);
+$perpage = optional_param('perpage', 20, PARAM_INT);
 
 list ($course, $cm) = get_course_and_cm_from_cmid($id, 'oercollection');
 $context = context_module::instance($cm->id);
+
+if (!in_array($perpage, [5, 10, 20, 50, 100, 5000], true)) {
+    $perpage = 20;
+}
 
 if (!has_capability('mod/oercollection:editresources', $context)) {
     $url = new moodle_url("/mod/oercollection/oercollectionstudentview.php", ['id' => $cm->id]);
@@ -58,6 +63,9 @@ if ($page) {
 }
 if ($filter) {
     $params['filterdata'] = $filter;
+}
+if ($perpage) {
+    $params['perpage'] = $perpage;
 }
 
 $PAGE->set_url(new moodle_url("/mod/oercollection/searchoer.php", $params));
@@ -91,13 +99,13 @@ if (!is_null($reset)) {
 
 if (!is_null($searchstring)) {
     $oersearchresults = [];
-    $resultsarray = $searchform->get_results($searchstring, $filter, $page);
+    $resultsarray = $searchform->get_results($searchstring, $filter, $page, $perpage);
     $templatecontext['resultlist'] = $resultsarray['resulthtml'];
 }
 
 echo $renderer->render_from_template('mod_oercollection/searchoer', $templatecontext);
 
 if (!is_null($searchstring)) {
-    echo $OUTPUT->paging_bar($resultsarray['foundcount'], $page, 20, $PAGE->url);
+    echo $OUTPUT->paging_bar($resultsarray['foundcount'], $page, $perpage, $PAGE->url);
 }
 echo $renderer->footer();

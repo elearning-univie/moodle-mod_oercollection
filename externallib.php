@@ -355,6 +355,7 @@ class mod_oercollection_external extends external_api {
            ]);
            $event = \mod_oercollection\event\oer_resource_added::create($params);
            $event->trigger();
+           oercollection_add_to_cache($oerid, $oerhubid);
         } else {
             $incollectionctr++;
         }
