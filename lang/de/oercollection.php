@@ -132,3 +132,5 @@ $string['eventoerresourceadded'] = 'Eine OER Resource wurde hinzugefügt.';
 $string['eventoerresourceremoved'] = 'Eine OER Resource wurde entfernt.';
 $string['popupblockmessage'] = 'ACHTUNG! Ihr Popup Blocker ist aktiviert! Um mehrere Links gleichzeitig zu öffnen, deaktivieren sie den Popup Blocker.';
 $string['errordisplaymode'] = 'Bei der Abschlussbedingung "Aktivität anzeigen" muss der Inhalt "Auf seperater Seite" ausgewählt sein!';
+
+$string['cachedef_entries'] = 'Dies ist die Beschreibung der Cache-Einträge';

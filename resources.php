@@ -124,6 +124,8 @@ $oerlist = [];
 
 $oerapi = new \oerapi_oerhub\api\general($PAGE->url, $oerid->id);
 
+$apicache = cache::make('mod_oercollection', 'entries');
+
 foreach ($oerentries as $oerentry) {
     $oerhidden = true;
     $background = 'bg-light';
@@ -136,9 +138,15 @@ foreach ($oerentries as $oerentry) {
         $commentexists = false;
     }
     $commentlink = new moodle_url("/mod/oercollection/oercomment.php", ['id' => $cmid, 'oereid' => $oerentry->id]);
+    if (!$apicache->get($oerentry->oerresourceid)) {
+        $oerhtml = $oerapi->get_resource_html($oerentry->oerresourceid);
+        $apicache->set($oerentry->oerresourceid, $oerhtml);
+    } else {
+        $oerhtml = $apicache->get($oerentry->oerresourceid);
+    }
     $oerlist[] = [
         'oerentryid' => $oerentry->id,
-        'oerhtml' => $oerapi->get_resource_html($oerentry->oerresourceid),
+        'oerhtml' => $oerhtml,
         'oerhidden' => $oerhidden,
         'resourcelink' => $oerentry->resourcelink,
         'resourcename' => "'" . $oerentry->resourcename . "'",

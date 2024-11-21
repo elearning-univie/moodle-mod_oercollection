@@ -17,8 +17,6 @@
  * Mandatory public API of folder oercollection
  *
  * @package   mod_oercollection
- * @author    Adrian Czermak
- * @author    Angela Baier
  * @copyright 2024 University of Vienna
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -26,3 +24,13 @@
 defined('MOODLE_INTERNAL') || die();
 
 define('DEFAULT_PAGE_SIZE', 5000);
+
+function oercollection_add_to_cache($oerid, $oerresourceid) {
+    $apicache = cache::make('mod_oercollection', 'entries');
+    $oerapi = new \oerapi_oerhub\api\general('', $oerid);
+    $cacheobj = $oerapi->get_resource_html($oerresourceid);
+
+    if (!$apicache->get($oerresourceid)) {
+        $apicache->set($oerresourceid, $cacheobj);
+    }
+}
