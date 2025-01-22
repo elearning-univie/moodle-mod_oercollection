@@ -88,7 +88,7 @@ $searchform = new \oerapi_oerhub\api\general($PAGE->url, $oercollection->id);
 $templatecontext = [
     'searchoer' => new moodle_url("/mod/oercollection/resources.php", ['id' => $id]),
     'searchform' => $searchform->get_search_form($searchstring),
-    'actionurl' => $PAGE->url,
+    'actionurl' => new moodle_url("/mod/oercollection/searchoer.php", ['id' => $id]),
     'oerid' => $oercollection->id,
     'searchinfotext' => get_string('searchoerhub_help', 'oercollection'),
 ];
