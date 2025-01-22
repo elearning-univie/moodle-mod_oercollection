@@ -33,32 +33,13 @@
          </a>
     </div>
 </div>
-<form action="{{actionurl}}" method="post" id="searchform" onsubmit="packData()">
-    <input type="hidden" name="filterdata" id="filterdata">
+<form action="{{actionurl}}" method="post" id="searchform">
     {{{searchform}}}
 
     {{{resultlist}}}
 </form>
 
 {{#js}}
-    packData = () => {
-        const selectElements = document.querySelectorAll('select.filterdata');
-        const selectedValues = {};
-
-        selectElements.forEach(select => {
-            const id = select.id;
-            const selectedValue = select.value;
-            if (id === 'yearfrom' || id === 'yearto') {
-                if (document.getElementById(id + 'checkbox').checked == false) {
-                    return;
-                }
-            }
-            selectedValues[id] = selectedValue;
-        });
-
-        document.getElementById('filterdata').value = JSON.stringify(selectedValues);
-        window.console.log(selectedValues);
-    };
     require(['mod_oercollection/defaultcontroller'], function(defaultcontroller) {
         defaultcontroller.init();
     });	
