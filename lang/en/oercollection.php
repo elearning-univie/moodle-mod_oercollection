@@ -131,3 +131,8 @@ $string['popupblockmessage'] = 'ACHTUNG! Ihr Popup Blocker ist aktiviert! Um meh
 $string['errordisplaymode'] = 'Bei der Abschlussbedingung "Aktivität anzeigen" muss der Inhalt "Auf seperater Seite" ausgewählt sein!';
 
 $string['cachedef_entries'] = 'This is the description of the cache entries';
+
+# for custom behat tests
+$string['error_notab'] = 'New tab was not opened';
+$string['url_mismatch'] = 'Incorrect URL';
+$string['license'] = 'License';
