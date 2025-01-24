@@ -43,12 +43,11 @@ if (!in_array($perpage, [5, 10, 20, 50, 100, 5000], true)) {
     $perpage = 20;
 }
 
+require_login($course, true, $cm);
 if (!has_capability('mod/oercollection:editresources', $context)) {
     $url = new moodle_url("/mod/oercollection/oercollectionstudentview.php", ['id' => $cm->id]);
     redirect($url);
 }
-require_login($course, true, $cm);
-require_capability('mod/oercollection:editresources', $context);
 
 $oercollection = $DB->get_record('oercollection', array('id' => $cm->instance));
 
@@ -85,12 +84,13 @@ $renderer = $PAGE->get_renderer('core');
 echo $renderer->header();
 
 $searchform = new \oerapi_oerhub\api\general($PAGE->url, $oercollection->id);
+$helpicon = new help_icon('searchoerhub', 'oercollection');
 $templatecontext = [
     'searchoer' => new moodle_url("/mod/oercollection/resources.php", ['id' => $id]),
     'searchform' => $searchform->get_search_form($searchstring),
     'actionurl' => new moodle_url("/mod/oercollection/searchoer.php", ['id' => $id]),
     'oerid' => $oercollection->id,
-    'searchinfotext' => get_string('searchoerhub_help', 'oercollection'),
+    'helpicon' => $helpicon->export_for_template($renderer),
 ];
 
 if (!is_null($reset)) {

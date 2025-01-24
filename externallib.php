@@ -326,7 +326,7 @@ class mod_oercollection_external extends external_api {
 
         self::validate_context($context);
         require_login($course, false, $cm);
-        require_capability('mod/oercollection:addinstance', $context);
+        require_capability('mod/oercollection:editresources', $context);
 
         $sqlwhere = 'oerid = :oerid and oerresourceid = ' . $DB->sql_compare_text(':oerresourceid');
         $sqlparams = ['oerid' => $oerid, 'oerresourceid' => $oerhubid];
@@ -385,7 +385,7 @@ class mod_oercollection_external extends external_api {
         
         self::validate_context($context);
         require_login($course, false, $cm);
-        require_capability('mod/oercollection:addinstance', $context);
+        require_capability('mod/oercollection:editresources', $context);
 
         $eventparams = array(
             'objectid' => $oerid,
