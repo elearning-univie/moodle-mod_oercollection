@@ -1,16 +1,15 @@
-import $ from "jquery";
 import ajax from "core/ajax";
 import notification from "core/notification";
 import {getString} from 'core/str';
 
 export const init = () => {
-    $.mod_oercollection_setall = function(status) {
+    const mod_oercollection_setall = (status) => {
         document.querySelectorAll('input[name="selectbox"]').forEach(checkbox => {
             checkbox.checked = status;
         });
     };
 
-    $.mod_oercollection_bulk_action = function(oer) {
+    const mod_oercollection_bulk_action = (oer) => {
         // Get all checked checkboxes and their associated data
         const checkboxes = document.querySelectorAll('input[name="selectbox"]:checked');
         const oerids = [];
@@ -167,4 +166,7 @@ export const init = () => {
             fail: notification.exception
         }]);
     }
+
+    window.mod_oercollection_setall = mod_oercollection_setall;
+    window.mod_oercollection_bulk_action = mod_oercollection_bulk_action;
 };
