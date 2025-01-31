@@ -18,18 +18,12 @@
  * Activity index for the mod_oercollection plugin.
  *
  * @package   mod_oercollection
- * @author    Adrian Czermak
- * @author    Angela Baier
  * @copyright 2024 University of Vienna
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 require('../../config.php');
 require_once(__DIR__ . '/lib.php');
-
-// $id = required_param('id', PARAM_INT);
-// [$course, $cm] = get_course_and_cm_from_cmid($id, 'oercollection');
-// $instance = $DB->get_record('oercollection', ['id'=> $cm->instance], '*', MUST_EXIST);
 
 global $PAGE, $OUTPUT, $DB, $CFG;
 
@@ -42,7 +36,7 @@ $context = context_module::instance($cm->id);
 require_login($course, false, $cm);
 require_capability('mod/oercollection:view', $context);
 
-$oercollection = $DB->get_record('oercollection', array('id' => $cm->instance));
+$oercollection = $DB->get_record('oercollection', ['id' => $cm->instance]);
 
 $PAGE->set_url(new moodle_url("/mod/oercollection/view.php", ['id' => $id]));
 $node = $PAGE->settingsnav->find('mod_oercollection', navigation_node::TYPE_SETTING);
@@ -56,13 +50,9 @@ $PAGE->set_title($oercollection->name);
 $PAGE->set_heading($course->shortname);
 
 if (has_capability('mod/oercollection:editresources', $context)) {
-    $redirecturl = new moodle_url('/mod/oercollection/oercollectionteacherview.php', array('id' => $id));
+    $redirecturl = new moodle_url('/mod/oercollection/oercollectionteacherview.php', ['id' => $id]);
     redirect($redirecturl);
 } else {
-    $redirecturl = new moodle_url('/mod/oercollection/oercollectionstudentview.php', array('id' => $id));
+    $redirecturl = new moodle_url('/mod/oercollection/oercollectionstudentview.php', ['id' => $id]);
     redirect($redirecturl);
-} 
-
-$renderer = $PAGE->get_renderer('core');
-echo $renderer->header();
-echo $renderer->footer();
+}

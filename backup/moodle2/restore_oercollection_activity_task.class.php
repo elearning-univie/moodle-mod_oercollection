@@ -57,9 +57,9 @@ class restore_oercollection_activity_task extends restore_activity_task {
      * processed by the link decoder
      */
     public static function define_decode_contents() {
-        $contents = array();
+        $contents = [];
 
-        $contents[] = new restore_decode_content('oercollection', array('intro'), 'oercollection');
+        $contents[] = new restore_decode_content('oercollection', ['intro'], 'oercollection');
 
         return $contents;
     }
@@ -69,7 +69,7 @@ class restore_oercollection_activity_task extends restore_activity_task {
      * to the activity to be executed by the link decoder
      */
     public static function define_decode_rules() {
-        $rules = array();
+        $rules = [];
 
         $rules[] = new restore_decode_rule('OERCOLLECTIONVIEWBYID', '/mod/oercollection/view.php?id=$1', 'course_module');
         $rules[] = new restore_decode_rule('OERCOLLECTIONINDEX', '/mod/oercollection/index.php?id=$1', 'course');
@@ -85,7 +85,7 @@ class restore_oercollection_activity_task extends restore_activity_task {
      * of {@see restore_log_rule} objects
      */
     public static function define_restore_log_rules() {
-        $rules = array();
+        $rules = [];
 
         $rules[] = new restore_log_rule('oercollection', 'add', 'view.php?id={course_module}', '{oercollection}');
         $rules[] = new restore_log_rule('oercollection', 'update', 'view.php?id={course_module}', '{oercollection}');
@@ -105,7 +105,7 @@ class restore_oercollection_activity_task extends restore_activity_task {
      * activity level. All them are rules not linked to any module instance (cmid = 0)
      */
     public static function define_restore_log_rules_for_course() {
-        $rules = array();
+        $rules = [];
 
         $rules[] = new restore_log_rule('oercollection', 'view all', 'index.php?id={course}', null);
 

@@ -16,10 +16,8 @@
 
 /**
  * Interface implementation of the external Webservices
- *-
+ *
  * @package   mod_oercollection
- * @author    Adrian Czermak
- * @author    Angela Baier
  * @copyright 2024 University of Vienna
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -38,7 +36,7 @@ require_once(__DIR__ . '/locallib.php');
 /**
  * Class mod_oercollection_external
  *
- * @copyright  2021 University of Vienna
+ * @copyright  2024 University of Vienna
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mod_oercollection_external extends external_api {
@@ -49,12 +47,10 @@ class mod_oercollection_external extends external_api {
      * @return external_function_parameters
      */
     public static function set_visibility_oerentry_parameters() {
-        return new external_function_parameters(
-            array(
-                'oerid' => new external_value(PARAM_INT, 'flashcard activity id', VALUE_REQUIRED),
-                'oerentryid' => new external_value(PARAM_INT, 'oer entry id', VALUE_REQUIRED),
-                )
-            );
+        return new external_function_parameters([
+            'oerid' => new external_value(PARAM_INT, 'flashcard activity id', VALUE_REQUIRED),
+            'oerentryid' => new external_value(PARAM_INT, 'oer entry id', VALUE_REQUIRED),
+        ]);
     }
     /**
      * Returns description of method parameters
@@ -62,15 +58,13 @@ class mod_oercollection_external extends external_api {
      * @return external_function_parameters
      */
     public static function set_visibility_all_parameters() {
-        return new external_function_parameters(
-            array(
-                'oerid' => new external_value(PARAM_INT, 'oerid', VALUE_REQUIRED),
-                'oerentryids' => new external_multiple_structure(
-                    new external_value(PARAM_INT, 'id array of questions')
-                    ),
-                'show' => new external_value(PARAM_BOOL, 'visibility value', VALUE_REQUIRED),
-            )
-            );
+        return new external_function_parameters([
+            'oerid' => new external_value(PARAM_INT, 'oerid', VALUE_REQUIRED),
+            'oerentryids' => new external_multiple_structure(
+                new external_value(PARAM_INT, 'id array of questions')
+                ),
+            'show' => new external_value(PARAM_BOOL, 'visibility value', VALUE_REQUIRED),
+        ]);
     }
     /**
      * Returns description of method parameters
@@ -78,14 +72,12 @@ class mod_oercollection_external extends external_api {
      * @return external_function_parameters
      */
     public static function delete_selected_oerentries_parameters() {
-        return new external_function_parameters(
-            array(
-                'oerid' => new external_value(PARAM_INT, 'oerid', VALUE_REQUIRED),
-                'oerentryids' => new external_multiple_structure(
-                    new external_value(PARAM_INT, 'id array of questions')
-                    ),
-                )
-            );
+        return new external_function_parameters([
+            'oerid' => new external_value(PARAM_INT, 'oerid', VALUE_REQUIRED),
+            'oerentryids' => new external_multiple_structure(
+                new external_value(PARAM_INT, 'id array of questions')
+                ),
+        ]);
     }
     /**
      * Returns description of method parameters
@@ -93,12 +85,10 @@ class mod_oercollection_external extends external_api {
      * @return external_function_parameters
      */
     public static function delete_oerentry_parameters() {
-        return new external_function_parameters(
-            array(
-                'oerid' => new external_value(PARAM_INT, 'flashcard activity id', VALUE_REQUIRED),
-                'oerentryid' => new external_value(PARAM_INT, 'oer entry id', VALUE_REQUIRED),
-            )
-            );
+        return new external_function_parameters([
+            'oerid' => new external_value(PARAM_INT, 'flashcard activity id', VALUE_REQUIRED),
+            'oerentryid' => new external_value(PARAM_INT, 'oer entry id', VALUE_REQUIRED),
+        ]);
     }
 
     /**
@@ -107,13 +97,11 @@ class mod_oercollection_external extends external_api {
      * @return external_function_parameters
      */
     public static function move_resource_parameters() {
-        return new external_function_parameters(
-            array(
-                'oerid' => new external_value(PARAM_INT, 'flashcard activity id', VALUE_REQUIRED),
-                'oereidtomove' => new external_value(PARAM_INT, 'flashcard activity id', VALUE_REQUIRED),
-                'oereidmoveafter' => new external_value(PARAM_INT, 'oer entry id', VALUE_REQUIRED),
-            )
-            );
+        return new external_function_parameters([
+            'oerid' => new external_value(PARAM_INT, 'flashcard activity id', VALUE_REQUIRED),
+            'oereidtomove' => new external_value(PARAM_INT, 'flashcard activity id', VALUE_REQUIRED),
+            'oereidmoveafter' => new external_value(PARAM_INT, 'oer entry id', VALUE_REQUIRED),
+        ]);
     }
     /**
      * Returns description of method parameters
@@ -134,21 +122,20 @@ class mod_oercollection_external extends external_api {
      * @return external_function_parameters
      */
     public static function add_entries_to_collection_parameters() {
-        return new external_function_parameters(
-            array(
-                'oerid' => new external_value(PARAM_INT, 'oerid', VALUE_REQUIRED),
-                'oerhubids' => new external_multiple_structure(
-                    new external_value(PARAM_TEXT, 'id array of hub resources')
-                    ),
-                'resourcelinks' => new external_multiple_structure(
-                    new external_value(PARAM_URL, 'id array of resourcelinks')
-                    ),
-                'resourcenames' => new external_multiple_structure(
-                    new external_value(PARAM_TEXT, 'id array of resourcetitles')
-                    ),
-            )
-            );
+        return new external_function_parameters([
+            'oerid' => new external_value(PARAM_INT, 'oerid', VALUE_REQUIRED),
+            'oerhubids' => new external_multiple_structure(
+                new external_value(PARAM_TEXT, 'id array of hub resources')
+                ),
+            'resourcelinks' => new external_multiple_structure(
+                new external_value(PARAM_URL, 'id array of resourcelinks')
+                ),
+            'resourcenames' => new external_multiple_structure(
+                new external_value(PARAM_TEXT, 'id array of resourcetitles')
+                ),
+        ]);
     }
+
     /**
      *
      * Removes all selected questions from box 1 to box 0 for the activity
@@ -157,41 +144,40 @@ class mod_oercollection_external extends external_api {
      * @param int $oerentryid
      */
     public static function set_visibility_oerentry($oerid, $oerentryid) {
-        global $DB, $USER;
-        
+        global $DB;
+
         $params = self::validate_parameters(self::set_visibility_oerentry_parameters(),
-            array('oerid' => $oerid, 'oerentryid' => $oerentryid));
-        
-        $oerentry = $DB->get_record('oercollection_resource', ['id' => $oerentryid]);
+            ['oerid' => $oerid, 'oerentryid' => $oerentryid]);
+
+        $oerentry = $DB->get_record('oercollection_resource', ['id' => $params['oerentryid']]);
         if ($oerentry) {
             $oerentry->showresource = $oerentry->showresource ? 0 : 1;
             $DB->update_record('oercollection_resource', $oerentry);
         }
-        
     }
-    
+
     /**
      *
      * Removes all selected questions from box 1 to box 0 for the activity
      *
      * @param int $oerid
-     * @param array $oerentryid
+     * @param array $oerentryids
      * @param int $show
      */
     public static function set_visibility_all($oerid, $oerentryids, $show) {
-        global $DB, $USER;
-        
-        $params = self::validate_parameters(self::set_visibility_all_parameters(),
-            array('oerid' => $oerid, 'oerentryids' => $oerentryids, 'show' => $show));
+        global $DB;
 
-        if ($oerentryids) {
-            list($inids, $oereids) = $DB->get_in_or_equal($oerentryids);
+        $params = self::validate_parameters(self::set_visibility_all_parameters(),
+            ['oerid' => $oerid, 'oerentryids' => $oerentryids, 'show' => $show]);
+
+        if ($params['oerentryids']) {
+            list($inids, $oereids) = $DB->get_in_or_equal($params['oerentryids']);
             $sql = "SELECT * FROM {oercollection_resource}
                             WHERE id $inids";
             $oerentries = $DB->get_records_sql($sql, $oereids);
             foreach ($oerentries as $oerentry) {
                 if ($oerentry) {
-                    $oerentry->showresource = $show;
+                    $oerentry->showresource = $params['show'];
                     $DB->update_record('oercollection_resource', $oerentry);
                 }
             }
@@ -201,19 +187,19 @@ class mod_oercollection_external extends external_api {
      * deletes all selected oer entries from collection
      *
      * @param int $oerid
-     * @param int $oerentryid
+     * @param array $oerentryids
      */
     public static function delete_selected_oerentries($oerid, $oerentryids) {
         global $DB;
-        
+
         $params = self::validate_parameters(self::delete_selected_oerentries_parameters(),
-            array('oerid' => $oerid, 'oerentryids' => $oerentryids));
+            ['oerid' => $oerid, 'oerentryids' => $oerentryids]);
 
         $cm = get_coursemodule_from_instance('oercollection', $params['oerid'], 0, false, MUST_EXIST);
-        $eventparams = array(
+        $eventparams = [
             'objectid' => $oerid,
             'context' => context_module::instance($cm->id),
-        );
+        ];
 
         if ($oerentryids) {
             list($inids, $oereids) = $DB->get_in_or_equal($oerentryids);
@@ -233,13 +219,14 @@ class mod_oercollection_external extends external_api {
      * deletes all selected oer entries from collection
      *
      * @param int $oerid
-     * @param int $oerentryid
+     * @param int $oereidtomove
+     * @param int $oereidmoveafter
      */
     public static function move_resource($oerid, $oereidtomove, $oereidmoveafter) {
-         global $DB;
+        global $DB;
 
         $params = self::validate_parameters(self::move_resource_parameters(),
-            array('oerid' => $oerid, 'oereidtomove' => $oereidtomove, 'oereidmoveafter' => $oereidmoveafter));
+            ['oerid' => $oerid, 'oereidtomove' => $oereidtomove, 'oereidmoveafter' => $oereidmoveafter]);
 
         $sql = "SELECT *
                   FROM {oercollection_resource} oer
@@ -258,7 +245,7 @@ class mod_oercollection_external extends external_api {
                  WHERE oer.oerid = $oerid
                    AND id = $oereidmoveafter
               ORDER BY oer.position ASC ";
-        $resourcemoveafter =  $DB->get_record_sql($sql);
+        $resourcemoveafter = $DB->get_record_sql($sql);
 
         $xx = 0;
         if ($resourcetomove->position < $resourcemoveafter->position) {
@@ -289,16 +276,16 @@ class mod_oercollection_external extends external_api {
         global $DB;
 
         $params = self::validate_parameters(self::delete_oerentry_parameters(),
-            array('oerid' => $oerid, 'oerentryid' => $oerentryid));
+            ['oerid' => $oerid, 'oerentryid' => $oerentryid]);
 
         $cm = get_coursemodule_from_instance('oercollection', $params['oerid'], 0, false, MUST_EXIST);
 
         if ($DB->record_exists('oercollection_resource', ['id' => $oerentryid, 'oerid' => $oerid])) {
             $DB->delete_records('oercollection_resource', ['id' => $oerentryid, 'oerid' => $oerid]);
-            $params = array(
+            $params = [
                 'objectid' => $oerid,
                 'context' => context_module::instance($cm->id),
-            );
+            ];
             $event = \mod_oercollection\event\oer_resource_removed::create($params);
             $event->trigger();
         }
@@ -309,16 +296,18 @@ class mod_oercollection_external extends external_api {
      *
      * @param int $oerid
      * @param int $oerhubid
+     * @param string $resourcelink
+     * @param string $resourcename
      */
     public static function add_entry_to_collection($oerid, $oerhubid, $resourcelink, $resourcename) {
         global $DB, $OUTPUT;
-        
+
         $params = self::validate_parameters(self::add_entry_to_collection_parameters(), [
-                'oerid' => $oerid,
-                'oerhubid' => $oerhubid,
-                'resourcelink' => $resourcelink,
-                'resourcename' => $resourcename,
-            ]);
+            'oerid' => $oerid,
+            'oerhubid' => $oerhubid,
+            'resourcelink' => $resourcelink,
+            'resourcename' => $resourcename,
+        ]);
 
         $cm = get_coursemodule_from_instance('oercollection', $oerid, 0, false, MUST_EXIST);
         $course = $DB->get_record('course', ['id' => $cm->course], '*', MUST_EXIST);
@@ -339,39 +328,40 @@ class mod_oercollection_external extends external_api {
             $maxpos = 0;
         }
 
-        $params = array(
+        $params = [
             'objectid' => $oerid,
             'context' => context_module::instance($cm->id),
-        );
+        ];
 
         $incollectionctr = 0;
         if (!$DB->get_record_select('oercollection_resource', $sqlwhere, $sqlparams)) {
-           $DB->insert_record('oercollection_resource', [
-               'oerid' => $oerid,
-               'oerresourceid' => $oerhubid,
-               'resourcelink' => $resourcelink,
-               'resourcename' => $resourcename,
-               'position' => ($maxpos +1),
-           ]);
-           $event = \mod_oercollection\event\oer_resource_added::create($params);
-           $event->trigger();
-           oercollection_add_to_cache($oerid, $oerhubid);
+            $DB->insert_record('oercollection_resource', [
+                'oerid' => $oerid,
+                'oerresourceid' => $oerhubid,
+                'resourcelink' => $resourcelink,
+                'resourcename' => $resourcename,
+                'position' => ($maxpos + 1),
+            ]);
+            $event = \mod_oercollection\event\oer_resource_added::create($params);
+            $event->trigger();
+            oercollection_add_to_cache($oerid, $oerhubid);
         } else {
             $incollectionctr++;
         }
         return ['alreadyincollection' => $incollectionctr];
     }
-    
-    //add_entries_to_collection
+
     /**
      * add oerhub entry to collectyion
      *
      * @param int $oerid
-     * @param int $oerhubid
+     * @param array $oerhubids
+     * @param array $resourcelinks
+     * @param array $resourcenames
      */
     public static function add_entries_to_collection($oerid, $oerhubids, $resourcelinks, $resourcenames) {
         global $DB;
-        
+
         $params = self::validate_parameters(self::add_entries_to_collection_parameters(), [
             'oerid' => $oerid,
             'oerhubids' => $oerhubids,
@@ -382,22 +372,22 @@ class mod_oercollection_external extends external_api {
         $cm = get_coursemodule_from_instance('oercollection', $params['oerid'], 0, false, MUST_EXIST);
         $course = $DB->get_record('course', ['id' => $cm->course], '*', MUST_EXIST);
         $context = context_module::instance($cm->id);
-        
+
         self::validate_context($context);
         require_login($course, false, $cm);
         require_capability('mod/oercollection:editresources', $context);
 
-        $eventparams = array(
+        $eventparams = [
             'objectid' => $oerid,
             'context' => context_module::instance($cm->id),
-        );
+        ];
 
         $ctr = 0;
         $incollectionctr = 0;
         foreach ($oerhubids as $oerhubid) {
             $sqlwhere = 'oerid = :oerid and oerresourceid = ' . $DB->sql_compare_text(':oerresourceid');
             $sqlparams = ['oerid' => $params['oerid'], 'oerresourceid' => $oerhubid];
-            
+
             $maxpossql = "SELECT MAX(oerr.position)
                        FROM {oercollection_resource} oerr
                       WHERE oerr.oerid = $oerid";
@@ -411,7 +401,7 @@ class mod_oercollection_external extends external_api {
                     'oerresourceid' => $oerhubid,
                     'resourcelink' => $resourcelinks[$ctr],
                     'resourcename' => $resourcenames[$ctr],
-                    'position' => ($maxpos +1),
+                    'position' => ($maxpos + 1),
                 ]);
                 $event = \mod_oercollection\event\oer_resource_added::create($eventparams);
                 $event->trigger();
@@ -422,7 +412,7 @@ class mod_oercollection_external extends external_api {
         }
         return ['incollectionnr' => $incollectionctr];
     }
-    
+
     /**
      * Returns return value description
      *
@@ -461,9 +451,9 @@ class mod_oercollection_external extends external_api {
      * @return external_value
      */
     public static function add_entry_to_collection_returns() {
-        return new external_single_structure(array(
+        return new external_single_structure([
             'alreadyincollection' => new external_value(PARAM_INT, 'total number of words submitted'),
-        ));
+        ]);
     }
     /**
      * Returns return value description
@@ -471,9 +461,9 @@ class mod_oercollection_external extends external_api {
      * @return external_value
      */
     public static function add_entries_to_collection_returns() {
-        return new external_single_structure(array(
+        return new external_single_structure([
             'incollectionnr' => new external_value(PARAM_INT, 'total number of words submitted'),
-        ));
+        ]);
     }
     /**
      * Returns return value description

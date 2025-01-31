@@ -18,8 +18,6 @@
  * Mandatory public API of oercollection
  *
  * @package   mod_oercollection
- * @author    Adrian Czermak
- * @author    Angela Baier
  * @copyright 2024 University of Vienna
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -28,27 +26,41 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot.'/course/moodleform_mod.php');
 
+/**
+ * mod_oercollection_mod_form
+ *
+ * @package   mod_oercollection
+ * @copyright 2024 University of Vienna
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class mod_oercollection_mod_form extends moodleform_mod {
 
-    function definition() {
-        global $CFG, $DB, $OUTPUT; 
+    /**
+     * Called to define this moodle form
+     *
+     * @return void
+     */
+    public function definition(): void {
+        global $CFG, $DB, $OUTPUT;
 
         $mform =& $this->_form;
 
-        $mform->addElement('text', 'name', get_string('oercollectionname', 'oercollection'), array('size' => '64'));
+        $mform->addElement('text', 'name', get_string('oercollectionname', 'oercollection'), ['size' => '64']);
         $mform->setType('name', PARAM_TEXT);
         $mform->addRule('name', null, 'required', null, 'client');
 
         $this->standard_intro_elements();
 
         $mform->addElement('header', 'display', get_string('display', 'oercollection'));
-        $options = array(NEWPAGE       => get_string('newpage', 'oercollection'),
-                        THISPAGE => get_string('thispage', 'oercollection'));
+        $options = [
+            NEWPAGE => get_string('newpage', 'oercollection'),
+            THISPAGE => get_string('thispage', 'oercollection'),
+        ];
         $mform->addElement('select', 'displaymode', get_string('displaymode', 'oercollection'), $options, NOGROUPS);
         $mform->addHelpButton('displaymode', 'displaymode', 'oercollection');
-        
-        // hide group mode...for now
-        $this->_features->groups= false;
+
+        // Hide group mode...for now.
+        $this->_features->groups = false;
 
         // Standard Moodle course module elements (course, category, etc.).
         $this->standard_coursemodule_elements();
@@ -57,10 +69,16 @@ class mod_oercollection_mod_form extends moodleform_mod {
         $this->add_action_buttons();
     }
 
-    function validation($data, $files) {
-        $errors = array();
+    /**
+     * Perform extra validation.
+     * @param array $data submitted form fields.
+     * @param array $files submitted with the form.
+     * @return array errors occuring during validation.
+     */
+    public function validation($data, $files) {
+        $errors = [];
 
-        if (array_key_exists('completionview', $data)){
+        if (array_key_exists('completionview', $data)) {
             if ($data['displaymode'] == THISPAGE && $data['completionview'] == 1) {
                 $errors['displaymode'] = get_string('errordisplaymode', 'oercollection');
             }

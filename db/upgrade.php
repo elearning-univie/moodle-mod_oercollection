@@ -18,20 +18,26 @@
  * Upgrade steps for the mod_oercollection plugin.
  *
  * @package   mod_oercollection
- * @author    Adrian Czermak
- * @author    Angela Baier
  * @copyright 2024 University of Vienna
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+/**
+ * xmldb_oercollection_upgrade
+ *
+ * @param int $oldversion
+ * @return true
+ * @throws ddl_field_missing_exception
+ * @throws ddl_table_missing_exception
+ */
 function xmldb_oercollection_upgrade($oldversion = 0) {
     global $DB, $CFG;
-    
+
     $dbman = $DB->get_manager();
 
     if ($oldversion < 2024041710.10) {
         $table = new xmldb_table('oercollection_resource');
-        $field = new xmldb_field('oerresourceid',XMLDB_TYPE_TEXT);
+        $field = new xmldb_field('oerresourceid', XMLDB_TYPE_TEXT);
 
         $dbman->change_field_type($table, $field);
 
@@ -41,7 +47,7 @@ function xmldb_oercollection_upgrade($oldversion = 0) {
 
     if ($oldversion < 2024041710.12) {
         $table = new xmldb_table('oercollection_resource');
-        $field = new xmldb_field('oerresourceid',XMLDB_TYPE_CHAR, '255');
+        $field = new xmldb_field('oerresourceid', XMLDB_TYPE_CHAR, '255');
 
         $dbman->change_field_type($table, $field);
 

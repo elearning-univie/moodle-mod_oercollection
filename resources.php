@@ -18,8 +18,6 @@
  * Activity index for the mod_oercollection plugin.
  *
  * @package   mod_oercollection
- * @author    Adrian Czermak
- * @author    Angela Baier
  * @copyright 2024 University of Vienna
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -35,23 +33,22 @@ $filter = optional_param('oerefilter', 1, PARAM_INT);
 $page = optional_param('page', 0, PARAM_INT);
 $perpage = optional_param('perpage', DEFAULT_PAGE_SIZE, PARAM_INT);
 $deleted = optional_param('del', 0, PARAM_INT);
-list ($course, $cm) = get_course_and_cm_from_cmid($cmid, 'oercollection');
 
-$context = context_module::instance($cm->id);
-
-if (!in_array($perpage, [5, 10, 20, 50, 100, 5000], true)) {
+$validperpages = [5, 10, 20, 50, 100, 5000];
+if (!in_array($perpage, $validperpages, true)) {
     $perpage = DEFAULT_PAGE_SIZE;
 }
 
+list ($course, $cm) = get_course_and_cm_from_cmid($cmid, 'oercollection');
 require_login($course, false, $cm);
 
+$context = context_module::instance($cm->id);
 if (!has_capability('mod/oercollection:editresources', $context)) {
     $url = new moodle_url("/mod/oercollection/oercollectionstudentview.php", ['id' => $cmid]);
     redirect($url);
-    die();
 }
 
-$oerid = $DB->get_record('oercollection', array('id' => $cm->instance));
+$oerid = $DB->get_record('oercollection', ['id' => $cm->instance]);
 
 $params = [
     'id' => $cmid,
@@ -62,18 +59,18 @@ if ($page) {
     $params['page'] = $page;
 }
 
-$homeurl = new moodle_url("/mod/oercollection/resources.php", $params);
-$PAGE->set_url($homeurl->out(false));
 $node = $PAGE->settingsnav->find('mod_oercollection', navigation_node::TYPE_SETTING);
 if ($node) {
     $node->make_active();
 }
 
-$pagetitle = get_string('pagetitle', 'oercollection');
+$homeurl = new moodle_url("/mod/oercollection/resources.php", $params);
+$PAGE->set_url($homeurl);
 $PAGE->set_title($oerid->name);
 $PAGE->set_heading($course->shortname);
 $PAGE->add_body_class('limitedwidth');
 
+$paramsql = ['oerid' => $oerid->id];
 switch ($filter) {
     case 2: // Only visible.
         $sqlshow = " AND oer.showresource = 1 ";
@@ -85,120 +82,91 @@ switch ($filter) {
         $sqlshow = "";
 }
 
-//pagination
-$offset = ($page * $perpage);
-
 $sql = "SELECT *
-          FROM {oercollection_resource} oer
-         WHERE oer.oerid = $oerid->id" . $sqlshow . " ORDER BY oer.position ASC";
+          FROM {oercollection_resource}
+         WHERE oerid = :oerid $sqlshow
+      ORDER BY position ASC";
 
-$filteredentries = $DB->get_records_sql($sql);
-$oerentries = array_slice($filteredentries, $offset, $perpage);
+$oerentries = $DB->get_records_sql($sql, $paramsql, $page * $perpage, $perpage);
+$totalentries = $DB->count_records('oercollection_resource', ['oerid' => $oerid->id]);
+$filteredcount = $DB->count_records_select('oercollection_resource', "oerid = :oerid $sqlshow", $paramsql);
 
-$sql = "SELECT *
-          FROM {oercollection_resource} oer
-         WHERE oer.oerid = $oerid->id
-      ORDER BY oer.position ASC ";
-$resourcesmodal = $DB->get_records_sql($sql);
-$rtotal = count($resourcesmodal);
-
-$selstring = 'selected2' . $filter;
-$oerexists = count($oerentries) ? true : false;
-
+// Prepare template context
 $templatecontext = [
-    'oernumber' => $rtotal,
+    'oernumber' => $totalentries,
     'oernumberhidden' => $DB->count_records('oercollection_resource', ['oerid' => $oerid->id, 'showresource' => 0]),
     'actionurl' => $PAGE->url,
     'id' => $cmid,
     'deleted' => $deleted,
     'selected' . $perpage => true,
-    $selstring => true,
+    'selected' . $filter => true,
     'sesskey' => sesskey(),
     'oerid' => $oerid->id,
-    'oerexists' => $oerexists,
+    'oerexists' => !empty($oerentries),
     'searchoer' => new moodle_url("/mod/oercollection/searchoer.php", ['id' => $cmid]),
-    'studentpreviewlink' => new moodle_url("/mod/oercollection/oercollectionstudentview.php", ['id' => $cmid])
+    'studentpreviewlink' => new moodle_url("/mod/oercollection/oercollectionstudentview.php", ['id' => $cmid]),
 ];
 
+// Prepare OER entries with caching
 $oerlist = [];
-
 $oerapi = new \oerapi_oerhub\api\general($PAGE->url, $oerid->id);
-
 $apicache = cache::make('mod_oercollection', 'entries');
+$resourceids = array_column($oerentries, 'oerresourceid');
 
+// Batch fetch cached resources
+$cachedresources = $apicache->get_many($resourceids);
 foreach ($oerentries as $oerentry) {
-    $oerhidden = true;
-    $background = 'bg-light';
-    if($oerentry->showresource) {
-        $oerhidden = false;
-        $background = '';
-    }
-    $commentexists = true;
-    if (is_null($oerentry->notetextinternal) || empty($oerentry->notetextinternal)) {
-        $commentexists = false;
-    }
-    $commentlink = new moodle_url("/mod/oercollection/oercomment.php", ['id' => $cmid, 'oereid' => $oerentry->id]);
-    if (!$apicache->get($oerentry->oerresourceid)) {
+    if (!isset($cachedresources[$oerentry->oerresourceid]) || $cachedresources[$oerentry->oerresourceid] === false) {
         $oerhtml = $oerapi->get_resource_html($oerentry->oerresourceid);
         $apicache->set($oerentry->oerresourceid, $oerhtml);
     } else {
-        $oerhtml = $apicache->get($oerentry->oerresourceid);
+        $oerhtml = $cachedresources[$oerentry->oerresourceid];
     }
+
+    $commentlink = new moodle_url("/mod/oercollection/oercomment.php", [
+        'id' => $cmid,
+        'oereid' => $oerentry->id,
+    ]);
+
     $oerlist[] = [
         'oerentryid' => $oerentry->id,
         'oerhtml' => $oerhtml,
-        'oerhidden' => $oerhidden,
+        'oerhidden' => !$oerentry->showresource,
         'resourcelink' => $oerentry->resourcelink,
-        'resourcename' => "'" . $oerentry->resourcename . "'",
-        'background' => $background,
-        'commentexists' => $commentexists,
+        'resourcename' => s($oerentry->resourcename),
+        'background' => $oerentry->showresource ? '' : 'bg-light',
+        'commentexists' => !empty($oerentry->notetextinternal),
         'commentlink' => $commentlink->out(false),
-        'commenttext' => $oerentry->notetextinternal,
-        'commentname' => $oerentry->notenameinternal,
+        'commenttext' => format_text($oerentry->notetextinternal),
+        'commentname' => s($oerentry->notenameinternal),
     ];
 }
 
-//Modal data loop
-$resourcestemp = [];
-foreach ($resourcesmodal as $remod) {
-    $oerhidden = true;
-    if($remod->showresource) {
-        $oerhidden = false;
-    }
-    $resourcestemp[] = ['id' => $remod->id, 'name' => $remod->resourcename, 'hidden' => $oerhidden];
+// Prepare modal data with array_chunk
+$allresources = $DB->get_records('oercollection_resource', ['oerid' => $oerid->id], 'position ASC');
+$chunkedresources = array_chunk($allresources, $perpage);
+$pagedresources = [];
+foreach ($chunkedresources as $index => $chunk) {
+    $pagedresources[] = [
+        'lines' => array_map(function($resource) {
+            return [
+                'id' => $resource->id,
+                'name' => s($resource->resourcename),
+                'hidden' => !$resource->showresource,
+            ];
+        }, $chunk),
+        'title' => get_string('page') . ' ' . ($index + 1),
+        'pnr' => $index + 1,
+        'open' => ($index === $page),
+    ];
 }
-
-$i=0;
-$pagenr = 1;
-$ll = [];
-$pg = [];
-$rr = [];
-while ($i < $rtotal) {
-    for ($x = $i; $x < ($i+$perpage); $x++) {
-        if (array_key_exists($x,$resourcestemp)) {
-            $ll[] = $resourcestemp[$x];
-        }
-    }
-    $pg['lines'] = $ll;
-    $pg['title'] = 'Page ' . $pagenr;
-    $pg['pnr'] = $pagenr;
-    $pg['open'] = true;
-    $rr[] = $pg;
-    unset($ll);
-    unset($pg);
-    $pagenr++;
-    $i+=$perpage;
-}
-
-$templatecontext['page'] = $rr;
-//Modal data loop end
 
 $templatecontext['oerresourcelist'] = $oerlist;
+$templatecontext['page'] = $pagedresources;
 
-$renderer = $PAGE->get_renderer('core');
-echo $renderer->header();
-
-echo $renderer->render_from_template('mod_oercollection/resources', $templatecontext);
-echo $OUTPUT->paging_bar(count($filteredentries), $page, $perpage, $homeurl);
-echo $renderer->render_from_template('mod_oercollection/resourcesactionsandoptions', $templatecontext);
-echo $renderer->footer();
+// Output rendering
+echo $OUTPUT->header();
+echo $OUTPUT->render_from_template('mod_oercollection/resources', $templatecontext);
+echo $OUTPUT->paging_bar($filteredcount, $page, $perpage, $homeurl);
+echo $OUTPUT->render_from_template('mod_oercollection/resourcesactionsandoptions', $templatecontext);
+echo $OUTPUT->footer();

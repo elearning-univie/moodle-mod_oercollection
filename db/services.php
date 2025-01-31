@@ -18,7 +18,7 @@
  * External service definition
  *
  * @package    mod_oercollection
- * @copyright  2021 University of Vienna
+ * @copyright  2024 University of Vienna
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -42,8 +42,8 @@ $services = [
     ],
 ];
 
-$functions = array(
-    'mod_oercollection_set_visibility_oerentry' => array(
+$functions = [
+    'mod_oercollection_set_visibility_oerentry' => [
         'classname' => 'mod_oercollection_external',
         'methodname' => 'set_visibility_oerentry',
         'classpath' => 'mod/oercollection/externallib.php',
@@ -51,8 +51,8 @@ $functions = array(
         'type' => 'write',
         'ajax' => true,
         'loginrequired' => true,
-    ),
-    'mod_oercollection_set_visibility_all' => array(
+    ],
+    'mod_oercollection_set_visibility_all' => [
         'classname' => 'mod_oercollection_external',
         'methodname' => 'set_visibility_all',
         'classpath' => 'mod/oercollection/externallib.php',
@@ -60,8 +60,8 @@ $functions = array(
         'type' => 'write',
         'ajax' => true,
         'loginrequired' => true,
-    ),
-    'mod_oercollection_delete_oerentry' => array(
+    ],
+    'mod_oercollection_delete_oerentry' => [
         'classname' => 'mod_oercollection_external',
         'methodname' => 'delete_oerentry',
         'classpath' => 'mod/oercollection/externallib.php',
@@ -69,8 +69,8 @@ $functions = array(
         'type' => 'write',
         'ajax' => true,
         'loginrequired' => true,
-    ),
-    'mod_oercollection_delete_selected_oerentries' => array(
+    ],
+    'mod_oercollection_delete_selected_oerentries' => [
         'classname' => 'mod_oercollection_external',
         'methodname' => 'delete_selected_oerentries',
         'classpath' => 'mod/oercollection/externallib.php',
@@ -78,8 +78,8 @@ $functions = array(
         'type' => 'write',
         'ajax' => true,
         'loginrequired' => true,
-    ),
-    'mod_oercollection_add_to_collection' => array(
+    ],
+    'mod_oercollection_add_to_collection' => [
         'classname' => 'mod_oercollection_external',
         'methodname' => 'add_entry_to_collection',
         'classpath' => 'mod/oercollection/externallib.php',
@@ -87,8 +87,8 @@ $functions = array(
         'type' => 'write',
         'ajax' => true,
         'loginrequired' => true,
-    ),
-    'mod_oercollection_add_selected_oerentries' => array(
+    ],
+    'mod_oercollection_add_selected_oerentries' => [
         'classname' => 'mod_oercollection_external',
         'methodname' => 'add_entries_to_collection',
         'classpath' => 'mod/oercollection/externallib.php',
@@ -96,9 +96,8 @@ $functions = array(
         'type' => 'write',
         'ajax' => true,
         'loginrequired' => true,
-    ),
-    
-    'mod_oercollection_move_resource' => array(
+    ],
+    'mod_oercollection_move_resource' => [
         'classname' => 'mod_oercollection_external',
         'methodname' => 'move_resource',
         'classpath' => 'mod/oercollection/externallib.php',
@@ -106,5 +105,5 @@ $functions = array(
         'type' => 'write',
         'ajax' => true,
         'loginrequired' => true,
-    ),
-);
+    ],
+];

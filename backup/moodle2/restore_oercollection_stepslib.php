@@ -22,8 +22,6 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die;
-
 /**
  * Structure step to restore one flashcards activity
  *
@@ -40,11 +38,10 @@ class restore_oercollection_activity_structure_step extends restore_activity_str
      * @return array of {@see restore_path_element}
      */
     protected function define_structure() {
-
-        $paths = array();
+        $paths = [];
         $paths[] = new restore_path_element('oercollection', '/activity/oercollection');
         $paths[] = new restore_path_element('oercollection_resource', '/activity/oercollection/resources/resource');
-        
+
         return $this->prepare_activity_structure($paths);
     }
 
@@ -74,7 +71,7 @@ class restore_oercollection_activity_structure_step extends restore_activity_str
      */
     protected function process_oercollection_resource($data) {
         global $DB;
-       
+
         $data = (object)$data;
         $data->course = $this->get_courseid();
         $oldid = $data->id;
@@ -90,7 +87,12 @@ class restore_oercollection_activity_structure_step extends restore_activity_str
     protected function after_execute() {
         $this->add_related_files('mod_oercollection', 'intro', null);
     }
-    protected function inform_new_usage_id($newusageid)
-    {}
 
+    /**
+     * inform_new_usage_id
+     * @param int $newusageid
+     * @return void
+     */
+    protected function inform_new_usage_id($newusageid) {
+    }
 }

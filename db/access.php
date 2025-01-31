@@ -24,38 +24,35 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$capabilities = array(
-
-    'mod/oercollection:addinstance' => array(
+$capabilities = [
+    'mod/oercollection:addinstance' => [
         'riskbitmask' => RISK_XSS,
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,
-        'archetypes' => array(
+        'archetypes' => [
             'editingteacher' => CAP_ALLOW,
-            'manager' => CAP_ALLOW
-        ),
-    ),
-
-    'mod/oercollection:editresources' => array(
+            'manager' => CAP_ALLOW,
+        ],
+    ],
+    'mod/oercollection:editresources' => [
         'riskbitmask' => RISK_XSS,
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,
-        'archetypes' => array(
+        'archetypes' => [
             'teacher' => CAP_ALLOW,
             'editingteacher' => CAP_ALLOW,
             'manager' => CAP_ALLOW,
-        ),
-    ),
-
-    'mod/oercollection:view' => array(
+        ],
+    ],
+    'mod/oercollection:view' => [
         'captype' => 'read',
         'contextlevel' => CONTEXT_MODULE,
-        'archetypes' => array(
+        'archetypes' => [
             'guest' => CAP_ALLOW,
             'student' => CAP_ALLOW,
             'teacher' => CAP_ALLOW,
             'editingteacher' => CAP_ALLOW,
             'manager' => CAP_ALLOW,
-        )
-    ),
-);
+        ],
+    ],
+];

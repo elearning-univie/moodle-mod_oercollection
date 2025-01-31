@@ -18,8 +18,6 @@
  * Activity index for the mod_oercollection plugin.
  *
  * @package   mod_oercollection
- * @author    Adrian Czermak
- * @author    Angela Baier
  * @copyright 2024 University of Vienna
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -49,7 +47,7 @@ if (!has_capability('mod/oercollection:editresources', $context)) {
     redirect($url);
 }
 
-$oercollection = $DB->get_record('oercollection', array('id' => $cm->instance));
+$oercollection = $DB->get_record('oercollection', ['id' => $cm->instance]);
 
 $params = [
     'id' => $id,

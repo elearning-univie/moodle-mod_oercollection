@@ -19,8 +19,10 @@
 
     Example context (json):
     {
+        "actionurl": "https://moodleurl.com"
     }
 }}
+
 <div class="row">
     {{#searchoer}}<a class="btn btn-secondary" href="{{searchoer}}">{{#str}} backtoresources, mod_oercollection {{/str}}</a>{{/searchoer}}
 </div>
@@ -39,5 +41,5 @@
 {{#js}}
     require(['mod_oercollection/defaultcontroller'], function(defaultcontroller) {
         defaultcontroller.init();
-    });	
+    });
 {{/js}}

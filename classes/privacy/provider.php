@@ -18,14 +18,9 @@
  * Privacy Subsystem implementation for mod_oercollection.
  *
  * @package   mod_oercollection
- * @author    Adrian Czermak
- * @author    Angela Baier
  * @copyright 2024 University of Vienna
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-namespace mod_oercollection\privacy;
-
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * The mod_folder module does not store any data.

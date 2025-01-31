@@ -7,8 +7,6 @@
 // (at your option) any later version.
 //
 // Moodle is distributed in the hope that it will be useful,
-
-
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
@@ -17,10 +15,10 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Class for the structure used to backup one flashcards activity.
+ * Class for the structure used to backup one oercollection activity.
  *
- * @package   mod_flashcards
- * @copyright 2021 University of Vienna
+ * @package   mod_oercollection
+ * @copyright 2024 University of Vienna
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -40,26 +38,25 @@ class backup_oercollection_activity_structure_step extends backup_activity_struc
      * @return backup_nested_element
      */
     protected function define_structure() {
-
         $oercollection = new backup_nested_element('oercollection', ['id'],
             [ 'name', 'course', 'intro', 'introformat', 'timemodified', 'displaymode']);
 
         $resources = new backup_nested_element('resources');
-        
+
         $resource = new backup_nested_element('resource', ['id'],
             [ 'oerid', 'oerresourceid', 'apipluginid', 'showresource', 'position',
                 'notenameinternal', 'notetextinternal', 'resourcelink', 'resourcename']);
 
         $oercollection->add_child($resources);
         $resources->add_child($resource);
-        
-        $oercollection->set_source_table('oercollection', array('id' => backup::VAR_ACTIVITYID));
-        
+
+        $oercollection->set_source_table('oercollection', ['id' => backup::VAR_ACTIVITYID]);
+
         $resource->set_source_sql('
             SELECT *
               FROM {oercollection_resource}
              WHERE oerid = ?',
-            array(backup::VAR_PARENTID));
+            [backup::VAR_PARENTID]);
 
         return $this->prepare_activity_structure($oercollection);
     }

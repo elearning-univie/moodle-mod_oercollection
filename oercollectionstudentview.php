@@ -30,7 +30,7 @@ require_once('locallib.php');
 
 global $PAGE, $OUTPUT, $DB;
 
-$id = required_param('id', PARAM_INT); //cmid!!
+$id = required_param('id', PARAM_INT);
 $perpage = optional_param('perpage', DEFAULT_PAGE_SIZE, PARAM_INT);
 $pg = optional_param('page', 0, PARAM_INT);
 $filter = optional_param('oerefilter', 1, PARAM_INT);
@@ -48,7 +48,7 @@ require_capability('mod/oercollection:view', $context);
 
 $oercollection = $DB->get_record('oercollection', ['id' => $cm->instance]);
 
-$params = array();
+$params = [];
 $params['id'] = $id;
 $params['perpage'] = $perpage;
 if ($pg) {
@@ -70,18 +70,18 @@ $PAGE->set_title($oercollection->name);
 $PAGE->set_heading($course->shortname);
 $PAGE->add_body_class('limitedwidth');
 
-//pagination
+// Pagination.
 $paginationsql = "";
-$offset = ($pg)*$perpage;
+$offset = ($pg) * $perpage;
 $totalnumberresources = $DB->count_records('oercollection_resource', ['oerid' => $oercollection->id]);
-if (($totalnumberresources/$perpage) > 1) {
+if (($totalnumberresources / $perpage) > 1) {
     $paginationsql = " LIMIT $perpage OFFSET $offset";
 }
 $paginationsql = "LIMIT $perpage OFFSET $offset";
 $sql = 'SELECT * FROM {oercollection_resource} oerr WHERE oerr.oerid = :oerid AND oerr.showresource = 1 ';
 $sql .= " ORDER BY oerr.position ASC ";
 $sql .= $paginationsql;
-$oerentries = $DB->get_records_sql($sql, ['oerid' => $oercollection->id]); //, "position ASC"
+$oerentries = $DB->get_records_sql($sql, ['oerid' => $oercollection->id]);
 
 $templatecontext = [];
 
@@ -109,13 +109,13 @@ foreach ($oerentries as $oerentry) {
     if (is_null($oerentry->notetextinternal) || empty($oerentry->notetextinternal)) {
         $commentexists = false;
     }
-    $oerlist[] = array(
+    $oerlist[] = [
         'oerentryid' => $oerentry->id,
         'oerhtml' => $oerapi->get_resource_html($oerentry->oerresourceid),
         'commentexists' => $commentexists,
         'commenttext' => $oerentry->notetextinternal,
         'commentname' => $oerentry->notenameinternal,
-    );
+    ];
 }
 
 $templatecontext['oerresourcelist'] = $oerlist;

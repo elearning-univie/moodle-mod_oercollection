@@ -22,10 +22,12 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$definitions = array(
+defined('MOODLE_INTERNAL') || die();
+
+$definitions = [
     // Used to cache user grades for conditional availability purposes.
-    'entries' => array(
+    'entries' => [
         'mode' => cache_store::MODE_APPLICATION,
         'ttl' => 3600,
-    ),
-);
+    ],
+];
