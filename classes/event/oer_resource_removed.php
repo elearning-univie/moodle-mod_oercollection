@@ -17,20 +17,16 @@
 /**
  * The mod_oercollection resource removed event.
  *
- * @author    Adrian Czermak
- * @author    Angela Baier
+ * @package   mod_oercollection
  * @copyright 2024 University of Vienna
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 namespace mod_oercollection\event;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * The mod_oercollection resource removed event.
  *
- * @author    Adrian Czermak
- * @author    Angela Baier
+ * @package   mod_oercollection
  * @copyright 2024 University of Vienna
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -69,13 +65,13 @@ class oer_resource_removed extends \core\event\base {
      * @return \moodle_url
      */
     public function get_url() {
-        return new \moodle_url('/mod/oercollection/resource.php', array('cmid' => $this->contextinstanceid));
+        return new \moodle_url('/mod/oercollection/resource.php', ['cmid' => $this->contextinstanceid]);
     }
 
     /**
      * Get objectid mapping
      */
     public static function get_objectid_mapping() {
-        return array('db' => 'oercollection_resource', 'restore' => 'oercollection_resource');
+        return ['db' => 'oercollection_resource', 'restore' => 'oercollection_resource'];
     }
 }

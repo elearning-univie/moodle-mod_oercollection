@@ -17,18 +17,15 @@
 /**
  * provider
  *
- * @package       mod_oercollection
- * @author        Karri Pajarinen
- * @copyright     Universitaet Wien
- * @since         Moodle 4.4
- * @license       http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   mod_oercollection
+ * @copyright 2024 University of Vienna
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 require_once(__DIR__ . '/../../../../lib/behat/behat_base.php');
 
 /**
  * Steps definitions related with the oercollection plugin.
- * 
  */
 class behat_mod_oercollection extends behat_base {
 
@@ -44,21 +41,21 @@ class behat_mod_oercollection extends behat_base {
         $session = $this->getSession();
         $driver = $session->getDriver();
 
-        $window_names = $driver->getWindowNames();
+        $windownames = $driver->getWindowNames();
 
-        if (count($window_names) <= 1) {
+        if (count($windownames) <= 1) {
             throw new \moodle_exception(get_string('error_notab', 'mod_oercollection'));
         }
 
-        $driver->switchToWindow(end($window_names));
+        $driver->switchToWindow(end($windownames));
 
         $session->wait(5000, "document.readyState === 'complete'");
 
-        $current_url = $session->getCurrentUrl();
+        $currenturl = $session->getCurrentUrl();
 
-        if (strpos($current_url, $url) === false) {
+        if (strpos($currenturl, $url) === false) {
             throw new \moodle_exception(get_string('url_mismatch', 'mod_oercollection', (object)[
-                'actual' => $current_url,
+                'actual' => $currenturl,
                 'expected' => $url,
             ]));
         }

@@ -14,12 +14,43 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * API definition.
+ *
+ * @package   mod_oercollection
+ * @copyright 2024 University of Vienna
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 namespace mod_oercollection\api;
 
+/**
+ * Defines the API
+ */
 abstract class general {
+
+    /**
+     * get_resource_html
+     *
+     * @param int $id
+     * @return mixed
+     */
     abstract public function get_resource_html($id);
 
+
+    /**
+     * get_search_form
+     *
+     * @return mixed
+     */
     abstract public function get_search_form();
 
+
+    /**
+     * get_results
+     *
+     * @param object $searchstring
+     * @return mixed
+     */
     abstract public function get_results($searchstring);
 }

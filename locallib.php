@@ -13,6 +13,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
 /**
  * Mandatory public API of folder oercollection
  *
@@ -21,10 +22,16 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
 define('DEFAULT_PAGE_SIZE', 5000);
 
+/**
+ * oercollection_add_to_cache
+ *
+ * @param int $oerid
+ * @param int $oerresourceid
+ * @return void
+ * @throws \core\exception\coding_exception
+ */
 function oercollection_add_to_cache($oerid, $oerresourceid) {
     $apicache = cache::make('mod_oercollection', 'entries');
     $oerapi = new \oerapi_oerhub\api\general('', $oerid);

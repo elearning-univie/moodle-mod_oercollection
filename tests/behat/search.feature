@@ -1,7 +1,7 @@
 @mod @mod_oercollection
 Feature: A teacher uses the Search tab in OERHub
 
-Background:
+  Background:
     Given the following "users" exist:
       | username | firstname | lastname | email                |
       | teacher1 | Teacher   | 1        | teacher1@example.com |
@@ -23,18 +23,16 @@ Background:
     And I click on "id_showdescription" "checkbox"
     And I click on "Save and return to course" "button"
     And I should see "example1"
-        
-    # requires local mock data or a mock server
-    @javascript
-    Scenario: the OERHub search works as intended
-        When I click on "Open course index" "button" 
-        And I follow "example1"
-        And I follow "Search in OERHub"
-        And I set the following fields to these values:
-        | searchstring | Video from 2020 |
-        And I click on "Search" "button"
-        And I should see "Video from 2020"
-        And I follow "Open resource"
-        Then the url should be "https://phaidra.univie.ac.at/detail/o:1134317"
-  
-    
+
+  # requires local mock data or a mock server
+  @javascript
+  Scenario: the OERHub search works as intended
+    When I click on "Open course index" "button"
+    And I follow "example1"
+    And I follow "Search in OERHub"
+    And I set the following fields to these values:
+    | searchstring | Video from 2020 |
+    And I click on "Search" "button"
+    And I should see "Video from 2020"
+    And I follow "Open resource"
+    Then the url should be "https://phaidra.univie.ac.at/detail/o:1134317"

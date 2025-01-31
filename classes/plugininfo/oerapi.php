@@ -14,8 +14,19 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * plugininfo
+ *
+ * @package   mod_oercollection
+ * @copyright 2024 University of Vienna
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 namespace mod_oercollection\plugininfo;
 
+/**
+ * oerapi
+ */
 class oerapi extends \core\plugininfo\base {
     /**
      * is_uninstall_allowed
@@ -23,8 +34,7 @@ class oerapi extends \core\plugininfo\base {
      * {@inheritDoc}
      * @see \core\plugininfo\base::is_uninstall_allowed()
      */
-    public function is_uninstall_allowed()
-    {
+    public function is_uninstall_allowed() {
         return true;
     }
 
@@ -34,11 +44,15 @@ class oerapi extends \core\plugininfo\base {
      * {@inheritDoc}
      * @see \core\plugininfo\base::uninstall_cleanup()
      */
-    public function uninstall_cleanup()
-    {
+    public function uninstall_cleanup() {
         // TODO
     }
 
+    /**
+     * plugintype_supports_disabling
+     *
+     * @return bool
+     */
     public static function plugintype_supports_disabling(): bool {
         return true;
     }
@@ -52,9 +66,9 @@ class oerapi extends \core\plugininfo\base {
 
         $plugins = \core_plugin_manager::instance()->get_installed_plugins('oerapi');
         if (!$plugins) {
-            return array();
+            return [];
         }
-        $installed = array();
+        $installed = [];
         foreach ($plugins as $plugin => $version) {
             $installed[] = 'oerapi_'.$plugin;
         }
@@ -69,7 +83,7 @@ class oerapi extends \core\plugininfo\base {
             unset($plugins[$name]);
         }
 
-        $enabled = array();
+        $enabled = [];
         foreach ($plugins as $plugin => $version) {
             $enabled[$plugin] = $plugin;
         }
@@ -77,6 +91,15 @@ class oerapi extends \core\plugininfo\base {
         return $enabled;
     }
 
+
+    /**
+     * enable_plugin
+     *
+     * @param string $pluginname
+     * @param int $enabled
+     * @return bool
+     * @throws \dml_exception
+     */
     public static function enable_plugin(string $pluginname, int $enabled): bool {
         $haschanged = false;
 
@@ -100,9 +123,14 @@ class oerapi extends \core\plugininfo\base {
      * @return moodle_url
      */
     public static function get_manage_url() {
-        return new \moodle_url('/mod/oercollection/adminmanageplugins.php', array('subtype'=>'oerapi'));
+        return new \moodle_url('/mod/oercollection/adminmanageplugins.php', ['subtype' => 'oerapi']);
     }
 
+    /**
+     * get_settings_section_name
+     *
+     * @return string
+     */
     public function get_settings_section_name() {
         return $this->type . '_' . $this->name;
     }
@@ -126,7 +154,7 @@ class oerapi extends \core\plugininfo\base {
             return;
         }
 
-        if (!$hassiteconfig or !file_exists($this->full_path('settings.php'))) {
+        if (!$hassiteconfig || !file_exists($this->full_path('settings.php'))) {
             return;
         }
 

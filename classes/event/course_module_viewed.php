@@ -17,21 +17,17 @@
 /**
  * The mod_oercollection course module viewed event.
  *
- * @author    Adrian Czermak
- * @author    Angela Baier
+ * @package   mod_oercollection
  * @copyright 2024 University of Vienna
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace mod_oercollection\event;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * The mod_oercollection course module viewed event.
  *
- * @author    Adrian Czermak
- * @author    Angela Baier
+ * @package   mod_oercollection
  * @copyright 2024 University of Vienna
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -54,11 +50,16 @@ class course_module_viewed extends \core\event\course_module_viewed {
      * @return \moodle_url
      */
     public function get_url() {
-        return new \moodle_url('/mod/oercollection/view.php', array('f' => $this->objectid));
+        return new \moodle_url('/mod/oercollection/view.php', ['f' => $this->objectid]);
     }
 
+    /**
+     * get_objectid_mapping
+     *
+     * @return string[]
+     */
     public static function get_objectid_mapping() {
-        return array('db' => 'oercollection', 'restore' => 'oercollection');
+        return ['db' => 'oercollection', 'restore' => 'oercollection'];
     }
 }
 

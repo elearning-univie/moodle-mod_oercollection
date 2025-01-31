@@ -8,7 +8,7 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNE SS FOR A PARTICULAR PURPOSE.  See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
@@ -27,7 +27,7 @@
 require('../../config.php');
 require_once(__DIR__ . '/lib.php');
 
-global $PAGE, $OUTPUT, $DB, $CFG;
+global $PAGE, $OUTPUT, $DB, $CFG, $COURSE;
 
 $cmid = required_param('id', PARAM_INT);
 $oerentryid = required_param('oereid', PARAM_INT);
@@ -35,7 +35,6 @@ $oerentryid = required_param('oereid', PARAM_INT);
 $url = new moodle_url("/mod/oercollection/oercomment.php", ['id' => $cmid, 'oereid' => $oerentryid]);
 $PAGE->set_url($url);
 
-//list ($course, $cm) = get_course_and_cm_from_cmid($oerid, 'oercollection');
 list ($course, $cm) = get_course_and_cm_from_cmid($cmid, 'oercollection');
 $oerid = $cm->instance;
 $context = context_module::instance($cm->id);
@@ -43,8 +42,7 @@ $context = context_module::instance($cm->id);
 require_login($course, false, $cm);
 require_capability('mod/oercollection:editresources', $context);
 
-$oer = $DB->get_record('oercollection', array('id' => $cm->instance));
-
+$oer = $DB->get_record('oercollection', ['id' => $cm->instance]);
 
 $node = $PAGE->settingsnav->find('mod_oercollection', navigation_node::TYPE_SETTING);
 if ($node) {
@@ -53,7 +51,6 @@ if ($node) {
 
 $pagetitle = get_string('pagetitle', 'mod_oercollection');
 $PAGE->set_title($oer->name);
-//$PAGE->set_title("Titolooo");
 $PAGE->set_heading($course->shortname);
 $PAGE->add_body_class('limitedwidth');
 
@@ -73,13 +70,12 @@ if ($mform->is_cancelled()) {
     $DB->update_record('oercollection_resource', $oerentry);
     redirect($origin->out(false));
 } else if ($fromform = $mform->get_data()) {
-    if ($fromform->notenameinternal == "" || $fromform->notenameinternal == NULL) {
+    if ($fromform->notenameinternal == "" || $fromform->notenameinternal == null) {
         $oerentry->notenameinternal = get_string('comment', 'oercollection');
     } else {
         $oerentry->notenameinternal = $fromform->notenameinternal;
     }
     $oerentry->notetextinternal = $fromform->notetextinternal['text'];
-   /// print_object($oerentry);
     $DB->update_record('oercollection_resource', $oerentry);
     redirect($origin->out(false));
 }
@@ -89,15 +85,8 @@ $PAGE->set_title("Anmerkungen");
 $PAGE->set_heading($COURSE->fullname);
 $PAGE->navbar->add("Anmerkungen");
 $activityheader = $PAGE->activityheader;
-// $activityheader->set_attrs([
-//     'description' => '',
-//     'hidecompletion' => true,
-// ]);
 
-$renderer = $PAGE->get_renderer('core');
-//echo $renderer->header();
 echo $OUTPUT->header();
-echo $OUTPUT->heading_with_help($pageheading, '','');
+echo $OUTPUT->heading_with_help($pageheading, '', '');
 $mform->display();
-echo $renderer->footer();
-//echo $OUTPUT->footer();
+echo $OUTPUT->footer();

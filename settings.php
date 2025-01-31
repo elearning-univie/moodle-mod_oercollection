@@ -17,8 +17,8 @@
 /**
  * This file adds the settings pages to the navigation menu
  *
- * @package   mod_assign
- * @copyright 2012 NetSpot {@link http://www.netspot.com.au}
+ * @package   mod_oercollection
+ * @copyright 2024 University of Vienna
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -30,9 +30,8 @@ $ADMIN->add('modoercollectionfolder', new admin_category('oerapiplugins',
     new lang_string('oerapiplugins', 'oercollection'), !$module->is_enabled()));
 $ADMIN->add('oerapiplugins', new admin_externalpage('manageoerapiplugins',
     get_string('manageoerapiplugins', 'oercollection'),
-    new moodle_url('/mod/assign/adminmanageplugins.php', array('subtype'=>'oerapi'))));
+    new moodle_url('/mod/oercollection/adminmanageplugins.php', ['subtype' => 'oerapi'])));
 
 foreach (core_plugin_manager::instance()->get_plugins_of_type('oerapi') as $plugin) {
     $plugin->load_settings($ADMIN, 'oerapiplugins', $hassiteconfig);
 }
-

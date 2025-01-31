@@ -18,8 +18,6 @@
  * Comment Form
  *
  * @package   mod_oercollection
- * @author    Adrian Czermak
- * @author    Angela Baier
  * @copyright 2024 University of Vienna
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -34,6 +32,7 @@ require_once($CFG->libdir . '/formslib.php');
 /**
  * Flashcard form definition with less information.
  *
+ * @package   mod_oercollection
  * @copyright  2021 University of Vienna
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -51,16 +50,16 @@ class oercommentform extends \moodleform {
     public $oerid;
     /** @var int cmid */
     public $id;
+
     /**
-     * simplequestionform constructor.
+     * constructor
      *
-     * @param string $submiturl
-     * @param object $question
-     * @param string $category
-     * @param string $action
+     * @param mixed $submiturl
+     * @param int $oerentryid
+     * @param int $oerid
+     * @param int $cmid
      * @param bool $formeditable
-     * @throws coding_exception
-     * @throws dml_exception
+     * @throws \coding_exception
      */
     public function __construct($submiturl, $oerentryid, $oerid, $cmid, $formeditable = true) {
         global $DB;
@@ -69,8 +68,11 @@ class oercommentform extends \moodleform {
         $this->oerid = $oerid;
         $this->id = $cmid;
 
-        $this->editoroptions = array('subdirs' => 1, 'maxfiles' => EDITOR_UNLIMITED_FILES,
-            'context' => $this->context);
+        $this->editoroptions = [
+            'subdirs' => 1,
+            'maxfiles' => EDITOR_UNLIMITED_FILES,
+            'context' => $this->context,
+        ];
 
         $this->context = \context::instance_by_id($this->id);
 
@@ -87,16 +89,16 @@ class oercommentform extends \moodleform {
         $mform = $this->_form;
 
         $mform->addElement('text', 'notenameinternal', get_string('oercommentname', 'mod_oercollection'),
-                array('size' => 50, 'maxlength' => 255));
+                ['size' => 50, 'maxlength' => 255]);
         $mform->setType('notenameinternal', PARAM_TEXT);
         $mform->setDefault('notenameinternal', get_string('comment', 'oercollection'));
         $mform->addHelpButton('notenameinternal', 'oercommentname', 'oercollection');
-        
+
         $mform->addElement('editor', 'notetextinternal', get_string('oercommentdescription', 'mod_oercollection'),
-                array('rows' => 15), $this->editoroptions);
+                ['rows' => 15], $this->editoroptions);
         $mform->setType('notetextinternal', PARAM_RAW);
         $mform->addHelpButton('notetextinternal', 'oercommentdescription', 'oercollection');
-        
+
         $this->add_hidden_fields();
         $this->add_action_buttons(true, get_string('savechanges'));
     }
@@ -121,12 +123,11 @@ class oercommentform extends \moodleform {
      */
     protected function add_hidden_fields() {
         $mform = $this->_form;
-        
+
         $mform->addElement('hidden', 'id', $this->id);
         $mform->setType('id', PARAM_INT);
 
         $mform->addElement('hidden', 'oereid', $this->oerentryid);
         $mform->setType('oereid', PARAM_INT);
-        
     }
 }

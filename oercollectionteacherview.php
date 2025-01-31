@@ -43,7 +43,7 @@ if (!has_capability('mod/oercollection:editresources', $context)) {
     die();
 }
 
-$oercollection = $DB->get_record('oercollection', array('id' => $cm->instance));
+$oercollection = $DB->get_record('oercollection', ['id' => $cm->instance]);
 
 $PAGE->set_url(new moodle_url("/mod/oercollection/view.php", ['id' => $id]));
 $node = $PAGE->settingsnav->find('mod_oercollection', navigation_node::TYPE_SETTING);
