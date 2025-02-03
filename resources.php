@@ -65,7 +65,7 @@ if ($node) {
 }
 
 $homeurl = new moodle_url("/mod/oercollection/resources.php", $params);
-$PAGE->set_url($homeurl);
+$PAGE->set_url($homeurl->out());
 $PAGE->set_title($oerid->name);
 $PAGE->set_heading($course->shortname);
 $PAGE->add_body_class('limitedwidth');
