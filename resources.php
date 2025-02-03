@@ -59,16 +59,16 @@ if ($page) {
     $params['page'] = $page;
 }
 
+$homeurl = new moodle_url("/mod/oercollection/resources.php", $params);
+$PAGE->set_url($homeurl);
+$PAGE->set_title($oerid->name);
+$PAGE->set_heading($course->shortname);
+$PAGE->add_body_class('limitedwidth');
+
 $node = $PAGE->settingsnav->find('mod_oercollection', navigation_node::TYPE_SETTING);
 if ($node) {
     $node->make_active();
 }
-
-$homeurl = new moodle_url("/mod/oercollection/resources.php", $params);
-$PAGE->set_url($homeurl->out());
-$PAGE->set_title($oerid->name);
-$PAGE->set_heading($course->shortname);
-$PAGE->add_body_class('limitedwidth');
 
 $paramsql = ['oerid' => $oerid->id];
 switch ($filter) {
