@@ -33,6 +33,7 @@ $string['checkall'] = 'All/';
 $string['checknone'] = 'None';
 $string['comment'] = 'Annotation';
 $string['deleteinfomessage'] = '{$a} resource(s) has(have) been deleted.';
+$string['deletemultipopup'] = 'This will remove {$a} resource(s) from the collection. Existing annotations are irrevocably deleted!';
 $string['deletepopup'] = 'This will remove the resource "{$a}" from the collection. Existing annotations are irrevocably deleted!';
 $string['deletewarning'] = 'Delete resource?';
 $string['display'] = 'Display';
@@ -101,7 +102,7 @@ $string['overviewinfo'] = '<details><summary> <i class="icon fa fa-info-circle f
 $string['pagetitle'] = 'OER Collection';
 $string['pluginadministration'] = 'OER Collection Administration';
 $string['pluginname'] = 'OER Collection';
-$string['popupblockmessage'] = 'ATTENTION: Your pop-up blocker is activated! To open several resources at the same time, you must deactivate the pop-up blocker.';
+$string['popupblockmessage'] = '<strong>ATTENTION:</strong> Your pop-up blocker is activated! To open several resources at the same time, you must allow pop-ups for this site.';
 $string['privacy:metadata'] = 'The OER collection resource plugin does not store any personal data.';
 $string['removeoer'] = 'Remove from collection';
 $string['removeselected'] = 'Remove from collection';

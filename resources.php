@@ -73,10 +73,10 @@ if ($node) {
 $paramsql = ['oerid' => $oerid->id];
 switch ($filter) {
     case 2: // Only visible.
-        $sqlshow = " AND oer.showresource = 1 ";
+        $sqlshow = " AND showresource = 1 ";
         break;
     case 3: // Only hidden.
-        $sqlshow = " AND oer.showresource = 0 ";
+        $sqlshow = " AND showresource = 0 ";
         break;
     default:
         $sqlshow = "";
@@ -99,7 +99,7 @@ $templatecontext = [
     'id' => $cmid,
     'deleted' => $deleted,
     'selected' . $perpage => true,
-    'selected' . $filter => true,
+    'selected2' . $filter => true,
     'sesskey' => sesskey(),
     'oerid' => $oerid->id,
     'oerexists' => !empty($oerentries),

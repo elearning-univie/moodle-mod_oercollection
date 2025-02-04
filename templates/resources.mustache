@@ -22,12 +22,10 @@
     }
 }}
 <div class="row mt-1 mb-3">
-    <div class="container">
-        {{#searchoer}}<a class="btn btn-primary" href="{{searchoer}}">{{#str}}
-            oersearchlink, mod_oercollection {{/str}}</a>{{/searchoer}}
-        {{#studentpreviewlink}}<a class="btn btn-secondary" href="{{studentpreviewlink}}">{{#str}}
-            studentpreviewlink, mod_oercollection {{/str}}</a>{{/studentpreviewlink}}
-    </div>
+    {{#searchoer}}<a class="btn btn-primary" href="{{searchoer}}">{{#str}}
+        oersearchlink, mod_oercollection {{/str}}</a>{{/searchoer}}
+    {{#studentpreviewlink}}<a class="btn btn-secondary mx-3" href="{{studentpreviewlink}}">{{#str}}
+        studentpreviewlink, mod_oercollection {{/str}}</a>{{/studentpreviewlink}}
 </div>
 <div class="row py-3">
     <h3>
@@ -64,162 +62,138 @@
     </a>
 </div>
 
-{{# oerresourcelist}}
-    <div class="row py-1 draggable">
-        <div class="d-flex flex-column mb-3 p-0 {{background}}" style="width:100%;border: 1px LightGrey solid;border-radius: 5px;">
-            <div class="d-flex">
-
-                <!-- the checkbox -->
-                <div class="d-flex p-2 align-self-center" style="width:5%">
-                    <input class="mod-oercollection-checkbox" type="checkbox" name="selectbox" value="{{oerentryid}}"/>
-                    <a id="resourcelink{{oerentryid}}" href="{{resourcelink}}" target="_blank"></a>
+{{#oerresourcelist}}
+    <div class="card mb-3 resource-frame {{background}}">
+        <div class="card-body">
+            <div class="row align-items-center flex-nowrap">
+                <!-- Checkbox Column -->
+                <div class="col-auto">
+                    <div class="form-check">
+                        <input class="form-check-input mod-oercollection-checkbox" type="checkbox" name="selectbox" id="checkbox{{oerentryid}}" value="{{oerentryid}}">
+                        <!-- Empty label with link target if needed -->
+                        <label class="form-check-label" for="checkbox{{oerentryid}}">
+                            <a id="resourcelink{{oerentryid}}" href="{{resourcelink}}" target="_blank"></a>
+                        </label>
+                    </div>
                 </div>
 
-                <div class="d-flex flex-column flex-grow-1">
-
-                    <!-- HTML provided by the subplugin -->
-                    <div class="d-flex flex-grow-1"
-                         {{#commentexists}}style="border-bottom: 1px solid LightGrey;"{{/commentexists}}>
-                        {{{oerhtml}}}
-                    </div>
-                    <div class="d-flex flex-grow-1">
-                        <div class="d-flex flex-grow-1">
-                            <div class="d-flex" style="width:15%">
-                                <div class="d-flex flex-column  flex-grow-1">
-
-                                    <!-- Comment String; optional -->
-                                    {{#commentexists}}
-                                        <div class="d-flex">{{{commentname}}}</div>
-                                    {{/commentexists}}
-
-                                    <!-- visibility info according in moodle style; optional -->
-                                    {{#oerhidden}}
-                                        <div class="d-flex p-1">
-                                            <span class="badge bg-secondary text-dark">{{#str}}
-                                                hiddenfromstudents {{/str}}</span>
-                                        </div>
-                                    {{/oerhidden}}
-                                </div>
-                            </div>
-
-                            <!-- The actual comment; optional -->
-                            {{#commentexists}}
-                                <div class="d-flex flex-grow-1">{{{commenttext}}}</div>
-                            {{/commentexists}}
+                <!-- Main Content Column -->
+                <div class="col">
+                    {{{oerhtml}}}
+                    {{#oerhidden}}
+                    <div class="row">
+                        <div class="col-auto">
+                            <span class="badge badge-secondary">{{#str}} hiddenfromstudents {{/str}}</span>
                         </div>
                     </div>
+                    {{/oerhidden}}
+
+                    <!-- Optional Comment Section -->
+                    {{#commentexists}}
+                        <hr>
+                        <div class="row">
+                            <div class="col">
+                                <strong>{{{commentname}}}</strong>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                {{{commenttext}}}
+                            </div>
+                        </div>
+                    {{/commentexists}}
                 </div>
 
-                <!-- the 3-Dot Menu -->
-                <div class="d-flex p-2 align-self-start" style="width:7%">
-
+                <!-- 3-Dot Dropdown Column -->
+                <div class="col-auto p-0 align-self-start">
                     <div class="dropdown">
-                        <button class="btn btn-icon rounded-circle mx-2" type="button" data-toggle="dropdown">
-                            <i class="icon fa fa-ellipsis-v fa-fw m-0" aria-hidden="true"></i>
+                        <button class="btn btn-light rounded-circle" type="button" id="dropdownMenuButton{{oerentryid}}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-ellipsis-v"></i>
                         </button>
-                        <div class="dropdown-menu dropdown-menu-right">
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton{{oerentryid}}">
                             <a class="dropdown-item" href="{{commentlink}}">
                                 {{#pix}} a/setting, core {{/pix}}
-                                {{#str}}editcomment, mod_oercollection{{/str}}
+                                {{#str}} editcomment, mod_oercollection {{/str}}
                             </a>
-
-                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#myModal{{oerentryid}}">
+                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#moveModal{{oerentryid}}">
                                 {{#pix}} i/dragdrop, core {{/pix}}
-                                {{#str}}move, mod_oercollection{{/str}}
+                                {{#str}} move, mod_oercollection {{/str}}
                             </a>
-
                             {{#oerhidden}}
                                 <a class="dropdown-item" href="#"
-                                   onclick="mod_oercollection_set_visibility_oerentry({{oerid}},{{oerentryid}}, 1)">
+                                   onclick="mod_oercollection_set_visibility_oerentry({{oerid}}, {{oerentryid}}, 1)">
                                     {{#pix}} i/hide, core {{/pix}}
-                                    {{#str}}showoer, mod_oercollection{{/str}}
+                                    {{#str}} showoer, mod_oercollection {{/str}}
                                 </a>
                             {{/oerhidden}}
                             {{^oerhidden}}
                                 <a class="dropdown-item" href="#"
-                                   onclick="mod_oercollection_set_visibility_oerentry({{oerid}},{{oerentryid}}, 0)">
+                                   onclick="mod_oercollection_set_visibility_oerentry({{oerid}}, {{oerentryid}}, 0)">
                                     {{#pix}} i/show, core {{/pix}}
-                                    {{#str}}hideoer, mod_oercollection{{/str}}
+                                    {{#str}} hideoer, mod_oercollection {{/str}}
                                 </a>
                             {{/oerhidden}}
                             <a class="dropdown-item" href="#"
-                               onclick="mod_oercollection_delete_oerentry({{oerid}},{{oerentryid}},{{resourcename}})">
+                               onclick="mod_oercollection_delete_oerentry({{oerid}}, {{oerentryid}}, '{{resourcename}}')">
                                 {{#pix}} i/trash, core {{/pix}}
-                                {{#str}}removeoer, mod_oercollection{{/str}}
+                                {{#str}} removeoer, mod_oercollection {{/str}}
                             </a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
-    <!-- The Modal -->
-    <div class="modal moodle-has-zindex" id="myModal{{oerentryid}}" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
 
+    <!-- Modal for Moving Resource -->
+    <div class="modal fade" id="moveModal{{oerentryid}}" tabindex="-1" role="dialog" aria-labelledby="moveModalLabel{{oerentryid}}" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
                 <!-- Modal Header -->
                 <div class="modal-header">
-                    <h5 class="modal-title">{{#str}}moveresource, mod_oercollection{{/str}}</h5>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h5 class="modal-title" id="moveModalLabel{{oerentryid}}">
+                        {{#str}} moveresource, mod_oercollection {{/str}}
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="{{#str}} close, core {{/str}}">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-
-                <!-- Modal body -->
+                <!-- Modal Body -->
                 <div class="modal-body">
-                    <div class="row ml-2" style="margin-bottom: 15px;">
-                        <span> {{#str}}insertafter, mod_oercollection{{/str}} </span>
+                    <div class="mb-3">
+                        <span>{{#str}} insertafter, mod_oercollection {{/str}}</span>
                     </div>
-                    <div class="container">
+                    <div class="list-group">
                         {{#page}}
-                            <div class="row ml-2 mb-4">
-                                <h5>
-                                    <a class="icons-collapse-expand notextdecoration" data-toggle="collapse"
-                                       href="#collapseOptions{{pnr}}" aria-expanded="false"
-                                       aria-controls="collapseOptions">
-                                        <span class="collapsed-icon icon-no-margin mr-1"
-                                              title="{{#str}} expand, core {{/str}}">
-                                                <span class="dir-rtl-hide">{{#pix}} t/collapsedchevron, core {{/pix}}</span>
-                                                <span class="dir-ltr-hide">{{#pix}} t/collapsedchevron_rtl, core {{/pix}}</span>
-                                                <span class="sr-only">{{#str}} expand, core {{/str}}</span>
-                                        </span>
-                                        <span class="expanded-icon icon-no-margin mr-1" title="{{#str}} collapse, core {{/str}}">
-                                                {{#pix}} t/expandedchevron, core {{/pix}}
-                                                <span class="sr-only">{{#str}} collapse, core {{/str}}</span>
-                                        </span>
+                            <div class="mb-2">
+                                <h6>
+                                    <a class="d-flex justify-content-between align-items-center text-decoration-none" data-toggle="collapse" href="#collapseOptions{{pnr}}" aria-expanded="false" aria-controls="collapseOptions{{pnr}}">
                                         {{title}}
+                                        <i class="fa fa-chevron-down"></i>
                                     </a>
-                                </h5>
-                            </div>
-
-                            <div class="collapse {{#open}}show{{/open}}" id="collapseOptions{{pnr}}">
-                                {{#lines}}
-                                    {{#.}}
-                                        <div class="row">
-                                            <ul style="list-style-type:none;">
-                                                <li>
-                                                    <a href="#" {{#hidden}}style="color:gray;"{{/hidden}}
-                                                       onclick="mod_oercollection_move_resource_action({{oerid}},{{oerentryid}},{{id}})"
-                                                       data-dismiss="modal">
+                                </h6>
+                                <div class="collapse" id="collapseOptions{{pnr}}">
+                                    <ul class="list-group list-group-flush">
+                                        {{#lines}}
+                                            {{#.}}
+                                                <li class="list-group-item p-1">
+                                                    <a href="#" {{#hidden}}class="text-muted"{{/hidden}}
+                                                       onclick="mod_oercollection_move_resource_action({{oerid}}, {{oerentryid}}, {{id}})" data-dismiss="modal">
                                                         {{name}}
                                                     </a>
                                                 </li>
-                                            </ul>
-                                        </div>
-                                    {{/.}}
-                                {{/lines}}
+                                            {{/.}}
+                                        {{/lines}}
+                                    </ul>
+                                </div>
                             </div>
                         {{/page}}
-
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
-    <!-- The Modal End -->
-
-{{/ oerresourcelist}}
+{{/oerresourcelist}}
 
 {{#js}}
     require(['mod_oercollection/defaultcontroller'], function(defaultcontroller) {

@@ -70,7 +70,18 @@ export const init = () => {
                 break;
             case 4:
                 // Delete selected entries
-                deleteSelectedEntries(oer, oerids, checkboxes.length);
+                getString('deletemultipopup', 'mod_oercollection', checkboxes.length)
+                    .then(warningMessage => {
+                        if (!confirm(warningMessage)) {
+                            const url = new URL(window.location);
+                            url.hash = '';
+                            history.replaceState({}, document.title, url.toString());
+                            return;
+                        }
+
+                        deleteSelectedEntries(oer, oerids, checkboxes.length);
+                    })
+                    .catch(notification.exception);
                 break;
             case 5:
                 // Delete selected entries
