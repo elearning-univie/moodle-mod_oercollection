@@ -25,7 +25,7 @@
 namespace mod_oercollection\event;
 
 /**
- * The mod_flashcards instance list viewed event class.
+ * The mod_oercollection instance list viewed event class.
  *
  * @package    mod_oercollection
  * @copyright  2020 University of Vienna
