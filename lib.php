@@ -41,8 +41,6 @@ define('THISPAGE', 1);
  */
 function oercollection_supports($feature) {
     switch($feature) {
-        case FEATURE_MOD_ARCHETYPE:
-            return MOD_ARCHETYPE_RESOURCE;
         case FEATURE_GROUPS:
             return true;
         case FEATURE_GROUPINGS:

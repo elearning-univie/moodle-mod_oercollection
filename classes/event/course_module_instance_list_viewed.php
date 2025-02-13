@@ -15,22 +15,22 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Defines the version and other meta-info about the plugin
+ * The mod_oercollection instance list viewed event.
  *
- * Setting the $plugin->version to 0 prevents the plugin from being installed.
- * See https://docs.moodle.org/dev/version.php for more info.
- *
- * @package   mod_oercollection
- * @author    Adrian Czermak
- * @author    Angela Baier
- * @copyright 2024 University of Vienna
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    mod_oercollection
+ * @copyright  2020 University of Vienna
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+namespace mod_oercollection\event;
 
-$plugin->component = 'mod_oercollection';
-$plugin->version = 2024100600.03;
-$plugin->release = 'v4.5.0-r0';
-$plugin->requires = 2024042200;
-$plugin->maturity = MATURITY_BETA;
+/**
+ * The mod_oercollection instance list viewed event class.
+ *
+ * @package    mod_oercollection
+ * @copyright  2020 University of Vienna
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class course_module_instance_list_viewed extends \core\event\course_module_instance_list_viewed {
+    // No code required here as the parent class handles it all.
+}
