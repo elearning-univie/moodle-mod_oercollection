@@ -33,4 +33,4 @@ $plugin->component = 'mod_oercollection';
 $plugin->version = 2024100600.03;
 $plugin->release = 'v4.5.0-r0';
 $plugin->requires = 2024042200;
-$plugin->maturity = MATURITY_BETA;
+$plugin->maturity = MATURITY_STABLE;
