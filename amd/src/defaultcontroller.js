@@ -7,7 +7,33 @@ export const init = () => {
         document.querySelectorAll('input[name="selectbox"]').forEach(checkbox => {
             checkbox.checked = status;
         });
+        var bulkbutton = document.getElementById("bulkbutton");
+        var nothingselected = document.getElementById("nothingselectedwarning");
+        if (status == true) {
+           bulkbutton.classList.remove("disabled");
+           nothingselected.classList.add("d-none");
+        } else {
+           bulkbutton.classList.add("disabled");
+           nothingselected.classList.remove("d-none");
+        }
     };
+
+    const mod_oercollection_cb_selected = () => {
+        var bulkbutton = document.getElementById("bulkbutton");
+        var nothingselected = document.getElementById("nothingselectedwarning");
+        const checkboxes = document.querySelectorAll('input[name="selectbox"]:checked');
+        if (checkboxes.length > 0) {
+           bulkbutton.classList.remove("disabled");
+           nothingselected.classList.add("d-none");
+        } else {
+          // bulkbutton.classList.remove("btn-primary");
+           bulkbutton.classList.add("disabled");
+           nothingselected.classList.remove("d-none");
+        }
+    };
+
+    // Expose the function for external use (if necessary)
+    window.mod_oercollection_cb_selected = mod_oercollection_cb_selected;
 
     const mod_oercollection_bulk_action = (oer) => {
         // Get all checked checkboxes and their associated data

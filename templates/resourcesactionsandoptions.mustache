@@ -35,9 +35,16 @@
             </select>
         </div>
         <div class="p-1 ml-1 flex-grow-1">
-            <a class="btn btn-primary" href="#" onclick="mod_oercollection_bulk_action({{oerid}})"> {{#str}}
-                start, mod_oercollection {{/str}}</a>
+            <a class="btn btn-primary disabled" href="#" id="bulkbutton" onclick="mod_oercollection_bulk_action({{oerid}})" data-bs-toggle="tooltip" title="Hooray!"> {{#str}}
+                start, mod_oercollection {{/str}} </a>
         </div>
+        
+        <div class="p-1 ml-1 flex-grow-1">
+           <div class="alert alert-warning" id="nothingselectedwarning">
+              <strong>Nothing selected!</strong> 
+           </div>
+        </div>
+        
     </div>
 </div>
 
