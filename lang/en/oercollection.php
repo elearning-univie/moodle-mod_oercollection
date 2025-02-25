@@ -112,6 +112,7 @@ $string['resourcesperpage'] = 'Entries per page';
 $string['searchoerhub'] = 'Search in OERhub';
 $string['searchoerhub_help'] = 'The <a href="https://oerhub.at">OERhub</a> is a search engine for OER from the Austrian higher education sector, to which the archive systems of the following universities are connected: University of Graz, University of Innsbruck, University of Klagenfurt, University of Vienna, Graz University of Technology';
 $string['selectdotdot'] = 'With selected...';
+$string['selectionwarning'] = '<strong>Info</strong>: No resources selected!';
 $string['showoer'] = 'Show';
 $string['showselected'] = 'Show selected resources';
 $string['start'] = 'Start';
