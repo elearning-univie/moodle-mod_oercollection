@@ -35,12 +35,12 @@
             </select>
         </div>
         <div class="p-1 ml-1 flex-grow-1">
-            <a class="btn btn-secondary disabled" href="#" id="bulkbutton" onclick="mod_oercollection_bulk_action({{oerid}})" data-bs-toggle="tooltip" title="Hooray!"> {{#str}}
+            <a class="btn btn-primary disabled" href="#" id="bulkbutton" onclick="mod_oercollection_bulk_action({{oerid}})" data-bs-toggle="tooltip" title="Hooray!"> {{#str}}
                 start, mod_oercollection {{/str}} </a>
         </div>
         
         <div class="p-1 ml-1 flex-grow-1">
-           <div class="alert alert-info" id="nothingselectedwarning" style="padding-bottom: 6px;padding-top: 6px;">
+           <div class="text-danger" id="nothingselectedwarning" style="padding-bottom: 6px;padding-top: 6px;">
               {{#str}}selectionwarning, mod_oercollection{{/str}}
            </div>
         </div>

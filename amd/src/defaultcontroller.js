@@ -10,13 +10,9 @@ export const init = () => {
         var bulkbutton = document.getElementById("bulkbutton");
         var nothingselected = document.getElementById("nothingselectedwarning");
         if (status == true) {
-           bulkbutton.classList.remove("btn-secondary");
-           bulkbutton.classList.add("btn-primary");
            bulkbutton.classList.remove("disabled");
            nothingselected.classList.add("d-none");
         } else {
-           bulkbutton.classList.remove("btn-primary");
-           bulkbutton.classList.add("btn-secondary");
            bulkbutton.classList.add("disabled");
            nothingselected.classList.remove("d-none");
         }
@@ -27,13 +23,9 @@ export const init = () => {
         var nothingselected = document.getElementById("nothingselectedwarning");
         const checkboxes = document.querySelectorAll('input[name="selectbox"]:checked');
         if (checkboxes.length > 0) {
-           bulkbutton.classList.remove("btn-secondary");
-           bulkbutton.classList.add("btn-primary");
            bulkbutton.classList.remove("disabled");
            nothingselected.classList.add("d-none");
         } else {
-           bulkbutton.classList.remove("btn-primary");
-           bulkbutton.classList.add("btn-secondary");
            bulkbutton.classList.add("disabled");
            nothingselected.classList.remove("d-none");
         }

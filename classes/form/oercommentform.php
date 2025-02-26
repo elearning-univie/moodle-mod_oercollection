@@ -74,7 +74,7 @@ class oercommentform extends \moodleform {
             'context' => $this->context,
         ];
 
-        $this->context = \context::instance_by_id($this->id);
+        $this->context = \context_module::instance($this->id);
 
         parent::__construct($submiturl, null, 'post', '', null, $formeditable);
     }
