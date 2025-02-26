@@ -7,27 +7,19 @@ export const init = () => {
         document.querySelectorAll('input[name="selectbox"]').forEach(checkbox => {
             checkbox.checked = status;
         });
-        var bulkbutton = document.getElementById("bulkbutton");
         var nothingselected = document.getElementById("nothingselectedwarning");
         if (status == true) {
-           bulkbutton.classList.remove("disabled");
            nothingselected.classList.add("d-none");
         } else {
-           bulkbutton.classList.add("disabled");
            nothingselected.classList.remove("d-none");
         }
     };
 
     const mod_oercollection_cb_selected = () => {
-        var bulkbutton = document.getElementById("bulkbutton");
         var nothingselected = document.getElementById("nothingselectedwarning");
         const checkboxes = document.querySelectorAll('input[name="selectbox"]:checked');
         if (checkboxes.length > 0) {
-           bulkbutton.classList.remove("disabled");
            nothingselected.classList.add("d-none");
-        } else {
-           bulkbutton.classList.add("disabled");
-           nothingselected.classList.remove("d-none");
         }
     };
 
@@ -41,9 +33,8 @@ export const init = () => {
         const rlinks = [];
         const rtitles = [];
 
-        var empty = 0;
         checkboxes.forEach(checkbox => {
-            empty++;
+            //empty++;
             oerids.push(checkbox.value);
             const linkElement = document.getElementById(`resourcelink${checkbox.value}`);
             if (linkElement) {
@@ -60,13 +51,15 @@ export const init = () => {
             checkbox.checked = false;
         });
 
-        if (empty == 0) {
-            getString('noselection', 'mod_oercollection').then(function (warningmessage) {
-            alert(warningmessage);
-            });
-        }
+        var bulkaction = parseInt(document.getElementById("editoptionselect").value, 10);
 
-        const bulkaction = parseInt(document.getElementById("editoptionselect").value, 10);
+        var nothingselected = document.getElementById("nothingselectedwarning");
+        if (checkboxes.length > 0) {
+           nothingselected.classList.add("d-none");
+        } else {
+           nothingselected.classList.remove("d-none");
+           bulkaction = 10;
+        }
 
         switch (bulkaction) {
             case 1:
