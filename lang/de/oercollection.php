@@ -111,7 +111,7 @@ $string['resourcesperpage'] = 'Einträge pro Seite';
 $string['searchoerhub'] = 'Suche im OERhub';
 $string['searchoerhub_help'] = 'Der <a href="https://oerhub.at">OERhub</a> ist eine Suchmaschine für OER aus dem österreichischen Hochschulraum, an den Archivsysteme folgender Hochschulen angebunden sind: Universität Graz, Universität Innsbruck, Universität Klagenfurt, Universität Wien, Technische Universität Graz';
 $string['selectdotdot'] = 'Mit Auswahl...';
-$string['selectionwarning'] = '<strong>Eine/mehrere Resource(n) auswählen!</strong>';
+$string['selectionwarning'] = 'Eine/mehrere Resource(n) auswählen!';
 $string['showoer'] = 'Einblenden';
 $string['showselected'] = 'Ausgewählte Ressourcen einblenden';
 $string['start'] = 'Start';
