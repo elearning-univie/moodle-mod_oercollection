@@ -15,10 +15,10 @@ With the OER collection resource, you can search for and find available Open Edu
 
 Usage
 -----------
-Teachers want to search for published Open Educational Resources (OER) via [OERhub](https://oerhub.at) to use them in their own lecture, such as documents, videos, podcasts or other materials. To refine the search, it is possible to filter the results according to various criteria: discipline, media type, language and published from/ to.
-Appropriate OER can be added easily  to the OER Collection and can be supplemented with further notes for didactic purpose.
+Teachers want to search for published Open Educational Resources (OER) via [OERhub](https://oerhub.at) to use them in their own lecture, such as documents, videos, podcasts or other materials. In order to refine their search, it is possible to filter the results according to various criteria: discipline, media type, language and published from/ to.
+OER of choice can be added easily to the OER Collection and can be supplemented with further notes for didactic purpose.
 
-Students can access linked OER directly via a Moodle course.
+Students can access the related OER directly via the provided link in the module.
 
 Requirements
 -----------
@@ -28,10 +28,9 @@ The plugin is available for Moodle 4.4+.
 
 Installation
 -----------
-* Copy the code directly to the mod/offlinequiz directory.
+* Copy the code directly to the mod/oercollection directory.
 * Log into Moodle as administrator.
-* Open the administration area (http://your-moodle-site/admin) to start the installation
-  automatically.
+* Open the administration area (http://your-moodle-site/admin) to start the installation automatically.
 
 Privacy API
 -----------
@@ -40,11 +39,6 @@ The plugin fully implements the Moodle Privacy API.
 Documentation
 -----------
 You can find further information to the plugin on the [Wiki of the University of Vienna](https://wiki.univie.ac.at/x/to2WHg).
-
-Third-party Libraries
------------
-This plugin uses the following third-party libraries:
-* JavaScript HTML renderer from [html2canvas](https://github.com/niklasvh/html2canvas)
 
 Bug Reports / Support
 -----------
