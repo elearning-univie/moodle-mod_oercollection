@@ -8,7 +8,7 @@ v4.5-r1
 * [FIX] Show the module in the activity chooser under the purpose 'Resources'
 * [FEATURE] Support for the block 'Activities'
 * [FEATURE] Implement message for bulk actions, if no resources are selected
-* [FEATURE] Add readme to the plugin
+* [FEATURE] Add readme and changelog to the plugin repository
 
 v4.5-r0
 -----------
