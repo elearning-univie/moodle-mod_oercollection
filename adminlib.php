@@ -174,15 +174,15 @@ class oer_plugin_manager {
         $table->define_baseurl($this->pageurl);
         $table->define_columns(['pluginname', 'version', 'hideshow', 'order',
                 'settings', 'uninstall']);
-        $table->define_headers([get_string($this->subtype . 'pluginname', 'assign'),
-                get_string('version'), get_string('hideshow', 'assign'),
+        $table->define_headers([get_string($this->subtype . 'pluginname', 'oercollection'),
+                get_string('version'), get_string('hideshow', 'oercollection'),
                 get_string('order'), get_string('settings'), get_string('uninstallplugin', 'core_admin')]);
         $table->set_attribute('id', $this->subtype . 'plugins');
         $table->set_attribute('class', 'admintable generaltable');
         $table->setup();
 
         $plugins = $this->get_sorted_plugins_list();
-        $shortsubtype = substr($this->subtype, strlen('assign'));
+        $shortsubtype = substr($this->subtype, strlen('oercollection'));
 
         foreach ($plugins as $idx => $plugin) {
             $row = [];
@@ -211,7 +211,7 @@ class oer_plugin_manager {
             }
             $row[] = $movelinks;
 
-            $exists = file_exists($CFG->dirroot . '/mod/assign/' . $shortsubtype . '/' . $plugin . '/settings.php');
+            $exists = file_exists($CFG->dirroot . '/mod/oercollection/' . $shortsubtype . '/' . $plugin . '/settings.php');
             if ($row[1] != '' && $exists) {
                 $row[] = html_writer::link(new moodle_url('/admin/settings.php',
                         ['section' => $this->subtype . '_' . $plugin]), get_string('settings'));
@@ -238,7 +238,7 @@ class oer_plugin_manager {
         admin_externalpage_setup('manage' . $this->subtype . 'plugins');
         // Print the page heading.
         echo $OUTPUT->header();
-        echo $OUTPUT->heading(get_string('manage' . $this->subtype . 'plugins', 'assign'));
+        echo $OUTPUT->heading(get_string('manage' . $this->subtype . 'plugins', 'oercollection'));
     }
 
     /**
