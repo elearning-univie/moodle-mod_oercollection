@@ -127,3 +127,5 @@ $string['thispage'] = 'Auf der Kursseite';
 $string['url_mismatch'] = 'Fehlerhafte URL';
 $string['visibilitynoinfomessage'] = '{$a} Ressource(n) wurde(n) ausgeblendet!';
 $string['visibilityyesinfomessage'] = '{$a} Ressource(n) wurde(n) eingeblendet!';
+$string['hideshow'] = 'Verbergen/Anzeigen';
+$string['oerapipluginname'] = 'Pluginname';

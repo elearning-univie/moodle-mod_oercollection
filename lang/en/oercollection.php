@@ -127,3 +127,5 @@ $string['thispage'] = 'On course page';
 $string['url_mismatch'] = 'Incorrect URL';
 $string['visibilitynoinfomessage'] = '{$a} resource(s) has(have) been hidden.';
 $string['visibilityyesinfomessage'] = '{$a} resource(s) has(have) been set to visible.';
+$string['hideshow'] = 'Hide/Show';
+$string['oerapipluginname'] = 'Pluginname';
