@@ -1,7 +1,7 @@
 CHANGELOG
 ===================
 
-v4.5-r2 (2025-03-17)
+v4.5-r2 (2025-03-07)
 -----------
 * [FIX] Change the position of the Student preview - button
 * [FIX] Bugfix for add/ edit annotations of resources
