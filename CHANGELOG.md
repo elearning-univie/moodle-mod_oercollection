@@ -1,7 +1,7 @@
 CHANGELOG
 ===================
 
-v4.5-r1 (2025-03-17)
+v4.5-r2 (2025-03-17)
 -----------
 * [FIX] Change the position of the Student preview - button
 * [FIX] Bugfix for add/ edit annotations of resources
@@ -11,11 +11,11 @@ v4.5-r1 (2025-03-17)
 * [FEATURE] Implement message for bulk actions, if no resources are selected
 * [FEATURE] Add readme and changelog to the plugin repository
 
-v4.5-r0 (2025-02-14)
+v4.5-r1 (2025-02-14)
 -----------
 * [FIX] Minor bug fixes
 * Moodle 4.5 compatible version
 
-v4.4-r0 (2025-02-14)
+v4.4-r1 (2025-02-14)
 -----------
 * Moodle 4.4 compatible version
