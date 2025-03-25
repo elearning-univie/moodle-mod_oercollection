@@ -129,3 +129,4 @@ $string['visibilitynoinfomessage'] = '{$a} resource(s) has(have) been hidden.';
 $string['visibilityyesinfomessage'] = '{$a} resource(s) has(have) been set to visible.';
 $string['hideshow'] = 'Hide/Show';
 $string['oerapipluginname'] = 'Pluginname';
+$string['settings'] = 'OER Collection settings';

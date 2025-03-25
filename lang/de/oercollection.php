@@ -129,3 +129,4 @@ $string['visibilitynoinfomessage'] = '{$a} Ressource(n) wurde(n) ausgeblendet!';
 $string['visibilityyesinfomessage'] = '{$a} Ressource(n) wurde(n) eingeblendet!';
 $string['hideshow'] = 'Verbergen/Anzeigen';
 $string['oerapipluginname'] = 'Pluginname';
+$string['settings'] = 'OER Collection Einstellungen';

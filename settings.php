@@ -28,6 +28,7 @@ $ADMIN->add('modsettings', new admin_category('modoercollectionfolder', new lang
 
 $ADMIN->add('modoercollectionfolder', new admin_category('oerapiplugins',
     new lang_string('oerapiplugins', 'oercollection'), !$module->is_enabled()));
+
 $ADMIN->add('oerapiplugins', new admin_externalpage('manageoerapiplugins',
     get_string('manageoerapiplugins', 'oercollection'),
     new moodle_url('/mod/oercollection/adminmanageplugins.php', ['subtype' => 'oerapi'])));
@@ -35,3 +36,7 @@ $ADMIN->add('oerapiplugins', new admin_externalpage('manageoerapiplugins',
 foreach (core_plugin_manager::instance()->get_plugins_of_type('oerapi') as $plugin) {
     $plugin->load_settings($ADMIN, 'oerapiplugins', $hassiteconfig);
 }
+// in case we want to have some general settings for OER Collection
+// $settings = new admin_settingpage($section, get_string('settings', 'mod_oercollection'), 'moodle/site:config', $module->is_enabled() === false);
+// $ADMIN->add('modoercollectionfolder', $settings);
+ $settings = null;
