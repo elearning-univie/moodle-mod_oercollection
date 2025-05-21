@@ -1,6 +1,11 @@
 CHANGELOG
 ===================
 
+v4.5-r3 (2025-05-21)
+-----------
+* [FIX] Bugfix double occurance in admin tree
+* [FEATURE] Add headline to student preview page
+
 v4.5-r2 (2025-03-07)
 -----------
 * [FIX] Change the position of the Student preview - button
