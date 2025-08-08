@@ -34,5 +34,5 @@ Feature: A student uses the OERHub plugin
     And I should see "example description"
     And I follow "example1"
     And I should see "Find out more about the open educational resources displayed here."
-    And I visit "/mod/oercollection/oercollectionteacherview.php?id=218000"
+    And I visit "/mod/oercollection/teacherview.php?id=218000"
     Then I should not see "Overview"

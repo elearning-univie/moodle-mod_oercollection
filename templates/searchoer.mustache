@@ -23,16 +23,30 @@
     }
 }}
 
-<div class="row">
-    {{#searchoer}}<a class="btn btn-secondary" href="{{searchoer}}">{{#str}} backtoresources, mod_oercollection {{/str}}</a>{{/searchoer}}
+<div class="row mb-3">
+    <div class="col-auto">
+        {{#searchoer}}
+            <a class="btn btn-secondary" href="{{searchoer}}">
+                {{#str}} backtoresources, mod_oercollection {{/str}}
+            </a>
+        {{/searchoer}}
+    </div>
 </div>
-<div class="row py-3">
-    <h4>{{# str }} searchoerhub, mod_oercollection {{/ str }}</h4>
+
+<div class="row align-items-center py-3">
+    <div class="col-auto">
+        <h4 class="mb-0">
+            {{#str}} searchoerhub, mod_oercollection {{/str}}
+        </h4>
+    </div>
     {{#helpicon}}
-        {{>core/help_icon}}
+        <div class="col-auto">
+            {{> core/help_icon }}
+        </div>
     {{/helpicon}}
 </div>
-<form action="{{actionurl}}" method="post" id="searchform">
+
+<form action="{{actionurl}}" method="post" id="searchform" class="mt-2">
     {{{searchform}}}
 
     {{{resultlist}}}
