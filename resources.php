@@ -162,6 +162,7 @@ foreach ($chunkedresources as $index => $chunk) {
 }
 
 $templatecontext['oerresourcelist'] = $oerlist;
+$templatecontext['resourcecount'] = count($oerlist);
 $templatecontext['page'] = $pagedresources;
 
 // Output rendering

@@ -15,7 +15,7 @@
   along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-    @template mod_oercollection/oercollection
+    @template mod_oercollection/resources
 
     Example context (json):
     {
@@ -66,7 +66,7 @@
         </table>
     </div>
 </div>
-{{#oerresourcelist}}
+{{#resourcecount}}
     <div class="row py-1">
         <div class="col-auto">
             <a href="#" onclick="mod_oercollection_setall(true)">
@@ -79,7 +79,7 @@
             </a>
         </div>
     </div>
-{{/oerresourcelist}}
+{{/resourcecount}}
 {{#oerresourcelist}}
     <div class="card mb-3 resource-frame {{background}}">
         <div class="card-body">
