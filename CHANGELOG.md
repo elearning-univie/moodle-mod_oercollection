@@ -1,6 +1,13 @@
 CHANGELOG
 ===================
 
+v5.0-r1 (2025-08-08)
+-----------
+* Moodle 5.0 compatible version
+* [FIX] Fixed bug with pagination of ressources on the student view
+* [FIX] Fixed bug with date restrictions
+* [FIX] Fixed that support for privacy API is accepted in Moodle
+
 v4.5-r3 (2025-05-21)
 -----------
 * [FIX] Bugfix double occurance in admin tree
