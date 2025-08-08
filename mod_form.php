@@ -76,7 +76,7 @@ class mod_oercollection_mod_form extends moodleform_mod {
      * @return array errors occuring during validation.
      */
     public function validation($data, $files) {
-        $errors = [];
+        $errors = parent::validation($data, $files);
 
         if (array_key_exists('completionview', $data)) {
             if ($data['displaymode'] == THISPAGE && $data['completionview'] == 1) {

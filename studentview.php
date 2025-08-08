@@ -39,7 +39,7 @@ list ($course, $cm) = get_course_and_cm_from_cmid($id, 'oercollection');
 
 $context = context_module::instance($cm->id);
 
-if (!in_array($perpage, [10, 20, 50, 100, 5000], true)) {
+if (!in_array($perpage, [5, 10, 20, 50, 100, 5000], true)) {
     $perpage = DEFAULT_PAGE_SIZE;
 }
 
@@ -73,7 +73,7 @@ $PAGE->add_body_class('limitedwidth');
 // Pagination.
 $paginationsql = "";
 $offset = ($pg) * $perpage;
-$totalnumberresources = $DB->count_records('oercollection_resource', ['oerid' => $oercollection->id]);
+$totalnumberresources = $DB->count_records('oercollection_resource', ['oerid' => $oercollection->id, 'showresource' => 1]);
 if (($totalnumberresources / $perpage) > 1) {
     $paginationsql = " LIMIT $perpage OFFSET $offset";
 }
