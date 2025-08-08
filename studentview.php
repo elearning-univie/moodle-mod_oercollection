@@ -58,7 +58,7 @@ if ($pg) {
 // Completion.
 oercollection_view($oercollection, $course, $cm, $context);
 
-$homeurl = new moodle_url("/mod/oercollection/oercollectionstudentview.php", $params);
+$homeurl = new moodle_url("/mod/oercollection/studentview.php", $params);
 $PAGE->set_url($homeurl->out(false));
 
 $node = $PAGE->settingsnav->find('mod_oercollection', navigation_node::TYPE_SETTING);
@@ -123,7 +123,7 @@ $templatecontext['oerresourcelist'] = $oerlist;
 $backtoteacherview = has_capability('mod/oercollection:editresources', $context);
 
 $templatecontext['backtoteacherview'] = $backtoteacherview;
-$templatecontext['backtoteacherviewlink'] = new moodle_url("/mod/oercollection/oercollectionteacherview.php", ['id' => $id]);
+$templatecontext['backtoteacherviewlink'] = new moodle_url("/mod/oercollection/teacherview.php", ['id' => $id]);
 $templatecontext['selected' . $perpage] = true;
 $templatecontext['actionurl'] = $PAGE->url;
 $templatecontext['sesskey'] = sesskey();

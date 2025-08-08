@@ -43,7 +43,7 @@ if (!in_array($perpage, [5, 10, 20, 50, 100, 5000], true)) {
 
 require_login($course, true, $cm);
 if (!has_capability('mod/oercollection:editresources', $context)) {
-    $url = new moodle_url("/mod/oercollection/oercollectionstudentview.php", ['id' => $cm->id]);
+    $url = new moodle_url("/mod/oercollection/studentview.php", ['id' => $cm->id]);
     redirect($url);
 }
 

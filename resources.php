@@ -44,7 +44,7 @@ require_login($course, false, $cm);
 
 $context = context_module::instance($cm->id);
 if (!has_capability('mod/oercollection:editresources', $context)) {
-    $url = new moodle_url("/mod/oercollection/oercollectionstudentview.php", ['id' => $cmid]);
+    $url = new moodle_url("/mod/oercollection/studentview.php", ['id' => $cmid]);
     redirect($url);
 }
 
@@ -104,7 +104,7 @@ $templatecontext = [
     'oerid' => $oerid->id,
     'oerexists' => !empty($oerentries),
     'searchoer' => new moodle_url("/mod/oercollection/searchoer.php", ['id' => $cmid]),
-    'studentpreviewlink' => new moodle_url("/mod/oercollection/oercollectionstudentview.php", ['id' => $cmid]),
+    'studentpreviewlink' => new moodle_url("/mod/oercollection/studentview.php", ['id' => $cmid]),
 ];
 
 // Prepare OER entries with caching
@@ -168,5 +168,7 @@ $templatecontext['page'] = $pagedresources;
 echo $OUTPUT->header();
 echo $OUTPUT->render_from_template('mod_oercollection/resources', $templatecontext);
 echo $OUTPUT->paging_bar($filteredcount, $page, $perpage, $homeurl);
-echo $OUTPUT->render_from_template('mod_oercollection/resourcesactionsandoptions', $templatecontext);
+if ($totalentries) {
+    echo $OUTPUT->render_from_template('mod_oercollection/resourcesactionsandoptions', $templatecontext);
+}
 echo $OUTPUT->footer();

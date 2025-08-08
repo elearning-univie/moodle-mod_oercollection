@@ -50,9 +50,9 @@ $PAGE->set_title($oercollection->name);
 $PAGE->set_heading($course->shortname);
 
 if (has_capability('mod/oercollection:editresources', $context)) {
-    $redirecturl = new moodle_url('/mod/oercollection/oercollectionteacherview.php', ['id' => $id]);
+    $redirecturl = new moodle_url('/mod/oercollection/teacherview.php', ['id' => $id]);
     redirect($redirecturl);
 } else {
-    $redirecturl = new moodle_url('/mod/oercollection/oercollectionstudentview.php', ['id' => $id]);
+    $redirecturl = new moodle_url('/mod/oercollection/studentview.php', ['id' => $id]);
     redirect($redirecturl);
 }

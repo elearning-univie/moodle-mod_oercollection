@@ -22,30 +22,44 @@
     }
 }}
 <div class="row mt-1 mb-3">
-    {{#searchoer}}<a class="btn btn-primary" href="{{searchoer}}">{{#str}}
-        oersearchlink, mod_oercollection {{/str}}</a>{{/searchoer}}
-    {{#studentpreviewlink}}<a class="btn btn-secondary mx-3 d-none" href="{{studentpreviewlink}}">{{#str}}
-        studentpreviewlink, mod_oercollection {{/str}}</a>{{/studentpreviewlink}}
+    <div class="col-auto">
+        {{#searchoer}}
+            <a class="btn btn-primary me-2" href="{{searchoer}}">
+                {{#str}} oersearchlink, mod_oercollection {{/str}}
+            </a>
+        {{/searchoer}}
+        {{#studentpreviewlink}}
+            <a class="btn btn-secondary d-none" href="{{studentpreviewlink}}">
+                {{#str}} studentpreviewlink, mod_oercollection {{/str}}
+            </a>
+        {{/studentpreviewlink}}
+    </div>
 </div>
+
 <div class="row py-3">
-    <h3>
-        {{# str }} resources, mod_oercollection {{/ str }}
-    </h3>
+    <div class="col">
+        <h3 class="h5 mb-0">
+            {{#str}} resources, mod_oercollection {{/str}}
+        </h3>
+    </div>
 </div>
 
 <div class="row py-0">
     <div class="table-responsive">
-        <table class="table table-borderless">
+        <table class="table table-borderless mb-0">
             <tbody>
             <tr>
                 {{#oerexists}}
-                    <td style="width:100%;font-weight: bold;padding-left: 0px;">{{#str}}
-                        availableresourcesnumberinfo, mod_oercollection, { "total": {{oernumber}},
-                        "hidden": {{oernumberhidden}} } {{/str}} </td>
+                    <td class="fw-bold ps-0 w-100">
+                        {{#str}}
+                            availableresourcesnumberinfo, mod_oercollection, { "total": {{oernumber}}, "hidden": {{oernumberhidden}} }
+                        {{/str}}
+                    </td>
                 {{/oerexists}}
                 {{^oerexists}}
-                    <td style="width:100%;font-weight: bold;padding-left: 0px;">{{#str}}
-                        noresources, mod_oercollection {{/str}}</td>
+                    <td class="fw-bold ps-0 w-100">
+                        {{#str}} noresources, mod_oercollection {{/str}}
+                    </td>
                 {{/oerexists}}
             </tr>
             </tbody>
@@ -53,14 +67,20 @@
     </div>
 </div>
 
-<div class="row py-1">
-    <a href="#" onclick="mod_oercollection_setall(true)">
-        {{#str}}checkall, mod_oercollection{{/str}}
-    </a>
-    <a href="#" onclick="mod_oercollection_setall(false)">
-        {{#str}}checknone, mod_oercollection{{/str}}
-    </a>
-</div>
+{{#oerresourcelist}}
+    <div class="row py-1">
+        <div class="col-auto">
+            <a href="#" onclick="mod_oercollection_setall(true)">
+                {{#str}} checkall, mod_oercollection {{/str}}
+            </a>
+        </div>
+        <div class="col-auto">
+            <a href="#" onclick="mod_oercollection_setall(false)">
+                {{#str}} checknone, mod_oercollection {{/str}}
+            </a>
+        </div>
+    </div>
+{{/oerresourcelist}}
 
 {{#oerresourcelist}}
     <div class="card mb-3 resource-frame {{background}}">
