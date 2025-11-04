@@ -79,7 +79,7 @@ $PAGE->add_body_class('limitedwidth');
 $PAGE->requires->js_call_amd('mod_oercollection/searchcontroller', 'init');
 
 $renderer = $PAGE->get_renderer('core');
-echo $renderer->header();
+//echo $renderer->header();
 
 $searchform = new \oerapi_oerhub\api\general($PAGE->url, $oercollection->id);
 $helpicon = new help_icon('searchoerhub', 'oercollection');
@@ -100,10 +100,11 @@ if (!is_null($searchstring)) {
     $resultsarray = $searchform->get_results($searchstring, $filter, $page, $perpage);
     $templatecontext['resultlist'] = $resultsarray['resulthtml'];
 }
-
-echo $renderer->render_from_template('mod_oercollection/searchoer', $templatecontext);
+echo $OUTPUT->header();
+echo $OUTPUT->render_from_template('mod_oercollection/searchoer', $templatecontext);
 
 if (!is_null($searchstring)) {
     echo $OUTPUT->paging_bar($resultsarray['foundcount'], $page, $perpage, $PAGE->url);
 }
-echo $renderer->footer();
+
+echo $OUTPUT->footer();
