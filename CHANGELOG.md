@@ -1,6 +1,10 @@
 CHANGELOG
 ===================
 
+v5.0-r2 (2025-12-29)
+* [FIX] Fixed some CSS/Boostrap bugs
+* [FEATURE] Changed gitignore to keep the subplugin folder [github PR #1 @Menrath]
+
 v5.0-r1 (2025-08-08)
 -----------
 * Moodle 5.0 compatible version
