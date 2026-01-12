@@ -91,19 +91,27 @@ $templatecontext = [
     'helpicon' => $helpicon->export_for_template($renderer),
 ];
 
-if (!is_null($reset)) {
-    $filter = '{}';
+$apiavailable = $searchform->is_api_available();
+$resultsarray = null;
+
+if (!$apiavailable) {
+    $templatecontext['apiwarning'] = get_string('resourceunavailable', 'oerapi_oerhub');
+} else {
+    if (!is_null($reset)) {
+        $filter = '{}';
+    }
+
+    if (!is_null($searchstring)) {
+        $oersearchresults = [];
+        $resultsarray = $searchform->get_results($searchstring, $filter, $page, $perpage);
+        $templatecontext['resultlist'] = $resultsarray['resulthtml'];
+    }
 }
 
-if (!is_null($searchstring)) {
-    $oersearchresults = [];
-    $resultsarray = $searchform->get_results($searchstring, $filter, $page, $perpage);
-    $templatecontext['resultlist'] = $resultsarray['resulthtml'];
-}
 echo $OUTPUT->header();
 echo $OUTPUT->render_from_template('mod_oercollection/searchoer', $templatecontext);
 
-if (!is_null($searchstring)) {
+if (!is_null($searchstring) && $resultsarray !== null) {
     echo $OUTPUT->paging_bar($resultsarray['foundcount'], $page, $perpage, $PAGE->url);
 }
 
