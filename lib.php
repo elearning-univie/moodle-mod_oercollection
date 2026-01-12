@@ -242,18 +242,28 @@ function oercollection_cm_info_view(cm_info $cm) {
         $oerlist = [];
         $oerapi = new \oerapi_oerhub\api\general($PAGE->url, $cm->instance);
 
-        foreach ($oerentries as $oerentry) {
-            $commentexists = true;
-            if (is_null($oerentry->notetextinternal) || empty($oerentry->notetextinternal)) {
-                $commentexists = false;
+        $apiavailable = $oerapi->is_api_available();
+
+        if (!$apiavailable && !empty($oerentries)) {
+            $templatecontext['apiwarning'] = $OUTPUT->notification(get_string('resourceunavailable', 'oerapi_oerhub'), 'info');
+        } else if ($apiavailable) {
+            foreach ($oerentries as $oerentry) {
+                $commentexists = true;
+                if (is_null($oerentry->notetextinternal) || empty($oerentry->notetextinternal)) {
+                    $commentexists = false;
+                }
+
+                $oerhtml = $oerapi->get_resource_html($oerentry->oerresourceid);
+
+                $oerlist[] = [
+                    'oerentryid' => $oerentry->id,
+                    'oerhtml' => $oerhtml,
+                    'resourceloadfailed' => empty($oerhtml),
+                    'commentexists' => $commentexists,
+                    'commenttext' => $oerentry->notetextinternal,
+                    'commentname' => $oerentry->notenameinternal,
+                ];
             }
-            $oerlist[] = [
-                'oerentryid' => $oerentry->id,
-                'oerhtml' => $oerapi->get_resource_html($oerentry->oerresourceid),
-                'commentexists' => $commentexists,
-                'commenttext' => $oerentry->notetextinternal,
-                'commentname' => $oerentry->notenameinternal,
-            ];
         }
         $templatecontext['oerresourcelist'] = $oerlist;
 

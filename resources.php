@@ -113,33 +113,41 @@ $oerapi = new \oerapi_oerhub\api\general($PAGE->url, $oerid->id);
 $apicache = cache::make('mod_oercollection', 'entries');
 $resourceids = array_column($oerentries, 'oerresourceid');
 
-// Batch fetch cached resources
-$cachedresources = $apicache->get_many($resourceids);
-foreach ($oerentries as $oerentry) {
-    if (!isset($cachedresources[$oerentry->oerresourceid]) || $cachedresources[$oerentry->oerresourceid] === false) {
-        $oerhtml = $oerapi->get_resource_html($oerentry->oerresourceid);
-        $apicache->set($oerentry->oerresourceid, $oerhtml);
-    } else {
-        $oerhtml = $cachedresources[$oerentry->oerresourceid];
+$apiavailable = $oerapi->is_api_available();
+
+if (!$apiavailable && !empty($resourceids)) {
+    $templatecontext['apiwarning'] = get_string('resourceunavailable', 'oerapi_oerhub');
+} else if ($apiavailable) {
+    $cachedresources = $apicache->get_many($resourceids);
+    foreach ($oerentries as $oerentry) {
+        if (!isset($cachedresources[$oerentry->oerresourceid]) || $cachedresources[$oerentry->oerresourceid] === false) {
+            $oerhtml = $oerapi->get_resource_html($oerentry->oerresourceid);
+            if ($oerhtml !== null) {
+                $apicache->set($oerentry->oerresourceid, $oerhtml);
+            }
+        } else {
+            $oerhtml = $cachedresources[$oerentry->oerresourceid];
+        }
+
+        $commentlink = new moodle_url("/mod/oercollection/oercomment.php", [
+            'id' => $cmid,
+            'oereid' => $oerentry->id,
+        ]);
+
+        $oerlist[] = [
+            'oerentryid' => $oerentry->id,
+            'oerhtml' => $oerhtml,
+            'resourceloadfailed' => empty($oerhtml),
+            'oerhidden' => !$oerentry->showresource,
+            'resourcelink' => $oerentry->resourcelink,
+            'resourcename' => s($oerentry->resourcename),
+            'background' => $oerentry->showresource ? '' : 'bg-light',
+            'commentexists' => !empty($oerentry->notetextinternal),
+            'commentlink' => $commentlink->out(false),
+            'commenttext' => format_text($oerentry->notetextinternal),
+            'commentname' => s($oerentry->notenameinternal),
+        ];
     }
-
-    $commentlink = new moodle_url("/mod/oercollection/oercomment.php", [
-        'id' => $cmid,
-        'oereid' => $oerentry->id,
-    ]);
-
-    $oerlist[] = [
-        'oerentryid' => $oerentry->id,
-        'oerhtml' => $oerhtml,
-        'oerhidden' => !$oerentry->showresource,
-        'resourcelink' => $oerentry->resourcelink,
-        'resourcename' => s($oerentry->resourcename),
-        'background' => $oerentry->showresource ? '' : 'bg-light',
-        'commentexists' => !empty($oerentry->notetextinternal),
-        'commentlink' => $commentlink->out(false),
-        'commenttext' => format_text($oerentry->notetextinternal),
-        'commentname' => s($oerentry->notenameinternal),
-    ];
 }
 
 // Prepare modal data with array_chunk
