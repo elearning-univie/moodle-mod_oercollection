@@ -173,6 +173,8 @@ $templatecontext['oerresourcelist'] = $oerlist;
 $templatecontext['resourcecount'] = count($oerlist);
 $templatecontext['page'] = $pagedresources;
 
+$PAGE->requires->js_call_amd('mod_oercollection/resourcecontroller', 'init');
+
 // Output rendering
 echo $OUTPUT->header();
 echo $OUTPUT->render_from_template('mod_oercollection/resources', $templatecontext);

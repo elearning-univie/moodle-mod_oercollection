@@ -54,7 +54,14 @@
                         </div>
                         <div class="row">
                             <div class="col">
-                                {{{commenttext}}}
+                                <div class="oer-comment-container">
+                                    <div class="oer-comment-text" data-entry-id="{{oerentryid}}">
+                                        {{{commenttext}}}
+                                    </div>
+                                    <a href="#" class="oer-comment-toggle d-none" data-entry-id="{{oerentryid}}" data-expanded="false">
+                                        <small>{{#str}} showmore, core {{/str}}</small>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     {{/commentexists}}

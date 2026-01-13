@@ -34,7 +34,119 @@ const setQueryParamAndReload = (param, value) => {
     location.reload();
 };
 
+/**
+ * Text truncation for descriptions and comments.
+ */
+const initTextTruncation = async () => {
+    const showMoreStr = await getString('showmore', 'core');
+    const showLessStr = await getString('showless', 'core');
+
+    const isOverflowing = (element) => {
+        return element.scrollHeight > element.clientHeight;
+    };
+
+    /**
+     * Truncation for a specific selector
+     *
+     * @param {string} textSelector - Selector for text elements
+     * @param {string} toggleSelector - Selector for toggle links
+     * @param {string} idAttribute - Attribute used to match text and toggle
+     */
+    const initTruncationForSelector = (textSelector, toggleSelector, idAttribute) => {
+        const elements = document.querySelectorAll(textSelector);
+
+        elements.forEach((textElement) => {
+
+            // For comments using the nested .text_to_html element.
+            let elementToCheck = textElement;
+            if (textSelector === '.oer-comment-text') {
+                const textToHtml = textElement.querySelector('.text_to_html');
+                if (textToHtml) {
+                    elementToCheck = textToHtml;
+                }
+            }
+
+            if (isOverflowing(elementToCheck)) {
+                const id = textElement.getAttribute(idAttribute);
+                const toggleLink = document.querySelector(`${toggleSelector}[${idAttribute}="${id}"]`);
+
+                if (toggleLink) {
+                    toggleLink.classList.remove('d-none');
+
+                    // Check if toggle uses icon or text
+                    const iconElement = toggleLink.querySelector('i');
+                    const hasIcon = iconElement !== null;
+
+                    if (hasIcon) {
+                        iconElement.className = 'fa fa-chevron-down';
+                    } else {
+                        toggleLink.querySelector('small').textContent = showMoreStr;
+                    }
+
+                    toggleLink.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const isExpanded = toggleLink.getAttribute('data-expanded') === 'true';
+
+                        if (isExpanded) {
+                            textElement.classList.remove('expanded');
+                            // Re-apply inline truncation styles for comments
+                            if (textSelector === '.oer-comment-text') {
+                                textElement.style.display = '-webkit-box';
+                                textElement.style.webkitLineClamp = '3';
+                                textElement.style.webkitBoxOrient = 'vertical';
+                                textElement.style.overflow = 'hidden';
+                                textElement.style.maxHeight = '4.5em';
+                            }
+                            toggleLink.setAttribute('data-expanded', 'false');
+                            if (hasIcon) {
+                                iconElement.className = 'fa fa-chevron-down';
+                            } else {
+                                toggleLink.querySelector('small').textContent = showMoreStr;
+                            }
+                        } else {
+                            textElement.classList.add('expanded');
+                            // Remove inline truncation styles for comments
+                            if (textSelector === '.oer-comment-text') {
+                                textElement.style.display = 'block';
+                                textElement.style.webkitLineClamp = 'unset';
+                                textElement.style.webkitBoxOrient = '';
+                                textElement.style.overflow = 'visible';
+                                textElement.style.maxHeight = 'none';
+                            }
+                            toggleLink.setAttribute('data-expanded', 'true');
+                            if (hasIcon) {
+                                iconElement.className = 'fa fa-chevron-up';
+                            } else {
+                                toggleLink.querySelector('small').textContent = showLessStr;
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    };
+
+    const runTruncation = () => {
+        requestAnimationFrame(() => {
+            // Small delay to ensure CSS is applied
+            setTimeout(() => {
+                initTruncationForSelector('.oer-description', '.oer-description-toggle', 'data-resource-id');
+                initTruncationForSelector('.oer-comment-text', '.oer-comment-toggle', 'data-entry-id');
+            }, 100);
+        });
+    };
+
+    runTruncation();
+};
+
 export const init = () => {
+    // Skip image load and run truncation as soon as DOM is ready.
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initTextTruncation);
+    } else {
+        initTextTruncation();
+    }
+
     window.addEventListener('load', async () => {
         await Promise.all([
             handleQueryParamNotification('delete', 'deleteinfomessage'),

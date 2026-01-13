@@ -32,6 +32,36 @@ define('NEWPAGE', 0);
  */
 define('THISPAGE', 1);
 
+/**
+ * Format date according to the user's selected language.
+ * EN: YYYY-MM-DD
+ * DE: DD.MM.YYYY
+ *
+ * @param string $datestring The date string to format (expected format: YYYY-MM-DD)
+ * @return string Formatted date string
+ */
+function oercollection_format_date(string $datestring): string {
+    if (empty($datestring)) {
+        return '';
+    }
+
+    // Parse the date assuming YYYY-MM-DD format from API.
+    $timestamp = strtotime($datestring);
+
+    if ($timestamp === false) {
+        return $datestring;
+    }
+
+    $lang = current_language();
+
+    if ($lang === 'de') {
+        return date('d.m.Y', $timestamp);
+    } else if ($lang === 'en') {
+        return date('Y-m-d', $timestamp);
+    } else {
+        return userdate($timestamp, get_string('strftimedate', 'langconfig'));
+    }
+}
 
 /**
  * Returns the information on whether the module supports a feature
@@ -260,8 +290,8 @@ function oercollection_cm_info_view(cm_info $cm) {
                     'oerhtml' => $oerhtml,
                     'resourceloadfailed' => empty($oerhtml),
                     'commentexists' => $commentexists,
-                    'commenttext' => $oerentry->notetextinternal,
-                    'commentname' => $oerentry->notenameinternal,
+                    'commenttext' => format_text($oerentry->notetextinternal),
+                    'commentname' => s($oerentry->notenameinternal),
                 ];
             }
         }

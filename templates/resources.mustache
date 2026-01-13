@@ -79,8 +79,7 @@
             <a href="#" onclick="mod_oercollection_setall(true)">
                 {{#str}} checkall, mod_oercollection {{/str}}
             </a>
-        </div>
-        <div class="col-auto">
+            <span class="text-primary mx-1">/</span>
             <a href="#" onclick="mod_oercollection_setall(false)">
                 {{#str}} checknone, mod_oercollection {{/str}}
             </a>
@@ -127,8 +126,15 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col">
-                                {{{commenttext}}}
+                            <div class="col" style="min-width: 0; max-width: 100%; overflow: hidden;">
+                                <div class="oer-comment-container" style="max-width: 100%; overflow: hidden;">
+                                    <div class="oer-comment-text" data-entry-id="{{oerentryid}}" style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; line-height: 1.5em; max-height: 4.5em; word-wrap: break-word; overflow-wrap: anywhere; word-break: break-all;">
+                                        {{{commenttext}}}
+                                    </div>
+                                    <a href="#" class="oer-comment-toggle d-none" data-entry-id="{{oerentryid}}" data-expanded="false">
+                                        <small><i class="fa fa-chevron-down"></i></small>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     {{/commentexists}}
@@ -239,8 +245,5 @@
 {{#js}}
     require(['mod_oercollection/defaultcontroller'], function(defaultcontroller) {
         defaultcontroller.init();
-    });
-    require(['mod_oercollection/resourcecontroller'], function(resourcecontroller) {
-        resourcecontroller.init();
     });
 {{/js}}
