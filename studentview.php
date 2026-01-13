@@ -122,8 +122,8 @@ if (!$apiavailable && !empty($oerentries)) {
             'oerhtml' => $oerhtml,
             'resourceloadfailed' => empty($oerhtml),
             'commentexists' => $commentexists,
-            'commenttext' => $oerentry->notetextinternal,
-            'commentname' => $oerentry->notenameinternal,
+            'commenttext' => format_text($oerentry->notetextinternal),
+            'commentname' => s($oerentry->notenameinternal),
         ];
     }
 }
@@ -138,6 +138,8 @@ $templatecontext['selected' . $perpage] = true;
 $templatecontext['actionurl'] = $PAGE->url;
 $templatecontext['sesskey'] = sesskey();
 $templatecontext['id'] = $id;
+
+$PAGE->requires->js_call_amd('mod_oercollection/resourcecontroller', 'init');
 
 $renderer = $PAGE->get_renderer('core');
 echo $renderer->header();
