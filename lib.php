@@ -22,6 +22,8 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+require_once(__DIR__ . '/resource_list_builder.php');
+
 /**
  * Groups not used in course or activity
  */
@@ -33,33 +35,29 @@ define('NEWPAGE', 0);
 define('THISPAGE', 1);
 
 /**
- * Format date according to the user's selected language.
- * EN: YYYY-MM-DD
- * DE: DD.MM.YYYY
+ * Activate the settings navigation node for oercollection.
  *
- * @param string $datestring The date string to format (expected format: YYYY-MM-DD)
- * @return string Formatted date string
+ * Centralizes the navigation node activation pattern used across view pages.
  */
-function oercollection_format_date(string $datestring): string {
-    if (empty($datestring)) {
-        return '';
+function oercollection_activate_settings_node() {
+    global $PAGE;
+    $node = $PAGE->settingsnav->find('mod_oercollection', navigation_node::TYPE_SETTING);
+    if ($node) {
+        $node->make_active();
     }
+}
 
-    // Parse the date assuming YYYY-MM-DD format from API.
-    $timestamp = strtotime($datestring);
-
-    if ($timestamp === false) {
-        return $datestring;
-    }
-
-    $lang = current_language();
-
-    if ($lang === 'de') {
-        return date('d.m.Y', $timestamp);
-    } else if ($lang === 'en') {
-        return date('Y-m-d', $timestamp);
-    } else {
-        return userdate($timestamp, get_string('strftimedate', 'langconfig'));
+/**
+ * Redirect to student view if user lacks edit capability.
+ *
+ * @param context $context The module context
+ * @param int $cmid The course module ID
+ */
+function oercollection_require_capability($context, $cmid) {
+    if (!has_capability('mod/oercollection:editresources', $context)) {
+        $url = new moodle_url("/mod/oercollection/studentview.php", ['id' => $cmid]);
+        redirect($url);
+        die();
     }
 }
 
@@ -266,36 +264,22 @@ function oercollection_cm_info_view(cm_info $cm) {
             $folder->introformat = FORMAT_MOODLE;
         }
 
-        $sql = 'SELECT * FROM {oercollection_resource} oerr WHERE oerr.oerid = :oerid AND oerr.showresource = 1 ORDER BY oerr.position ASC';
-        $oerentries = $DB->get_records_sql($sql, ['oerid' => $cm->instance]);
+        // Fetch and format OER resources using centralized function
+        $resource_data = oercollection_get_resources_for_display(
+            $cm->instance,
+            $PAGE->url,
+            [
+                'show_hidden' => false,
+                'use_caching' => false,
+                'notification_wrapper' => false
+            ]
+        );
 
-        $oerlist = [];
-        $oerapi = new \oerapi_oerhub\api\general($PAGE->url, $cm->instance);
+        // Merge resource data into template context
+        $templatecontext = array_merge($templatecontext, $resource_data);
 
-        $apiavailable = $oerapi->is_api_available();
-
-        if (!$apiavailable && !empty($oerentries)) {
-            $templatecontext['apiwarning'] = $OUTPUT->notification(get_string('resourceunavailable', 'oerapi_oerhub'), 'info');
-        } else if ($apiavailable) {
-            foreach ($oerentries as $oerentry) {
-                $commentexists = true;
-                if (is_null($oerentry->notetextinternal) || empty($oerentry->notetextinternal)) {
-                    $commentexists = false;
-                }
-
-                $oerhtml = $oerapi->get_resource_html($oerentry->oerresourceid);
-
-                $oerlist[] = [
-                    'oerentryid' => $oerentry->id,
-                    'oerhtml' => $oerhtml,
-                    'resourceloadfailed' => empty($oerhtml),
-                    'commentexists' => $commentexists,
-                    'commenttext' => format_text($oerentry->notetextinternal),
-                    'commentname' => s($oerentry->notenameinternal),
-                ];
-            }
-        }
-        $templatecontext['oerresourcelist'] = $oerlist;
+        // Load JavaScript for comment truncation expand/collapse
+        $PAGE->requires->js_call_amd('mod_oercollection/resourcecontroller', 'init');
 
         // display folder
         $renderer = $PAGE->get_renderer('core');

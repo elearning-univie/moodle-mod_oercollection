@@ -15,58 +15,28 @@
   along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-    @template mod_oercollection/oercollection
+    @template mod_oercollection/oercourseinfo
+
+    V2 - Refactored to use partials
+    Course page inline display of OER collection
 
     Example context (json):
     {
+        "intro": "<p>Introduction text</p>",
+        "apiwarning": "Warning message",
+        "oerresourcelist": []
     }
 }}
 <p>{{{intro}}}</p>
-{{#apiwarning}}
-    {{{apiwarning}}}
-{{/apiwarning}}
-{{# oerresourcelist}}
+{{> mod_oercollection/api_warning }}
+{{#oerresourcelist}}
     <div class="card mb-3 resource-frame {{background}}">
         <div class="card-body">
             <div class="row align-items-center flex-nowrap">
                 <div class="col">
-                    {{{oerhtml}}}
-                    {{#resourceloadfailed}}
-                        <div class="alert alert-warning mb-2">
-                            <small><strong>{{#str}} warning, core {{/str}}:</strong> {{#str}} resourceloadfailed, oerapi_oerhub {{/str}}</small>
-                        </div>
-                    {{/resourceloadfailed}}
-                    {{#oerhidden}}
-                        <div class="row">
-                            <div class="col-auto">
-                                <span class="badge badge-secondary">{{#str}} hiddenfromstudents {{/str}}</span>
-                            </div>
-                        </div>
-                    {{/oerhidden}}
-
-                    <!-- Optional Comment Section -->
-                    {{#commentexists}}
-                        <hr>
-                        <div class="row">
-                            <div class="col">
-                                <strong>{{{commentname}}}</strong>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col">
-                                <div class="oer-comment-container">
-                                    <div class="oer-comment-text" data-entry-id="{{oerentryid}}">
-                                        {{{commenttext}}}
-                                    </div>
-                                    <a href="#" class="oer-comment-toggle d-none" data-entry-id="{{oerentryid}}" data-expanded="false">
-                                        <small>{{#str}} showmore, core {{/str}}</small>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    {{/commentexists}}
+                    {{> mod_oercollection/resource_card_content }}
                 </div>
             </div>
         </div>
     </div>
-{{/ oerresourcelist}}
+{{/oerresourcelist}}

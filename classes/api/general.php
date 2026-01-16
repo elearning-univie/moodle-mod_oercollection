@@ -53,4 +53,11 @@ abstract class general {
      * @return mixed
      */
     abstract public function get_results($searchstring);
+
+    /**
+     * is_api_available
+     * 
+     * @return boolean
+     */
+    abstract public function is_api_available();
 }

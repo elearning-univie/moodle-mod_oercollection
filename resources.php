@@ -25,6 +25,7 @@
 require('../../config.php');
 require_once(__DIR__ . '/lib.php');
 require_once('locallib.php');
+require_once(__DIR__ . '/resource_list_builder.php');
 
 global $PAGE, $OUTPUT, $DB, $CFG;
 
@@ -34,19 +35,13 @@ $page = optional_param('page', 0, PARAM_INT);
 $perpage = optional_param('perpage', DEFAULT_PAGE_SIZE, PARAM_INT);
 $deleted = optional_param('del', 0, PARAM_INT);
 
-$validperpages = [5, 10, 20, 50, 100, 5000];
-if (!in_array($perpage, $validperpages, true)) {
-    $perpage = DEFAULT_PAGE_SIZE;
-}
+$perpage = oercollection_validate_perpage($perpage);
 
 list ($course, $cm) = get_course_and_cm_from_cmid($cmid, 'oercollection');
 require_login($course, false, $cm);
 
 $context = context_module::instance($cm->id);
-if (!has_capability('mod/oercollection:editresources', $context)) {
-    $url = new moodle_url("/mod/oercollection/studentview.php", ['id' => $cmid]);
-    redirect($url);
-}
+oercollection_require_capability($context, $cmid);
 
 $oerid = $DB->get_record('oercollection', ['id' => $cm->instance]);
 
@@ -65,36 +60,41 @@ $PAGE->set_title($oerid->name);
 $PAGE->set_heading($course->shortname);
 $PAGE->add_body_class('limitedwidth');
 
-$node = $PAGE->settingsnav->find('mod_oercollection', navigation_node::TYPE_SETTING);
-if ($node) {
-    $node->make_active();
+oercollection_activate_settings_node();
+
+// Get resource counts using centralized function
+$counts = oercollection_get_resource_counts($oerid->id);
+
+// Determine visibility filter and filtered count based on filter parameter
+$visibility_filter = 'all';
+$filteredcount = $counts['total'];
+if ($filter == 2) {
+    $visibility_filter = 'visible';
+    $filteredcount = $counts['visible'];
+} else if ($filter == 3) {
+    $visibility_filter = 'hidden';
+    $filteredcount = $counts['hidden'];
 }
 
-$paramsql = ['oerid' => $oerid->id];
-switch ($filter) {
-    case 2: // Only visible.
-        $sqlshow = " AND showresource = 1 ";
-        break;
-    case 3: // Only hidden.
-        $sqlshow = " AND showresource = 0 ";
-        break;
-    default:
-        $sqlshow = "";
-}
-
-$sql = "SELECT *
-          FROM {oercollection_resource}
-         WHERE oerid = :oerid $sqlshow
-      ORDER BY position ASC";
-
-$oerentries = $DB->get_records_sql($sql, $paramsql, $page * $perpage, $perpage);
-$totalentries = $DB->count_records('oercollection_resource', ['oerid' => $oerid->id]);
-$filteredcount = $DB->count_records_select('oercollection_resource', "oerid = :oerid $sqlshow", $paramsql);
+// Fetch and format OER resources using centralized function
+$resource_data = oercollection_get_resources_for_display(
+    $oerid->id,
+    $PAGE->url,
+    [
+        'visibility_filter' => $visibility_filter,
+        'use_caching' => true,
+        'include_metadata' => true,
+        'include_comment_link' => true,
+        'cmid' => $cmid,
+        'per_page' => $perpage,
+        'page_offset' => $page * $perpage
+    ]
+);
 
 // Prepare template context
 $templatecontext = [
-    'oernumber' => $totalentries,
-    'oernumberhidden' => $DB->count_records('oercollection_resource', ['oerid' => $oerid->id, 'showresource' => 0]),
+    'oernumber' => $counts['total'],
+    'oernumberhidden' => $counts['hidden'],
     'actionurl' => $PAGE->url,
     'id' => $cmid,
     'deleted' => $deleted,
@@ -102,53 +102,13 @@ $templatecontext = [
     'selected2' . $filter => true,
     'sesskey' => sesskey(),
     'oerid' => $oerid->id,
-    'oerexists' => !empty($oerentries),
+    'oerexists' => !empty($resource_data['oerresourcelist']),
     'searchoer' => new moodle_url("/mod/oercollection/searchoer.php", ['id' => $cmid]),
     'studentpreviewlink' => new moodle_url("/mod/oercollection/studentview.php", ['id' => $cmid]),
 ];
 
-// Prepare OER entries with caching
-$oerlist = [];
-$oerapi = new \oerapi_oerhub\api\general($PAGE->url, $oerid->id);
-$apicache = cache::make('mod_oercollection', 'entries');
-$resourceids = array_column($oerentries, 'oerresourceid');
-
-$apiavailable = $oerapi->is_api_available();
-
-if (!$apiavailable && !empty($resourceids)) {
-    $templatecontext['apiwarning'] = get_string('resourceunavailable', 'oerapi_oerhub');
-} else if ($apiavailable) {
-    $cachedresources = $apicache->get_many($resourceids);
-    foreach ($oerentries as $oerentry) {
-        if (!isset($cachedresources[$oerentry->oerresourceid]) || $cachedresources[$oerentry->oerresourceid] === false) {
-            $oerhtml = $oerapi->get_resource_html($oerentry->oerresourceid);
-            if ($oerhtml !== null) {
-                $apicache->set($oerentry->oerresourceid, $oerhtml);
-            }
-        } else {
-            $oerhtml = $cachedresources[$oerentry->oerresourceid];
-        }
-
-        $commentlink = new moodle_url("/mod/oercollection/oercomment.php", [
-            'id' => $cmid,
-            'oereid' => $oerentry->id,
-        ]);
-
-        $oerlist[] = [
-            'oerentryid' => $oerentry->id,
-            'oerhtml' => $oerhtml,
-            'resourceloadfailed' => empty($oerhtml),
-            'oerhidden' => !$oerentry->showresource,
-            'resourcelink' => $oerentry->resourcelink,
-            'resourcename' => s($oerentry->resourcename),
-            'background' => $oerentry->showresource ? '' : 'bg-light',
-            'commentexists' => !empty($oerentry->notetextinternal),
-            'commentlink' => $commentlink->out(false),
-            'commenttext' => format_text($oerentry->notetextinternal),
-            'commentname' => s($oerentry->notenameinternal),
-        ];
-    }
-}
+// Merge resource data into template context
+$templatecontext = array_merge($templatecontext, $resource_data);
 
 // Prepare modal data with array_chunk
 $allresources = $DB->get_records('oercollection_resource', ['oerid' => $oerid->id], 'position ASC');
@@ -169,17 +129,17 @@ foreach ($chunkedresources as $index => $chunk) {
     ];
 }
 
-$templatecontext['oerresourcelist'] = $oerlist;
-$templatecontext['resourcecount'] = count($oerlist);
+$templatecontext['resourcecount'] = count($resource_data['oerresourcelist']);
 $templatecontext['page'] = $pagedresources;
 
 $PAGE->requires->js_call_amd('mod_oercollection/resourcecontroller', 'init');
+$PAGE->requires->js_call_amd('mod_oercollection/defaultcontroller', 'init');
 
 // Output rendering
 echo $OUTPUT->header();
 echo $OUTPUT->render_from_template('mod_oercollection/resources', $templatecontext);
 echo $OUTPUT->paging_bar($filteredcount, $page, $perpage, $homeurl);
-if ($totalentries) {
+if ($counts['total']) {
     echo $OUTPUT->render_from_template('mod_oercollection/resourcesactionsandoptions', $templatecontext);
 }
 echo $OUTPUT->footer();

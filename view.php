@@ -39,10 +39,7 @@ require_capability('mod/oercollection:view', $context);
 $oercollection = $DB->get_record('oercollection', ['id' => $cm->instance]);
 
 $PAGE->set_url(new moodle_url("/mod/oercollection/view.php", ['id' => $id]));
-$node = $PAGE->settingsnav->find('mod_oercollection', navigation_node::TYPE_SETTING);
-if ($node) {
-    $node->make_active();
-}
+oercollection_activate_settings_node();
 $PAGE->add_body_class('limitedwidth');
 
 $pagetitle = get_string('pagetitle', 'oercollection');
