@@ -44,10 +44,7 @@ require_capability('mod/oercollection:editresources', $context);
 
 $oer = $DB->get_record('oercollection', ['id' => $cm->instance]);
 
-$node = $PAGE->settingsnav->find('mod_oercollection', navigation_node::TYPE_SETTING);
-if ($node) {
-    $node->make_active();
-}
+oercollection_activate_settings_node();
 
 $pagetitle = get_string('pagetitle', 'mod_oercollection');
 $PAGE->set_title($oer->name);

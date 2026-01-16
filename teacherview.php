@@ -26,6 +26,7 @@
 
 require('../../config.php');
 require_once(__DIR__ . '/lib.php');
+require_once(__DIR__ . '/resource_list_builder.php');
 
 global $PAGE, $OUTPUT, $DB, $CFG;
 
@@ -37,19 +38,12 @@ $context = context_module::instance($cm->id);
 
 require_login($course, false, $cm);
 
-if (!has_capability('mod/oercollection:editresources', $context)) {
-    $url = new moodle_url("/mod/oercollection/studentview.php", ['id' => $cm->id]);
-    redirect($url);
-    die();
-}
+oercollection_require_capability($context, $cm->id);
 
 $oercollection = $DB->get_record('oercollection', ['id' => $cm->instance]);
 
 $PAGE->set_url(new moodle_url("/mod/oercollection/view.php", ['id' => $id]));
-$node = $PAGE->settingsnav->find('mod_oercollection', navigation_node::TYPE_SETTING);
-if ($node) {
-    $node->make_active();
-}
+oercollection_activate_settings_node();
 $PAGE->add_body_class('limitedwidth');
 
 $pagetitle = get_string('pagetitle', 'oercollection');
@@ -59,9 +53,8 @@ $PAGE->set_heading($course->shortname);
 // Completion.
 oercollection_view($oercollection, $course, $cm, $context);
 
-$oertotalcount = $DB->count_records('oercollection_resource', ['oerid' => $oercollection->id]);
-$oervisiblecount = $DB->count_records('oercollection_resource', ['oerid' => $oercollection->id, 'showresource' => 1]);
-$oerhiddencount = $DB->count_records('oercollection_resource', ['oerid' => $oercollection->id, 'showresource' => 0]);
+// Get resource counts using centralized function
+$counts = oercollection_get_resource_counts($oercollection->id);
 
 $templatecontext = [
     'oerexists' => false,
@@ -70,11 +63,11 @@ $templatecontext = [
     'studentpreviewlink' => new moodle_url("/mod/oercollection/studentview.php", ['id' => $id]),
 ];
 
-if ($oertotalcount) {
+if ($counts['total']) {
     $templatecontext['oerexists'] = true;
-    $templatecontext['oeretotalnumber'] = $oertotalcount;
-    $templatecontext['oerevisiblenumber'] = $oervisiblecount; // oerefilter=2
-    $templatecontext['oerehiddennumber'] = $oerhiddencount; // oerefilter=3
+    $templatecontext['oeretotalnumber'] = $counts['total'];
+    $templatecontext['oerevisiblenumber'] = $counts['visible'];
+    $templatecontext['oerehiddennumber'] = $counts['hidden'];
     $linkvisible = new moodle_url("/mod/oercollection/resources.php", ['id' => $id, 'oerefilter' => 2]);
     $templatecontext['oerresourcelinkvisible'] = $linkvisible->out(false);
     $linkhidden = new moodle_url("/mod/oercollection/resources.php", ['id' => $id, 'oerefilter' => 3]);

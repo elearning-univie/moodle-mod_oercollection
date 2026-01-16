@@ -27,6 +27,7 @@
 require('../../config.php');
 require_once(__DIR__ . '/lib.php');
 require_once('locallib.php');
+require_once(__DIR__ . '/resource_list_builder.php');
 
 global $PAGE, $OUTPUT, $DB;
 
@@ -39,9 +40,7 @@ list ($course, $cm) = get_course_and_cm_from_cmid($id, 'oercollection');
 
 $context = context_module::instance($cm->id);
 
-if (!in_array($perpage, [5, 10, 20, 50, 100, 5000], true)) {
-    $perpage = DEFAULT_PAGE_SIZE;
-}
+$perpage = oercollection_validate_perpage($perpage);
 
 require_login($course, false, $cm);
 require_capability('mod/oercollection:view', $context);
@@ -61,32 +60,22 @@ oercollection_view($oercollection, $course, $cm, $context);
 $homeurl = new moodle_url("/mod/oercollection/studentview.php", $params);
 $PAGE->set_url($homeurl->out(false));
 
-$node = $PAGE->settingsnav->find('mod_oercollection', navigation_node::TYPE_SETTING);
-if ($node) {
-    $node->make_active();
-}
+oercollection_activate_settings_node();
 
 $PAGE->set_title($oercollection->name);
 $PAGE->set_heading($course->shortname);
 $PAGE->add_body_class('limitedwidth');
 
 // Pagination.
-$paginationsql = "";
 $offset = ($pg) * $perpage;
-$totalnumberresources = $DB->count_records('oercollection_resource', ['oerid' => $oercollection->id, 'showresource' => 1]);
-if (($totalnumberresources / $perpage) > 1) {
-    $paginationsql = " LIMIT $perpage OFFSET $offset";
-}
-$paginationsql = "LIMIT $perpage OFFSET $offset";
-$sql = 'SELECT * FROM {oercollection_resource} oerr WHERE oerr.oerid = :oerid AND oerr.showresource = 1 ';
-$sql .= " ORDER BY oerr.position ASC ";
-$sql .= $paginationsql;
-$oerentries = $DB->get_records_sql($sql, ['oerid' => $oercollection->id]);
+$counts = oercollection_get_resource_counts($oercollection->id);
+$totalnumberresources = $counts['visible'];
 
+// Initialize template context
 $templatecontext = [];
 
 if (has_capability('mod/oercollection:editresources', $context)) {
-    $oerexists = $oerentries ? true : false;
+    $oerexists = $counts['visible'] > 0;
     if ($oerexists) {
         $templatecontext['oernumber'] = $totalnumberresources;
     }
@@ -99,36 +88,18 @@ if (has_capability('mod/oercollection:editresources', $context)) {
     }
 }
 
-// get oer entries
-
-$oerlist = [];
-$oerapi = new \oerapi_oerhub\api\general($PAGE->url, $oercollection->id);
-
-$apiavailable = $oerapi->is_api_available();
-
-if (!$apiavailable && !empty($oerentries)) {
-    $templatecontext['apiwarning'] = get_string('resourceunavailable', 'oerapi_oerhub');
-} else if ($apiavailable) {
-    foreach ($oerentries as $oerentry) {
-        $commentexists = true;
-        if (is_null($oerentry->notetextinternal) || empty($oerentry->notetextinternal)) {
-            $commentexists = false;
-        }
-
-        $oerhtml = $oerapi->get_resource_html($oerentry->oerresourceid);
-
-        $oerlist[] = [
-            'oerentryid' => $oerentry->id,
-            'oerhtml' => $oerhtml,
-            'resourceloadfailed' => empty($oerhtml),
-            'commentexists' => $commentexists,
-            'commenttext' => format_text($oerentry->notetextinternal),
-            'commentname' => s($oerentry->notenameinternal),
-        ];
-    }
-}
-
-$templatecontext['oerresourcelist'] = $oerlist;
+// Fetch and format OER resources using centralized function
+$resource_data = oercollection_get_resources_for_display(
+    $oercollection->id,
+    $PAGE->url,
+    [
+        'show_hidden' => false,
+        'use_caching' => true,
+        'per_page' => $perpage,
+        'page_offset' => $offset
+    ]
+);
+$templatecontext = array_merge($templatecontext, $resource_data);
 
 $backtoteacherview = has_capability('mod/oercollection:editresources', $context);
 
@@ -140,6 +111,7 @@ $templatecontext['sesskey'] = sesskey();
 $templatecontext['id'] = $id;
 
 $PAGE->requires->js_call_amd('mod_oercollection/resourcecontroller', 'init');
+$PAGE->requires->js_call_amd('mod_oercollection/defaultcontroller', 'init');
 
 $renderer = $PAGE->get_renderer('core');
 echo $renderer->header();

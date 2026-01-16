@@ -1,33 +1,65 @@
+/**
+ * Search controller for OER Collection - handles single "add to collection" action.
+ *
+ * @module     mod_oercollection/searchcontroller
+ * @copyright  2024 University of Vienna
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 import ajax from "core/ajax";
 import notification from "core/notification";
+import {add as addToast} from 'core/toast';
 import {getString} from 'core/str';
 
-export const init = () => {
-    const mod_oercollection_add_to_collection = (oer, oerhubid, resourcelink, resourcename) => {
-        ajax.call([{
-            methodname: 'mod_oercollection_add_to_collection',
-            args: {oerid: oer, oerhubid: oerhubid, resourcelink: resourcelink, resourcename: resourcename},
-            done: function (returnval) {
-                if (returnval.alreadyincollection === 1) {
-                    getString('resourceexistsinfomessage', 'mod_oercollection').then((infomessage) => {
-                        notification.addNotification({
-                            message: infomessage,
-                            type: "warning"
-                        });
-                    });
-                } else {
-                    getString('addedinfomessage', 'mod_oercollection', 1).then((infomessage) => {
-                        notification.addNotification({
-                            message: infomessage,
-                            type: "success"
-                        });
-                    });
-                }
-            },
-            fail: notification.exception
-        }]);
-    };
+/**
+ * Handle adding a single resource to the collection.
+ *
+ * @param {HTMLElement} element - The clicked element with data attributes
+ */
+const handleAddToCollection = async (element) => {
+    const oerId = element.dataset.oerId;
+    const oerhubId = element.dataset.oerhubId;
+    const resourceLink = element.dataset.resourceLink;
+    const resourceTitle = element.dataset.resourceTitle;
 
-    // Attach the function to the global namespace or use it where needed
-    window.mod_oercollection_add_to_collection = mod_oercollection_add_to_collection;
+    try {
+        const result = await ajax.call([{
+            methodname: 'mod_oercollection_add_to_collection',
+            args: {
+                oerid: oerId,
+                oerhubid: oerhubId,
+                resourcelink: resourceLink,
+                resourcename: resourceTitle
+            }
+        }])[0];
+
+        if (result.alreadyincollection === 1) {
+            const message = await getString('resourceexistsinfomessage', 'mod_oercollection');
+            addToast(message, {type: 'warning', delay: 5000});
+        } else {
+            const message = await getString('addedinfomessage', 'mod_oercollection', 1);
+            addToast(message, {type: 'success', delay: 5000});
+        }
+    } catch (error) {
+        notification.exception(error);
+    }
+};
+
+/**
+ * Initialize event delegation for search page actions.
+ */
+const initActionHandlers = () => {
+    document.addEventListener('click', async (e) => {
+        const actionElement = e.target.closest('[data-action="add-to-collection"]');
+        if (!actionElement) {
+            return;
+        }
+
+        e.preventDefault();
+        await handleAddToCollection(actionElement);
+    });
+};
+
+export const init = () => {
+    initActionHandlers();
 };

@@ -37,15 +37,10 @@ $perpage = optional_param('perpage', 20, PARAM_INT);
 list ($course, $cm) = get_course_and_cm_from_cmid($id, 'oercollection');
 $context = context_module::instance($cm->id);
 
-if (!in_array($perpage, [5, 10, 20, 50, 100, 5000], true)) {
-    $perpage = 20;
-}
+$perpage = oercollection_validate_perpage($perpage);
 
 require_login($course, true, $cm);
-if (!has_capability('mod/oercollection:editresources', $context)) {
-    $url = new moodle_url("/mod/oercollection/studentview.php", ['id' => $cm->id]);
-    redirect($url);
-}
+oercollection_require_capability($context, $cm->id);
 
 $oercollection = $DB->get_record('oercollection', ['id' => $cm->instance]);
 
@@ -66,10 +61,7 @@ if ($perpage) {
 }
 
 $PAGE->set_url(new moodle_url("/mod/oercollection/searchoer.php", $params));
-$node = $PAGE->settingsnav->find('mod_oercollection', navigation_node::TYPE_SETTING);
-if ($node) {
-    $node->make_active();
-}
+oercollection_activate_settings_node();
 
 $pagetitle = get_string('pagetitle', 'oercollection');
 $PAGE->set_title($oercollection->name);

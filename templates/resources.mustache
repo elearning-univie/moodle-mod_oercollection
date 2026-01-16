@@ -17,8 +17,20 @@
 {{!
     @template mod_oercollection/resources
 
+    V2 - Refactored to use partials
+    Teacher view for managing OER resources
+
     Example context (json):
     {
+        "searchoer": "http://example.com/search",
+        "studentpreviewlink": "http://example.com/preview",
+        "oerexists": true,
+        "oernumber": 10,
+        "oernumberhidden": 2,
+        "apiwarning": "Warning message",
+        "resourcecount": 10,
+        "oerresourcelist": [],
+        "oerid": 123
     }
 }}
 <div class="row mt-1 mb-3">
@@ -67,33 +79,30 @@
     </div>
 </div>
 
-{{#apiwarning}}
-<div class="alert alert-warning mb-3">
-    <strong>{{#str}} warning, core {{/str}}:</strong> {{apiwarning}}
-</div>
-{{/apiwarning}}
+{{> mod_oercollection/api_warning }}
 
 {{#resourcecount}}
     <div class="row py-1">
         <div class="col-auto">
-            <a href="#" onclick="mod_oercollection_setall(true)">
+            <a role="button" class="oer-action" data-action="select-all" data-select="true">
                 {{#str}} checkall, mod_oercollection {{/str}}
             </a>
             <span class="text-primary mx-1">/</span>
-            <a href="#" onclick="mod_oercollection_setall(false)">
+            <a role="button" class="oer-action" data-action="select-all" data-select="false">
                 {{#str}} checknone, mod_oercollection {{/str}}
             </a>
         </div>
     </div>
 {{/resourcecount}}
+
 {{#oerresourcelist}}
-    <div class="card mb-3 resource-frame {{background}}">
+    <div class="card mb-3 resource-frame {{background}}" data-entry-id="{{oerentryid}}">
         <div class="card-body">
             <div class="row align-items-center flex-nowrap">
                 <!-- Checkbox Column -->
                 <div class="col-auto">
                     <div class="form-check">
-                        <input class="form-check-input mod-oercollection-checkbox" type="checkbox" name="selectbox" id="checkbox{{oerentryid}}" onchange="mod_oercollection_cb_selected()" value="{{oerentryid}}">
+                        <input class="form-check-input mod-oercollection-checkbox" type="checkbox" name="selectbox" id="checkbox{{oerentryid}}" value="{{oerentryid}}">
                         <!-- Empty label with link target if needed -->
                         <label class="form-check-label" for="checkbox{{oerentryid}}">
                             <a id="resourcelink{{oerentryid}}" href="{{resourcelink}}" target="_blank"></a>
@@ -103,41 +112,7 @@
 
                 <!-- Main Content Column -->
                 <div class="col">
-                    {{{oerhtml}}}
-                    {{#resourceloadfailed}}
-                        <div class="alert alert-warning mb-2">
-                            <small><strong>{{#str}} warning, core {{/str}}:</strong> {{#str}} resourceloadfailed, oerapi_oerhub {{/str}}</small>
-                        </div>
-                    {{/resourceloadfailed}}
-                    {{#oerhidden}}
-                    <div class="row">
-                        <div class="col-auto">
-                            <span class="badge badge-secondary">{{#str}} hiddenfromstudents {{/str}}</span>
-                        </div>
-                    </div>
-                    {{/oerhidden}}
-
-                    <!-- Optional Comment Section -->
-                    {{#commentexists}}
-                        <hr>
-                        <div class="row">
-                            <div class="col">
-                                <strong>{{{commentname}}}</strong>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col" style="min-width: 0; max-width: 100%; overflow: hidden;">
-                                <div class="oer-comment-container" style="max-width: 100%; overflow: hidden;">
-                                    <div class="oer-comment-text" data-entry-id="{{oerentryid}}" style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; line-height: 1.5em; max-height: 4.5em; word-wrap: break-word; overflow-wrap: anywhere; word-break: break-all;">
-                                        {{{commenttext}}}
-                                    </div>
-                                    <a href="#" class="oer-comment-toggle d-none" data-entry-id="{{oerentryid}}" data-expanded="false">
-                                        <small><i class="fa fa-chevron-down"></i></small>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    {{/commentexists}}
+                    {{> mod_oercollection/resource_card_content }}
                 </div>
 
                 <!-- 3-Dot Dropdown Column -->
@@ -146,7 +121,7 @@
                         <div class="menubar d-flex">
                             <div class="action-menu-trigger">
                                 <div class="dropdown">
-                                    <a href="#" tabindex="0" class="btn btn-icon d-flex no-caret dropdown-toggle icon-no-margin" id="dropdownMenuButton{{oerentryid}}" aria-label="{{#str}} edit {{/str}}" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" aria-controls="dropdown-menu-{{oerentryid}}" title="{{#str}} edit {{/str}}">
+                                    <a role="button" tabindex="0" class="btn btn-icon d-flex no-caret dropdown-toggle icon-no-margin" id="dropdownMenuButton{{oerentryid}}" aria-label="{{#str}} edit {{/str}}" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" aria-controls="dropdown-menu-{{oerentryid}}" title="{{#str}} edit {{/str}}">
                                         <i class="icon fa fa-ellipsis-vertical fa-fw " aria-hidden="true"></i><span class="visually-hidden">{{#str}} edit {{/str}}</span>
                                         <b class="caret"></b>
                                     </a>
@@ -155,26 +130,33 @@
                                         {{#pix}} a/setting, core {{/pix}}
                                         {{#str}} editcomment, mod_oercollection {{/str}}
                                     </a>
-                                    <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#moveModal{{oerentryid}}">
+                                    <a class="dropdown-item" role="button" data-bs-toggle="modal" data-bs-target="#moveModal{{oerentryid}}">
                                         {{#pix}} i/dragdrop, core {{/pix}}
                                         {{#str}} move, mod_oercollection {{/str}}
                                     </a>
-                                    {{#oerhidden}}
-                                        <a class="dropdown-item" href="#"
-                                            onclick="mod_oercollection_set_visibility_oerentry({{oerid}}, {{oerentryid}}, 1)">
-                                            {{#pix}} i/hide, core {{/pix}}
-                                            {{#str}} showoer, mod_oercollection {{/str}}
-                                        </a>
-                                    {{/oerhidden}}
-                                    {{^oerhidden}}
-                                        <a class="dropdown-item" href="#"
-                                            onclick="mod_oercollection_set_visibility_oerentry({{oerid}}, {{oerentryid}}, 0)">
-                                            {{#pix}} i/show, core {{/pix}}
-                                            {{#str}} hideoer, mod_oercollection {{/str}}
-                                        </a>
-                                    {{/oerhidden}}
-                                    <a class="dropdown-item" href="#"
-                                        onclick="mod_oercollection_delete_oerentry({{oerid}}, {{oerentryid}}, '{{resourcename}}')">
+                                    <a class="dropdown-item oer-action" role="button"
+                                        data-action="toggle-visibility"
+                                        data-oer-id="{{oerid}}"
+                                        data-entry-id="{{oerentryid}}"
+                                        data-show="1"
+                                        {{^oerhidden}}style="display: none;"{{/oerhidden}}>
+                                        {{#pix}} i/hide, core {{/pix}}
+                                        {{#str}} showoer, mod_oercollection {{/str}}
+                                    </a>
+                                    <a class="dropdown-item oer-action" role="button"
+                                        data-action="toggle-visibility"
+                                        data-oer-id="{{oerid}}"
+                                        data-entry-id="{{oerentryid}}"
+                                        data-show="0"
+                                        {{#oerhidden}}style="display: none;"{{/oerhidden}}>
+                                        {{#pix}} i/show, core {{/pix}}
+                                        {{#str}} hideoer, mod_oercollection {{/str}}
+                                    </a>
+                                    <a class="dropdown-item oer-action" role="button"
+                                        data-action="delete-resource"
+                                        data-oer-id="{{oerid}}"
+                                        data-entry-id="{{oerentryid}}"
+                                        data-resource-name="{{resourcename}}">
                                         {{#pix}} i/trash, core {{/pix}}
                                         {{#str}} removeoer, mod_oercollection {{/str}}
                                     </a>
@@ -224,8 +206,12 @@
                                         {{#lines}}
                                             {{#.}}
                                                 <li class="list-group-item p-1">
-                                                    <a href="#" {{#hidden}}class="text-muted"{{/hidden}}
-                                                       onclick="mod_oercollection_move_resource_action({{oerid}}, {{oerentryid}}, {{id}})" data-bs-dismiss="modal">
+                                                    <a role="button" class="oer-action{{#hidden}} text-muted{{/hidden}}"
+                                                       data-action="move-resource"
+                                                       data-oer-id="{{oerid}}"
+                                                       data-entry-id="{{oerentryid}}"
+                                                       data-move-after="{{id}}"
+                                                       data-bs-dismiss="modal">
                                                         {{name}}
                                                     </a>
                                                 </li>
@@ -241,9 +227,3 @@
         </div>
     </div>
 {{/oerresourcelist}}
-
-{{#js}}
-    require(['mod_oercollection/defaultcontroller'], function(defaultcontroller) {
-        defaultcontroller.init();
-    });
-{{/js}}

@@ -15,28 +15,38 @@
   along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-    @template mod_oercollection/oercollection
+    @template mod_oercollection/studentresources
+
+    V2 - Refactored to use partials
+    Student view of OER collection with pagination
 
     Example context (json):
     {
-        "actionurl": "https://moodleurl.com"
+        "backtoteacherview": true,
+        "backtoteacherviewlink": "http://example.com",
+        "actionurl": "http://example.com",
+        "id": 123,
+        "sesskey": "abc123",
+        "selected10": true,
+        "apiwarning": "Warning message",
+        "oerresourcelist": []
     }
 }}
+{{#backtoteacherview}}
+<div class="row py-2">
+    <h2>
+        {{# str }} studentpreviewlink, mod_oercollection {{/ str }}
+    </h2>
+</div>
+<div class="row py-2">
+    <div class="col">
+        <a class="btn btn-secondary" href="{{backtoteacherviewlink}}">{{#str}} back {{/str}}</a>
+    </div>
+    <div class="col"></div>
+    <div class="col"></div>
+</div>
+{{/backtoteacherview}}
 
-    {{#backtoteacherview}}
-    <div class="row py-2">
-        <h2>
-            {{# str }} studentpreviewlink, mod_oercollection {{/ str }}
-        </h2>
-    </div>
-    <div class="row py-2">
-        <div class="col">
-            <a class="btn btn-secondary" href="{{backtoteacherviewlink}}">{{#str}} back {{/str}}</a>
-        </div>
-        <div class="col"></div>
-        <div class="col"></div>
-    </div>
-    {{/backtoteacherview}}
 <div id="region-main-box">
     <div class="row py-3">
         <h3>
@@ -51,57 +61,19 @@
         </div>
     </div>
 
-    {{#apiwarning}}
-    <div class="alert alert-warning">
-        <strong>{{#str}} warning, core {{/str}}:</strong> {{apiwarning}}
-    </div>
-    {{/apiwarning}}
+    {{> mod_oercollection/api_warning }}
 
-    {{# oerresourcelist}}
+    {{#oerresourcelist}}
     <div class="card mb-3 resource-frame {{background}}">
         <div class="card-body">
             <div class="row align-items-center flex-nowrap">
                 <div class="col">
-                    {{{oerhtml}}}
-                    {{#resourceloadfailed}}
-                        <div class="alert alert-warning mb-2">
-                            <small><strong>{{#str}} warning, core {{/str}}:</strong> {{#str}} resourceloadfailed, oerapi_oerhub {{/str}}</small>
-                        </div>
-                    {{/resourceloadfailed}}
-                    {{#oerhidden}}
-                        <div class="row">
-                            <div class="col-auto">
-                                <span class="badge badge-secondary">{{#str}} hiddenfromstudents {{/str}}</span>
-                            </div>
-                        </div>
-                    {{/oerhidden}}
-
-                    <!-- Optional Comment Section -->
-                    {{#commentexists}}
-                        <hr>
-                        <div class="row">
-                            <div class="col">
-                                <strong>{{{commentname}}}</strong>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col" style="min-width: 0; max-width: 100%; overflow: hidden;">
-                                <div class="oer-comment-container" style="max-width: 100%; overflow: hidden;">
-                                    <div class="oer-comment-text" data-entry-id="{{oerentryid}}" style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; line-height: 1.5em; max-height: 4.5em; word-wrap: break-word; overflow-wrap: anywhere; word-break: break-all;">
-                                        {{{commenttext}}}
-                                    </div>
-                                    <a href="#" class="oer-comment-toggle d-none" data-entry-id="{{oerentryid}}" data-expanded="false">
-                                        <small><i class="fa fa-chevron-down"></i></small>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    {{/commentexists}}
+                    {{> mod_oercollection/resource_card_content }}
                 </div>
             </div>
         </div>
     </div>
-    {{/ oerresourcelist}}
+    {{/oerresourcelist}}
 
     <div class="row py-1">
         <h4>

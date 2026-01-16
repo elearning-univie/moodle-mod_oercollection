@@ -37,8 +37,9 @@
             </select>
         </div>
         <div class="p-1 ms-1 flex-grow-1">
-            <a class="btn btn-primary" href="#" id="bulkbutton"
-               onclick="mod_oercollection_bulk_action({{oerid}})"
+            <a class="btn btn-primary oer-action" role="button" id="bulkbutton"
+               data-action="bulk-action"
+               data-oer-id="{{oerid}}"
                data-bs-toggle="tooltip" title="Hooray!">
                 {{#str}} start, mod_oercollection {{/str}}
             </a>

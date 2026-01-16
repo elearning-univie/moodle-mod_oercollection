@@ -1,37 +1,227 @@
+/**
+ * Resource controller for OER Collection - handles single resource actions.
+ *
+ * @module     mod_oercollection/resourcecontroller
+ * @copyright  2024 University of Vienna
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 import ajax from "core/ajax";
 import notification from "core/notification";
-import { getString } from 'core/str';
+import {add as addToast} from 'core/toast';
+import {getString} from 'core/str';
+import ModalFactory from 'core/modal_factory';
+import ModalEvents from 'core/modal_events';
 
-const handleQueryParamNotification = async (param, stringKey, needsValue = true) => {
-    const queryParams = new URLSearchParams(window.location.search);
-    const paramValue = queryParams.get(param);
-
-    if (!paramValue || Number(paramValue) <= 0) {
-        return;
-    }
-
+/**
+ * Show a notification using existing language strings.
+ *
+ * @param {string} stringKey - Language string key
+ * @param {number|object} param - Parameter for the string
+ * @param {string} type - Notification type: success, info, warning, danger
+ */
+const showNotification = async (
+    stringKey,
+    param = 1,
+    type = "success"
+    ) => {
     try {
-        const messageArgs = needsValue ? [stringKey, 'mod_oercollection', paramValue]
-            : [stringKey, 'mod_oercollection'];
-        const infoMessage = await getString(...messageArgs);
-
-        notification.addNotification({
-            message: infoMessage,
-            type: "info"
+        const message = await getString(stringKey, 'mod_oercollection', param);
+        addToast(message, {
+            type: type,
+            delay: 5000
         });
-
-        queryParams.delete(param);
-        history.replaceState(null, null, `?${queryParams.toString()}`);
     } catch (error) {
         notification.exception(error);
     }
 };
 
-const setQueryParamAndReload = (param, value) => {
-    const queryParams = new URLSearchParams(window.location.search);
-    queryParams.set(param, value);
-    history.replaceState(null, null, `?${queryParams.toString()}`);
-    location.reload();
+/**
+ * Update card visibility in the DOM after show/hide action.
+ *
+ * @param {string} entryId - The entry ID
+ * @param {boolean} isNowVisible - True if resource is now visible
+ */
+const updateCardVisibility = (entryId, isNowVisible) => {
+    const card = document.querySelector(`.resource-frame[data-entry-id="${entryId}"]`);
+    if (!card) {
+        return;
+    }
+
+    // Update card background
+    if (isNowVisible) {
+        card.classList.remove('bg-light');
+    } else {
+        card.classList.add('bg-light');
+    }
+
+    // Update hidden badge
+    const badge = card.querySelector('.oer-hidden-badge');
+    if (badge) {
+        badge.style.display = isNowVisible ? 'none' : '';
+    }
+
+    // Swap show/hide menu items
+    const showAction = card.querySelector('[data-action="toggle-visibility"][data-show="1"]');
+    const hideAction = card.querySelector('[data-action="toggle-visibility"][data-show="0"]');
+    if (showAction) {
+        showAction.style.display = isNowVisible ? 'none' : '';
+    }
+    if (hideAction) {
+        hideAction.style.display = isNowVisible ? '' : 'none';
+    }
+};
+
+/**
+ * Remove a card from the DOM after delete action.
+ *
+ * @param {string} entryId - The entry ID
+ */
+const removeCardFromDOM = (entryId) => {
+    const card = document.querySelector(`.resource-frame[data-entry-id="${entryId}"]`);
+    const modal = document.getElementById(`moveModal${entryId}`);
+
+    if (card) {
+        card.remove();
+    }
+    if (modal) {
+        modal.remove();
+    }
+};
+
+/**
+ * Handle visibility toggle action.
+ *
+ * @param {HTMLElement} element - The clicked element
+ */
+const handleVisibilityToggle = async (element) => {
+    const oerId = element.dataset.oerId;
+    const entryId = element.dataset.entryId;
+    const willBeVisible = element.dataset.show === '1';
+
+    try {
+        await ajax.call([{
+            methodname: 'mod_oercollection_set_visibility_oerentry',
+            args: { oerid: oerId, oerentryid: entryId }
+        }])[0];
+
+        updateCardVisibility(entryId, willBeVisible);
+        await showNotification(willBeVisible ? 'visibilityyesinfomessage' : 'visibilitynoinfomessage');
+    } catch (error) {
+        notification.exception(error);
+    }
+};
+
+/**
+ * Handle delete resource action.
+ *
+ * @param {HTMLElement} element - The clicked element
+ */
+const handleDeleteResource = async (element) => {
+    const oerId = element.dataset.oerId;
+    const entryId = element.dataset.entryId;
+    const resourceName = element.dataset.resourceName;
+
+    try {
+        const warningMessage = await getString('deletepopup', 'mod_oercollection', resourceName);
+        const deleteTitle = await getString('deletewarning', 'mod_oercollection');
+        const deleteLabel = await getString('removeoer', 'mod_oercollection');
+
+        // Create modal with SAVE_CANCEL type
+        const modal = await ModalFactory.create({
+            type: ModalFactory.types.SAVE_CANCEL,
+            title: deleteTitle,
+            body: warningMessage,
+        });
+
+        // Change the save button text
+        modal.setSaveButtonText(deleteLabel);
+
+        // Handle save (delete) button click
+        modal.getRoot().on(ModalEvents.save, async () => {
+            try {
+                await ajax.call([{
+                    methodname: 'mod_oercollection_delete_oerentry',
+                    args: {oerid: oerId, oerentryid: entryId}
+                }])[0];
+
+                removeCardFromDOM(entryId);
+                await showNotification('deleteinfomessage');
+            } catch (error) {
+                notification.exception(error);
+            }
+        });
+
+        // Clean up modal when hidden
+        modal.getRoot().on(ModalEvents.hidden, () => {
+            modal.destroy();
+        });
+
+        // Show the modal
+        modal.show();
+    } catch (error) {
+        notification.exception(error);
+    }
+};
+
+/**
+ * Handle move resource action.
+ *
+ * @param {HTMLElement} element - The clicked element
+ */
+const handleMoveResource = async (element) => {
+    const oerId = element.dataset.oerId;
+    const entryId = element.dataset.entryId;
+    const moveAfter = element.dataset.moveAfter;
+
+    try {
+        await ajax.call([{
+            methodname: 'mod_oercollection_move_resource',
+            args: {
+                oerid: oerId,
+                oereidtomove: entryId,
+                oereidmoveafter: moveAfter
+            }
+        }])[0];
+
+        sessionStorage.setItem('showMoveToast', 'true');
+        location.reload();
+    } catch (error) {
+        notification.exception(error);
+    }
+};
+
+/**
+ * Initialize action handlers using event delegation.
+ */
+const initActionHandlers = () => {
+    document.addEventListener('click', async (e) => {
+        const actionElement = e.target.closest('[data-action]');
+        if (!actionElement) {
+            return;
+        }
+
+        // Only handle our specific actions
+        const action = actionElement.dataset.action;
+        const validActions = ['toggle-visibility', 'delete-resource', 'move-resource'];
+        if (!validActions.includes(action)) {
+            return;
+        }
+
+        e.preventDefault();
+
+        switch (action) {
+            case 'toggle-visibility':
+                await handleVisibilityToggle(actionElement);
+                break;
+            case 'delete-resource':
+                await handleDeleteResource(actionElement);
+                break;
+            case 'move-resource':
+                await handleMoveResource(actionElement);
+                break;
+        }
+    });
 };
 
 /**
@@ -46,7 +236,7 @@ const initTextTruncation = async () => {
     };
 
     /**
-     * Truncation for a specific selector
+     * Initialize truncation for a specific selector.
      *
      * @param {string} textSelector - Selector for text elements
      * @param {string} toggleSelector - Selector for toggle links
@@ -56,69 +246,60 @@ const initTextTruncation = async () => {
         const elements = document.querySelectorAll(textSelector);
 
         elements.forEach((textElement) => {
-
-            // For comments using the nested .text_to_html element.
-            let elementToCheck = textElement;
-            if (textSelector === '.oer-comment-text') {
-                const textToHtml = textElement.querySelector('.text_to_html');
-                if (textToHtml) {
-                    elementToCheck = textToHtml;
-                }
-            }
-
-            if (isOverflowing(elementToCheck)) {
+            if (isOverflowing(textElement)) {
                 const id = textElement.getAttribute(idAttribute);
                 const toggleLink = document.querySelector(`${toggleSelector}[${idAttribute}="${id}"]`);
 
                 if (toggleLink) {
                     toggleLink.classList.remove('d-none');
+                    const textSpan = toggleLink.querySelector('.toggle-text');
+                    const iconElement = toggleLink.querySelector('.toggle-icon');
 
-                    // Check if toggle uses icon or text
-                    const iconElement = toggleLink.querySelector('i');
-                    const hasIcon = iconElement !== null;
-
-                    if (hasIcon) {
-                        iconElement.className = 'fa fa-chevron-down';
-                    } else {
-                        toggleLink.querySelector('small').textContent = showMoreStr;
+                    if (!textSpan || !iconElement) {
+                        return;
                     }
+
+                    // Initial state
+                    textSpan.textContent = showMoreStr;
+                    iconElement.className = 'fa fa-chevron-down toggle-icon';
 
                     toggleLink.addEventListener('click', (e) => {
                         e.preventDefault();
+
                         const isExpanded = toggleLink.getAttribute('data-expanded') === 'true';
 
                         if (isExpanded) {
+                            // Collapse
                             textElement.classList.remove('expanded');
-                            // Re-apply inline truncation styles for comments
+
                             if (textSelector === '.oer-comment-text') {
                                 textElement.style.display = '-webkit-box';
                                 textElement.style.webkitLineClamp = '3';
                                 textElement.style.webkitBoxOrient = 'vertical';
                                 textElement.style.overflow = 'hidden';
-                                textElement.style.maxHeight = '4.5em';
+                                textElement.style.maxHeight = '4.40em';
                             }
+
                             toggleLink.setAttribute('data-expanded', 'false');
-                            if (hasIcon) {
-                                iconElement.className = 'fa fa-chevron-down';
-                            } else {
-                                toggleLink.querySelector('small').textContent = showMoreStr;
-                            }
+                            toggleLink.setAttribute('aria-expanded', 'false');
+                            textSpan.textContent = showMoreStr;
+                            iconElement.className = 'fa fa-chevron-down toggle-icon';
+
                         } else {
+                            // Expand
                             textElement.classList.add('expanded');
-                            // Remove inline truncation styles for comments
+
                             if (textSelector === '.oer-comment-text') {
                                 textElement.style.display = 'block';
-                                textElement.style.webkitLineClamp = 'unset';
                                 textElement.style.webkitBoxOrient = '';
                                 textElement.style.overflow = 'visible';
                                 textElement.style.maxHeight = 'none';
                             }
+
                             toggleLink.setAttribute('data-expanded', 'true');
-                            if (hasIcon) {
-                                iconElement.className = 'fa fa-chevron-up';
-                            } else {
-                                toggleLink.querySelector('small').textContent = showLessStr;
-                            }
+                            toggleLink.setAttribute('aria-expanded', 'true');
+                            textSpan.textContent = showLessStr;
+                            iconElement.className = 'fa fa-chevron-up toggle-icon';
                         }
                     });
                 }
@@ -126,82 +307,31 @@ const initTextTruncation = async () => {
         });
     };
 
-    const runTruncation = () => {
-        requestAnimationFrame(() => {
-            // Small delay to ensure CSS is applied
-            setTimeout(() => {
-                initTruncationForSelector('.oer-description', '.oer-description-toggle', 'data-resource-id');
-                initTruncationForSelector('.oer-comment-text', '.oer-comment-toggle', 'data-entry-id');
-            }, 100);
-        });
-    };
-
-    runTruncation();
+    requestAnimationFrame(() => {
+        setTimeout(() => {
+            initTruncationForSelector('.oer-description', '.oer-description-toggle', 'data-resource-id');
+            initTruncationForSelector('.oer-comment-text', '.oer-comment-toggle', 'data-entry-id');
+        }, 100);
+    });
 };
 
+/**
+ * Initialize the resource controller.
+ */
 export const init = () => {
-    // Skip image load and run truncation as soon as DOM is ready.
+    // Text truncation
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', initTextTruncation);
     } else {
         initTextTruncation();
     }
 
-    window.addEventListener('load', async () => {
-        await Promise.all([
-            handleQueryParamNotification('delete', 'deleteinfomessage'),
-            handleQueryParamNotification('vyes', 'visibilityyesinfomessage'),
-            handleQueryParamNotification('vno', 'visibilitynoinfomessage'),
-            handleQueryParamNotification('moved', 'movedinfomessage', false)
-        ]);
-    });
+    // Action handlers via event delegation
+    initActionHandlers();
 
-    const setVisibilityHandler = (oer, oerentryid, show) => {
-        ajax.call([{
-            methodname: 'mod_oercollection_set_visibility_oerentry',
-            args: { oerid: oer, oerentryid: oerentryid },
-            done: () => setQueryParamAndReload(show === 1 ? 'vyes' : 'vno', 1),
-            fail: notification.exception
-        }]);
-    };
-
-    const deleteHandler = (oer, oerentryid, resourcename) => {
-        getString('deletepopup', 'mod_oercollection', resourcename)
-            .then(warningMessage => {
-                if (!confirm(warningMessage)) {
-                    const url = new URL(window.location);
-                    url.hash = '';
-                    history.replaceState({}, document.title, url.toString());
-                    return;
-                }
-
-                ajax.call([{
-                    methodname: 'mod_oercollection_delete_oerentry',
-                    args: { oerid: oer, oerentryid: oerentryid },
-                    done: () => setQueryParamAndReload('delete', 1),
-                    fail: notification.exception
-                }]);
-            })
-            .catch(notification.exception);
-    };
-
-    const moveResourceHandler = (oer, oereidtomove, oereidmoveafter) => {
-        ajax.call([{
-            methodname: 'mod_oercollection_move_resource',
-            args: {
-                oerid: oer,
-                oereidtomove: oereidtomove,
-                oereidmoveafter: oereidmoveafter
-            },
-            done: () => setQueryParamAndReload('moved', 1),
-            fail: notification.exception
-        }]);
-    };
-
-    // Expose handlers to global scope
-    Object.assign(window, {
-        mod_oercollection_set_visibility_oerentry: setVisibilityHandler,
-        mod_oercollection_delete_oerentry: deleteHandler,
-        mod_oercollection_move_resource_action: moveResourceHandler
-    });
+    // Show "move" toast if flagged
+    if (sessionStorage.getItem('showMoveToast')) {
+        showNotification('movedinfomessage');
+        sessionStorage.removeItem('showMoveToast');
+    }
 };
