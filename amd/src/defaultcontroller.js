@@ -6,6 +6,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+import {updateCardVisibility, updateResourceCounts, removeFromMoveModals} from 'mod_oercollection/cardutils';
 import ajax from "core/ajax";
 import {add as addToast} from 'core/toast';
 import notification from "core/notification";
@@ -44,8 +45,6 @@ export const init = () => {
         }
     };
 
-    // Expose the function for external use
-    window.mod_oercollection_cb_selected = mod_oercollection_cb_selected;
 
     /**
      * Handle bulk actions.
@@ -152,39 +151,6 @@ export const init = () => {
     };
 
     /**
-     * Update card visibility in DOM.
-     *
-     * @param {string} entryId - The entry ID
-     * @param {boolean} isNowVisible - New visibility state
-     */
-    function updateCardVisibility(entryId, isNowVisible) {
-        const card = document.querySelector(`.resource-frame[data-entry-id="${entryId}"]`);
-        if (!card) {
-            return;
-        }
-
-        if (isNowVisible) {
-            card.classList.remove('bg-light');
-        } else {
-            card.classList.add('bg-light');
-        }
-
-        const badge = card.querySelector('.oer-hidden-badge');
-        if (badge) {
-            badge.style.display = isNowVisible ? 'none' : '';
-        }
-
-        const showAction = card.querySelector('[data-action="toggle-visibility"][data-show="1"]');
-        const hideAction = card.querySelector('[data-action="toggle-visibility"][data-show="0"]');
-        if (showAction) {
-            showAction.style.display = isNowVisible ? 'none' : '';
-        }
-        if (hideAction) {
-            hideAction.style.display = isNowVisible ? '' : 'none';
-        }
-    }
-
-    /**
      * Sets the visibility of selected OER entries.
      *
      * @param {string} oer - The ID of the OER (Open Educational Resource) to act upon.
@@ -194,6 +160,18 @@ export const init = () => {
      */
     async function setVisibility(oer, oerids, show, count) {
         try {
+            // Count how many were actually in opposite state before changing
+            let actuallyChanged = 0;
+            oerids.forEach(entryId => {
+                const card = document.querySelector(`.resource-frame[data-entry-id="${entryId}"]`);
+                if (card) {
+                    const wasHidden = card.classList.contains('bg-light');
+                    if ((show && wasHidden) || (!show && !wasHidden)) {
+                        actuallyChanged++;
+                    }
+                }
+            });
+
             await ajax.call([{
                 methodname: 'mod_oercollection_set_visibility_all',
                 args: { oerid: oer, oerentryids: oerids, show: show }
@@ -203,6 +181,9 @@ export const init = () => {
             oerids.forEach(entryId => {
                 updateCardVisibility(entryId, show);
             });
+
+            // Update counts
+            await updateResourceCounts(0, show ? -actuallyChanged : actuallyChanged);
 
             // Show notification
             const stringKey = show ? 'visibilityyesinfomessage' : 'visibilitynoinfomessage';
@@ -225,6 +206,15 @@ export const init = () => {
      */
     async function deleteSelectedEntries(oer, oerids, count) {
         try {
+            // Count how many were hidden before deleting
+            let hiddenCount = 0;
+            oerids.forEach(entryId => {
+                const card = document.querySelector(`.resource-frame[data-entry-id="${entryId}"]`);
+                if (card?.classList.contains('bg-light')) {
+                    hiddenCount++;
+                }
+            });
+
             await ajax.call([{
                 methodname: 'mod_oercollection_delete_selected_oerentries',
                 args: { oerid: oer, oerentryids: oerids }
@@ -241,6 +231,11 @@ export const init = () => {
                     modal.remove();
                 }
             });
+
+            oerids.forEach(id => removeFromMoveModals(id));
+
+            // Update count, total decreases by count, hidden decreases by hiddenCount
+            await updateResourceCounts(-count, -hiddenCount);
 
             // Show notification
             const message = await getString('deleteinfomessage', 'mod_oercollection', count);
@@ -315,7 +310,4 @@ export const init = () => {
             mod_oercollection_cb_selected();
         }
     });
-
-    window.mod_oercollection_setall = mod_oercollection_setall;
-    window.mod_oercollection_bulk_action = mod_oercollection_bulk_action;
 };

@@ -111,7 +111,6 @@ $templatecontext['sesskey'] = sesskey();
 $templatecontext['id'] = $id;
 
 $PAGE->requires->js_call_amd('mod_oercollection/resourcecontroller', 'init');
-$PAGE->requires->js_call_amd('mod_oercollection/defaultcontroller', 'init');
 
 $renderer = $PAGE->get_renderer('core');
 echo $renderer->header();
