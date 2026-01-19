@@ -62,7 +62,10 @@
             <tbody>
             <tr>
                 {{#oerexists}}
-                    <td class="fw-bold ps-0 w-100">
+                    <td class="fw-bold ps-0 w-100" id="oer-resource-counts"
+                        data-total="{{oernumber}}"
+                        data-hidden="{{oernumberhidden}}"
+                        data-string-key="availableresourcesnumberinfo">
                         {{#str}}
                             availableresourcesnumberinfo, mod_oercollection, { "total": {{oernumber}}, "hidden": {{oernumberhidden}} }
                         {{/str}}

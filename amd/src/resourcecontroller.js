@@ -6,6 +6,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+import {updateCardVisibility, updateResourceCounts, removeFromMoveModals} from 'mod_oercollection/cardutils';
 import ajax from "core/ajax";
 import notification from "core/notification";
 import {add as addToast} from 'core/toast';
@@ -33,42 +34,6 @@ const showNotification = async (
         });
     } catch (error) {
         notification.exception(error);
-    }
-};
-
-/**
- * Update card visibility in the DOM after show/hide action.
- *
- * @param {string} entryId - The entry ID
- * @param {boolean} isNowVisible - True if resource is now visible
- */
-const updateCardVisibility = (entryId, isNowVisible) => {
-    const card = document.querySelector(`.resource-frame[data-entry-id="${entryId}"]`);
-    if (!card) {
-        return;
-    }
-
-    // Update card background
-    if (isNowVisible) {
-        card.classList.remove('bg-light');
-    } else {
-        card.classList.add('bg-light');
-    }
-
-    // Update hidden badge
-    const badge = card.querySelector('.oer-hidden-badge');
-    if (badge) {
-        badge.style.display = isNowVisible ? 'none' : '';
-    }
-
-    // Swap show/hide menu items
-    const showAction = card.querySelector('[data-action="toggle-visibility"][data-show="1"]');
-    const hideAction = card.querySelector('[data-action="toggle-visibility"][data-show="0"]');
-    if (showAction) {
-        showAction.style.display = isNowVisible ? 'none' : '';
-    }
-    if (hideAction) {
-        hideAction.style.display = isNowVisible ? '' : 'none';
     }
 };
 
@@ -106,6 +71,8 @@ const handleVisibilityToggle = async (element) => {
         }])[0];
 
         updateCardVisibility(entryId, willBeVisible);
+        // Update counts
+        await updateResourceCounts(0, willBeVisible ? -1 : 1);
         await showNotification(willBeVisible ? 'visibilityyesinfomessage' : 'visibilitynoinfomessage');
     } catch (error) {
         notification.exception(error);
@@ -140,12 +107,19 @@ const handleDeleteResource = async (element) => {
         // Handle save (delete) button click
         modal.getRoot().on(ModalEvents.save, async () => {
             try {
+                // Check if resource was hidden before deleting
+                const card = document.querySelector(`.resource-frame[data-entry-id="${entryId}"]`);
+                const wasHidden = card?.classList.contains('bg-light') ?? false;
+
                 await ajax.call([{
                     methodname: 'mod_oercollection_delete_oerentry',
                     args: {oerid: oerId, oerentryid: entryId}
                 }])[0];
 
                 removeCardFromDOM(entryId);
+                removeFromMoveModals(entryId);
+                // Update counts, total decreases by 1, hidden decreases by 1 if was hidden
+                await updateResourceCounts(-1, wasHidden ? -1 : 0);
                 await showNotification('deleteinfomessage');
             } catch (error) {
                 notification.exception(error);

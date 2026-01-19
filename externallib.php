@@ -42,6 +42,30 @@ require_once(__DIR__ . '/locallib.php');
 class mod_oercollection_external extends external_api {
 
     /**
+     * Renumber positions for all resources in a collection to be contiguous (1, 2, 3...).
+     *
+     * @param int $oerid The OER collection ID
+     */
+    private static function renumber_positions($oerid) {
+        global $DB;
+
+        $sql = "SELECT *
+                  FROM {oercollection_resource}
+                 WHERE oerid = :oerid
+              ORDER BY position ASC";
+        $resources = $DB->get_records_sql($sql, ['oerid' => $oerid]);
+
+        $position = 1;
+        foreach ($resources as $resource) {
+            if ($resource->position != $position) {
+                $resource->position = $position;
+                $DB->update_record('oercollection_resource', $resource);
+            }
+            $position++;
+        }
+    }
+
+    /**
      * Returns description of method parameters
      *
      * @return external_function_parameters
@@ -213,6 +237,7 @@ class mod_oercollection_external extends external_api {
                     $event->trigger();
                 }
             }
+            self::renumber_positions($oerid);
         }
     }
     /**
@@ -266,6 +291,7 @@ class mod_oercollection_external extends external_api {
             $ctr++;
         }
     }
+
     /**
      * Removes all selected questions from box 1 to box 0 for the activity
      *
@@ -282,6 +308,7 @@ class mod_oercollection_external extends external_api {
 
         if ($DB->record_exists('oercollection_resource', ['id' => $oerentryid, 'oerid' => $oerid])) {
             $DB->delete_records('oercollection_resource', ['id' => $oerentryid, 'oerid' => $oerid]);
+            self::renumber_positions($oerid);
             $params = [
                 'objectid' => $oerid,
                 'context' => context_module::instance($cm->id),
