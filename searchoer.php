@@ -69,6 +69,7 @@ $PAGE->set_heading($course->shortname);
 $PAGE->add_body_class('limitedwidth');
 
 $PAGE->requires->js_call_amd('mod_oercollection/searchcontroller', 'init');
+$PAGE->requires->js_call_amd('mod_oercollection/resourcecontroller', 'init');
 
 $renderer = $PAGE->get_renderer('core');
 //echo $renderer->header();
