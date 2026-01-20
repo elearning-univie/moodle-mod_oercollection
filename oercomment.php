@@ -78,9 +78,9 @@ if ($mform->is_cancelled()) {
 }
 $pageheading = get_string('editcomment', 'mod_oercollection');
 
-$PAGE->set_title("Anmerkungen");
+$PAGE->set_title(get_string('annotation', 'mod_oercollection'));
 $PAGE->set_heading($COURSE->fullname);
-$PAGE->navbar->add("Anmerkungen");
+$PAGE->navbar->add(get_string('annotation', 'mod_oercollection'));
 $activityheader = $PAGE->activityheader;
 
 echo $OUTPUT->header();
