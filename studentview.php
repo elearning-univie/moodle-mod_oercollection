@@ -74,20 +74,6 @@ $totalnumberresources = $counts['visible'];
 // Initialize template context
 $templatecontext = [];
 
-if (has_capability('mod/oercollection:editresources', $context)) {
-    $oerexists = $counts['visible'] > 0;
-    if ($oerexists) {
-        $templatecontext['oernumber'] = $totalnumberresources;
-    }
-    $templatecontext['oerid'] = $oercollection->id;
-    $templatecontext['oerexists'] = $oerexists;
-    if ($oerexists) {
-        $templatecontext['linktext'] = 'bla';
-    } else {
-        $templatecontext['link'] = new moodle_url("/mod/oercollection/resources.php", ['id' => $cm->id]);
-    }
-}
-
 // Fetch and format OER resources using centralized function
 $resource_data = oercollection_get_resources_for_display(
     $oercollection->id,
