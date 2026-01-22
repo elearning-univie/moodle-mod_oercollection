@@ -23,10 +23,9 @@
     Example context (json):
     {
         "backtoteacherview": true,
-        "backtoteacherviewlink": "http://example.com",
-        "actionurl": "http://example.com",
+        "backtoteacherviewlink": "http://moodleinstance/mod/oercollection/resources.php",
+        "actionurl": "http://moodleinstance/mod/oercollection/studentview.php",
         "id": 123,
-        "sesskey": "abc123",
         "selected10": true,
         "apiwarning": "Warning message",
         "oerresourcelist": []
@@ -99,7 +98,6 @@
             <form method="get" action="{{{actionurl}}}" id="oerstudentcollectionform">
               <div class="d-flex flex-fill">
                 <input type="hidden" name="id" value="{{id}}">
-                <input type="hidden" name="sesskey" value="{{sesskey}}">
                 <div class="p-1 d-flex">
                 <label for="perpage">{{#str}} resourcesperpage, mod_oercollection {{/str}}</label>
                 </div>

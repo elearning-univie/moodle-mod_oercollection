@@ -24,6 +24,7 @@
 
 require('../../config.php');
 require_once(__DIR__ . '/lib.php');
+require_once('locallib.php');
 
 global $PAGE, $OUTPUT, $DB, $CFG;
 
@@ -32,7 +33,7 @@ $searchstring = optional_param('searchstring', null, PARAM_TEXT);
 $filter = optional_param('filterdata', null, PARAM_TEXT);
 $page = optional_param('page', 0, PARAM_INT);
 $reset = optional_param('reset', null, PARAM_TEXT);
-$perpage = optional_param('perpage', 20, PARAM_INT);
+$perpage = optional_param('perpage', DEFAULT_PAGE_SIZE, PARAM_INT);
 
 list ($course, $cm) = get_course_and_cm_from_cmid($id, 'oercollection');
 $context = context_module::instance($cm->id);
