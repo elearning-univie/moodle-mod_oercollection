@@ -3,7 +3,7 @@ OER Collection
 
 This file is part of the mod_oercollection plugin for Moodle - <http://moodle.org/>
 
-*Author:* Angela Baier, Adrian Czermak
+*Author:* Angela Baier, Adrian Czermak, Karri Pajarinen
 
 *Copyright:* 2024 [University of Vienna](https://www.univie.ac.at/)
 

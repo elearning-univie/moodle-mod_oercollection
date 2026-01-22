@@ -23,6 +23,7 @@
  * @package   mod_oercollection
  * @author    Adrian Czermak
  * @author    Angela Baier
+ * @author    Karri Pajarinen
  * @copyright 2024 University of Vienna
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -30,7 +31,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'mod_oercollection';
-$plugin->version = 2025080801.01;
+$plugin->version = 2025080801.02;
 $plugin->release = 'v5.0-r2';
 $plugin->requires = 2025041400;
 $plugin->maturity = MATURITY_STABLE;

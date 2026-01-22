@@ -77,16 +77,16 @@
     <div class="row py-1">
         <h4>
         <a class="icons-collapse-expand notextdecoration" data-bs-toggle="collapse" href="#collapseOptions" aria-expanded="false" aria-controls="collapseOptions">
-            <span class="collapsed-icon icon-no-margin mr-1"
+            <span class="collapsed-icon icon-no-margin me-1"
             title="{{#str}} expand, core {{/str}}">
                 <span class="dir-rtl-hide">{{#pix}} t/collapsedchevron, core {{/pix}}</span>
                 <span class="dir-ltr-hide">{{#pix}} t/collapsedchevron_rtl, core {{/pix}}</span>
-                <span class="sr-only">{{#str}} expand, core {{/str}}</span>
+                <span class="visually-hidden">{{#str}} expand, core {{/str}}</span>
             </span>
-            <span class="expanded-icon icon-no-margin mr-1"
+            <span class="expanded-icon icon-no-margin me-1"
             title="{{#str}} collapse, core {{/str}}">
                 {{#pix}} t/expandedchevron, core {{/pix}}
-                <span class="sr-only">{{#str}} collapse, core {{/str}}</span>
+                <span class="visually-hidden">{{#str}} collapse, core {{/str}}</span>
             </span>
             {{# str }} options, mod_oercollection {{/ str }}
         </a>
@@ -96,13 +96,13 @@
     <div class="row py-1">
         <div class="collapse show" id="collapseOptions">
             <form method="get" action="{{{actionurl}}}" id="oerstudentcollectionform">
-              <div class="d-flex flex-fill">
+              <div class="d-flex flex-fill align-items-center">
                 <input type="hidden" name="id" value="{{id}}">
                 <div class="p-1 d-flex">
                 <label for="perpage">{{#str}} resourcesperpage, mod_oercollection {{/str}}</label>
                 </div>
-                <div class="p-1 ml-4 d-flex">
-                  <select class="custom-select" id="perpage" name="perpage" onchange="this.form.submit()">
+                <div class="p-1 ms-4 d-flex">
+                  <select class="form-select" id="perpage" name="perpage" onchange="this.form.submit()">
                       <option value="5" title="5" {{#selected5}}selected{{/selected5}}>5</option>
                       <option value="10" title="10" {{#selected10}}selected{{/selected10}}>10</option>
                       <option value="20" title="20" {{#selected20}}selected{{/selected20}}>20</option>
