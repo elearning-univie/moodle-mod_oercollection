@@ -15,34 +15,32 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Mandatory public API of folder oercollection
+ * Privacy Subsystem implementation for oerapi_oerhub.
  *
- * @package   mod_oercollection
+ * @package   oerapi_oerhub
+ * @author    Adrian Czermak
+ * @author    Angela Baier
  * @copyright 2024 University of Vienna
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+namespace oerapi_oerhub\privacy;
 
-use mod_oercollection\oerapi\factory;
-
-define('DEFAULT_PAGE_SIZE', 5000);
+defined('MOODLE_INTERNAL') || die();
 
 /**
- * oercollection_add_to_cache
+ * The mod_folder module does not store any data.
  *
- * @param int $oerid
- * @param int $oerresourceid
- * @return void
- * @throws \core\exception\coding_exception
+ * @copyright 2024 University of Vienna
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-function oercollection_add_to_cache($oerid, $oerresourceid) {
-    $apicache = cache::make('mod_oercollection', 'entries');
-    $oerapi = factory::create('', $oerid);
-    if ($oerapi === null) {
-        return;
-    }
-    $cacheobj = $oerapi->get_resource_html($oerresourceid);
-
-    if (!$apicache->get($oerresourceid)) {
-        $apicache->set($oerresourceid, $cacheobj);
+class provider implements \core_privacy\local\metadata\null_provider {
+    /**
+     * Get the language string identifier with the component's language
+     * file to explain why this plugin stores no data.
+     *
+     * @return  string
+     */
+    public static function get_reason(): string {
+        return 'privacy:metadata';
     }
 }

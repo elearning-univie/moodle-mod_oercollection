@@ -111,3 +111,10 @@ $string['visibilityyesinfomessage'] = '{$a} resource(s) has(have) been set to vi
 $string['hideshow'] = 'Hide/Show';
 $string['oerapipluginname'] = 'Pluginname';
 $string['settings'] = 'OER Collection settings';
+
+// Factory and API selection strings, move after ready.
+$string['activeoerapi'] = 'Active OER API provider';
+$string['activeoerapi_desc'] = 'Select which OER API provider plugin should be used for searching and displaying OER resources.';
+$string['nooerapiplugins'] = 'No OER API plugins are currently enabled. Please enable at least one plugin.';
+$string['resourceunavailable'] = 'Resource data is currently unavailable.';
+$string['resourceloadfailed'] = 'Unable to load resource data.';

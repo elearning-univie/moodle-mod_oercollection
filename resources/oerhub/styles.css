@@ -1,0 +1,71 @@
+.search-bar {
+    background-color: #e5e5e5;
+    border: 1px solid #e5e5e5;
+    border-radius: 5px;
+    padding: 1em;
+}
+
+.filter-container {
+    border: 1px solid #e5e5e5;
+    padding: 1em;
+}
+
+.label-select-container {
+    /*display: inline-block;*/
+}
+
+.resource-entry {
+    width: 100%;
+    border: 1px LightGrey solid;
+    border-radius: 5px;
+}
+
+.date-error {
+    color: #ca3120;
+    font-size: 0.875em;
+}
+
+.path-mod-oercollection .big-icon,
+.activity-item .big-icon {
+    width: 48px;
+    height: 48px;
+    max-width: 48px;
+    max-height: 48px;
+}
+
+.oer-description {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    max-width: 100%;
+    min-width: 0;
+}
+
+.oer-description.expanded {
+    -webkit-line-clamp: unset;
+    display: block;
+    word-wrap: break-word;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+.oer-description-toggle {
+    font-size: 0.875rem;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.oer-description-toggle:hover {
+    text-decoration: underline;
+}
+
+.oer-description-container {
+    max-width: 60ch;
+    overflow: hidden;
+    min-width: 0;
+}

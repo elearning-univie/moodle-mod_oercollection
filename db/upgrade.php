@@ -55,6 +55,15 @@ function xmldb_oercollection_upgrade($oldversion = 0) {
         upgrade_mod_savepoint(true, 2024041710.12, 'oercollection');
     }
 
+    if ($oldversion < 2025080801.05) {
+        $existing = get_config('mod_oercollection', 'activeoerapi');
+        if (empty($existing)) {
+            set_config('activeoerapi', 'oerhub', 'mod_oercollection');
+        }
+
+        upgrade_mod_savepoint(true, 2025080801.05, 'oercollection');
+    }
+
     // Everything has succeeded to here. Return true.
     return true;
 }
