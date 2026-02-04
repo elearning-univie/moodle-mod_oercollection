@@ -26,6 +26,8 @@ require('../../config.php');
 require_once(__DIR__ . '/lib.php');
 require_once('locallib.php');
 
+use mod_oercollection\oerapi\factory;
+
 global $PAGE, $OUTPUT, $DB, $CFG;
 
 $id = required_param('id', PARAM_INT);
@@ -77,21 +79,23 @@ $PAGE->requires->js_call_amd('mod_oercollection/defaultcontroller', 'init');
 $renderer = $PAGE->get_renderer('core');
 //echo $renderer->header();
 
-$searchform = new \oerapi_oerhub\api\general($PAGE->url, $oercollection->id);
+$searchform = factory::create($PAGE->url, $oercollection->id);
 $helpicon = new help_icon('searchoerhub', 'oercollection');
 $templatecontext = [
     'searchoer' => new moodle_url("/mod/oercollection/resources.php", ['id' => $id]),
-    'searchform' => $searchform->get_search_form($searchstring),
+    'searchform' => $searchform ? $searchform->get_search_form($searchstring) : '',
     'actionurl' => new moodle_url("/mod/oercollection/searchoer.php", ['id' => $id]),
     'oerid' => $oercollection->id,
     'helpicon' => $helpicon->export_for_template($renderer),
 ];
 
-$apiavailable = $searchform->is_api_available();
+$apiavailable = $searchform ? $searchform->is_api_available() : false;
 $resultsarray = null;
 
-if (!$apiavailable) {
-    $templatecontext['apiwarning'] = get_string('resourceunavailable', 'oerapi_oerhub');
+if ($searchform === null) {
+    $templatecontext['apiwarning'] = get_string('nooerapiplugins', 'oercollection');
+} else if (!$apiavailable) {
+    $templatecontext['apiwarning'] = get_string('resourceunavailable', 'oercollection');
 } else {
     if (!is_null($reset)) {
         $filter = '{}';

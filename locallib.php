@@ -22,6 +22,8 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use mod_oercollection\oerapi\factory;
+
 define('DEFAULT_PAGE_SIZE', 5000);
 
 /**
@@ -34,7 +36,10 @@ define('DEFAULT_PAGE_SIZE', 5000);
  */
 function oercollection_add_to_cache($oerid, $oerresourceid) {
     $apicache = cache::make('mod_oercollection', 'entries');
-    $oerapi = new \oerapi_oerhub\api\general('', $oerid);
+    $oerapi = factory::create('', $oerid);
+    if ($oerapi === null) {
+        return;
+    }
     $cacheobj = $oerapi->get_resource_html($oerresourceid);
 
     if (!$apicache->get($oerresourceid)) {

@@ -1,0 +1,63 @@
+{{!
+  This file is part of Moodle - http://moodle.org/
+
+  Moodle is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  Moodle is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template oerapi_oerhub/resource
+
+    Example context (json):
+    {
+    }
+}}
+<h5 class="card-title mb-2">
+    <a href="{{oerresourcelink}}" target="_blank">{{title}}</a>
+</h5>
+<div class="row">
+    <div class="col-md-3">
+        <img src="{{thumbnail}}" alt="Thumbnail" class="img-fluid rounded">
+    </div>
+    <div class="col-md-9">
+        <div class="oer-description-container">
+            <div class="card-text oer-description" data-resource-id="{{oerhubid}}">
+                {{{abstract}}}
+            </div>
+            <a href="#" class="oer-description-toggle d-none" data-resource-id="{{oerhubid}}" data-expanded="false" style="display: block; text-align: right;">
+                <small class="toggle-text"></small>
+                <i class="fa fa-chevron-down toggle-icon" aria-hidden="true"></i>
+            </a>
+        </div>
+        <div class="d-flex justify-content-between">
+            <div class="col p-0">
+                <p class="mb-0 small">
+                    <strong>{{#str}} author, oerapi_oerhub {{/str}}</strong> {{authors}}
+                </p>
+                <p class="mb-0 small">
+                    <strong>{{#str}} uploaddate, oerapi_oerhub {{/str}}</strong> {{uploaddate}}
+                </p>
+            </div>
+            {{#mediaicon}}
+            <div class="col-auto p-0">
+                {{{mediaicon}}}
+            </div>
+            {{/mediaicon}}
+            <div class="col-auto p-0">
+                <a href="{{{licenseurl}}}" target="_blank" class="text-decoration-none">
+                    {{{licenseicons}}}<br>
+                    <small>{{license}}</small>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -144,8 +144,10 @@ class oerapi extends \core\plugininfo\base {
      * @param \part_of_admin_tree $adminroot
      * @param string $parentnodename
      * @param bool $hassiteconfig whether the current user has moodle/site:config capability
+     * @param \admin_settingpage|null $settingspage optional existing settings page to add to
      */
-    public function load_settings(\part_of_admin_tree $adminroot, $parentnodename, $hassiteconfig) {
+    public function load_settings(\part_of_admin_tree $adminroot, $parentnodename, $hassiteconfig,
+            ?\admin_settingpage $settingspage = null) {
         global $CFG, $USER, $DB, $OUTPUT, $PAGE; // In case settings.php wants to refer to them.
         $ADMIN = $adminroot; // May be used in settings.php.
         $plugininfo = $this; // Also can be used inside settings.php.
@@ -158,15 +160,26 @@ class oerapi extends \core\plugininfo\base {
             return;
         }
 
-        $section = $this->get_settings_section_name();
+        if ($settingspage !== null) {
+            // Add settings to the provided page with a heading.
+            $settings = $settingspage;
+            if ($adminroot->fulltree) {
+                $settings->add(new \admin_setting_heading('oerapi_' . $this->name . '_heading',
+                    $this->displayname, ''));
+                include($this->full_path('settings.php'));
+            }
+        } else {
+            // Create a separate settings page as fallback.
+            $section = $this->get_settings_section_name();
+            $settings = new \admin_settingpage($section, $this->displayname, 'moodle/site:config',
+                $this->is_enabled() === false);
 
-        $settings = new \admin_settingpage($section, $this->displayname, 'moodle/site:config', $this->is_enabled() === false);
+            if ($adminroot->fulltree) {
+                $shortsubtype = substr($this->type, strlen('oerapi'));
+                include($this->full_path('settings.php'));
+            }
 
-        if ($adminroot->fulltree) {
-            $shortsubtype = substr($this->type, strlen('oerapi'));
-            include($this->full_path('settings.php'));
+            $adminroot->add($this->type . 'plugins', $settings);
         }
-
-        $adminroot->add($this->type . 'plugins', $settings);
     }
 }
