@@ -24,19 +24,38 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-$ADMIN->add('modsettings', new admin_category('modoercollectionfolder', new lang_string('pluginname', 'mod_oercollection'), $module->is_enabled() === false));
+$ADMIN->add('modsettings', new admin_category('modsettingoercollectionfolder',
+    new lang_string('pluginname', 'mod_oercollection'), !$module->is_enabled()));
 
-$ADMIN->add('modoercollectionfolder', new admin_category('oerapiplugins',
+$settings = new admin_settingpage('modsettingoercollection',
+    get_string('settings', 'oercollection'),
+    'moodle/site:config',
+    !$module->is_enabled());
+
+if ($ADMIN->fulltree) {
+    $plugins = \mod_oercollection\oerapi\factory::get_available_plugins();
+    if (!empty($plugins)) {
+        $settings->add(new admin_setting_configselect(
+            'mod_oercollection/activeoerapi',
+            get_string('activeoerapi', 'oercollection'),
+            get_string('activeoerapi_desc', 'oercollection'),
+            \mod_oercollection\oerapi\factory::DEFAULT_PLUGIN,
+            $plugins
+        ));
+    }
+}
+// Load plugin settings into the main settings page.
+foreach (core_plugin_manager::instance()->get_plugins_of_type('oerapi') as $plugin) {
+    $plugin->load_settings($ADMIN, 'oerapiplugins', $hassiteconfig, $settings);
+}
+
+$ADMIN->add('modsettingoercollectionfolder', $settings);
+
+$ADMIN->add('modsettingoercollectionfolder', new admin_category('oerapiplugins',
     new lang_string('oerapiplugins', 'oercollection'), !$module->is_enabled()));
+
+$settings = null;
 
 $ADMIN->add('oerapiplugins', new admin_externalpage('manageoerapiplugins',
     get_string('manageoerapiplugins', 'oercollection'),
     new moodle_url('/mod/oercollection/adminmanageplugins.php', ['subtype' => 'oerapi'])));
-
-foreach (core_plugin_manager::instance()->get_plugins_of_type('oerapi') as $plugin) {
-    $plugin->load_settings($ADMIN, 'oerapiplugins', $hassiteconfig);
-}
-// in case we want to have some general settings for OER Collection
-// $settings = new admin_settingpage($section, get_string('settings', 'mod_oercollection'), 'moodle/site:config', $module->is_enabled() === false);
-// $ADMIN->add('modoercollectionfolder', $settings);
- $settings = null;

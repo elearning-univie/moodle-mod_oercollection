@@ -24,6 +24,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+use mod_oercollection\oerapi\factory;
+
 /**
  * Fetch and format OER resources for template display.
  * Centralizes the duplicate logic.
@@ -53,11 +55,18 @@ function oercollection_get_resources_for_display($oerid, $page_url, $options = [
 
     // Fetch OER entries from database and init api.
     $oerentries = oercollection_fetch_oer_entries($oerid, $options);
-    $oerapi = new \oerapi_oerhub\api\general($page_url, $oerid);
+    $oerapi = factory::create($page_url, $oerid);
+
+    if ($oerapi === null) {
+        $templatecontext['apiwarning'] = get_string('nooerapiplugins', 'oercollection');
+        $templatecontext['oerresourcelist'] = [];
+        return $templatecontext;
+    }
+
     $apiavailable = $oerapi->is_api_available();
 
     if (!$apiavailable && !empty($oerentries)) {
-        $warningtext = get_string('resourceunavailable', 'oerapi_oerhub');
+        $warningtext = get_string('resourceunavailable', 'oercollection');
         if ($options['notification_wrapper']) {
             $templatecontext['apiwarning'] = $OUTPUT->notification($warningtext, 'info');
         } else {

@@ -15,23 +15,32 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Defines the version and other meta-info about the plugin
+ * Privacy Subsystem implementation for oerapi_oerhub.
  *
- * Setting the $plugin->version to 0 prevents the plugin from being installed.
- * See https://docs.moodle.org/dev/version.php for more info.
- *
- * @package   mod_oercollection
+ * @package   oerapi_oerhub
  * @author    Adrian Czermak
  * @author    Angela Baier
- * @author    Karri Pajarinen
  * @copyright 2024 University of Vienna
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+namespace oerapi_oerhub\privacy;
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'mod_oercollection';
-$plugin->version = 2025080801.08;
-$plugin->release = 'v5.0-r2';
-$plugin->requires = 2025041400;
-$plugin->maturity = MATURITY_STABLE;
+/**
+ * The mod_folder module does not store any data.
+ *
+ * @copyright 2024 University of Vienna
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class provider implements \core_privacy\local\metadata\null_provider {
+    /**
+     * Get the language string identifier with the component's language
+     * file to explain why this plugin stores no data.
+     *
+     * @return  string
+     */
+    public static function get_reason(): string {
+        return 'privacy:metadata';
+    }
+}
