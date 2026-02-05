@@ -35,11 +35,19 @@ const handleAddToCollection = async (element) => {
 
         if (result.alreadyincollection === 1) {
             const message = await getString('resourceexistsinfomessage', 'mod_oercollection');
-            addToast(message, {type: 'warning', delay: 5000});
+            await addToast(message, {type: 'warning', delay: 5000});
         } else {
             const message = await getString('addedinfomessage', 'mod_oercollection', 1);
-            addToast(message, {type: 'success', delay: 5000});
+            await addToast(message, {type: 'success', delay: 5000});
         }
+        setTimeout(() => {
+            const wrapper = document.querySelector('.toast-wrapper');
+            const toastEl = wrapper?.firstElementChild;
+            if (toastEl) {
+                toastEl.style.maxWidth = '95vw';
+                toastEl.style.width = 'fit-content';
+            }
+        }, 0);
     } catch (error) {
         notification.exception(error);
     }

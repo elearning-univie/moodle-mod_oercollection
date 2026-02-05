@@ -69,3 +69,13 @@
     overflow: hidden;
     min-width: 0;
 }
+
+/*noidea why it does not work in the main plugin css but this needs to be kept here.*/
+.toast {
+    width: fit-content !important;
+    max-width: 95vw !important;
+}
+
+.toast .toast-message {
+    white-space: pre !important;
+}

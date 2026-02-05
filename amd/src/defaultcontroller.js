@@ -91,11 +91,20 @@ export const init = () => {
                 for (let link of rlinks) {
                     const newWin = window.open(link);
                     if (!newWin || newWin.closed || typeof newWin.closed === 'undefined') {
-                        getString('popupblockmessage', 'mod_oercollection').then(function(infomessage) {
-                            addToast(infomessage, {
+                        getString('popupblockmessage', 'mod_oercollection').then(async function(infomessage) {
+                            await addToast(infomessage, {
                                 type: "danger",
                                 delay: 10000
                             });
+                            // Apply inline styles as backup in case CSS !important rules are overridden.
+                            setTimeout(() => {
+                                const wrapper = document.querySelector('.toast-wrapper');
+                                const toastEl = wrapper?.firstElementChild;
+                                if (toastEl) {
+                                    toastEl.style.maxWidth = '95vw';
+                                    toastEl.style.width = 'fit-content';
+                                }
+                            }, 0);
                         });
                         break;
                     }
@@ -188,10 +197,18 @@ export const init = () => {
             // Show notification
             const stringKey = show ? 'visibilityyesinfomessage' : 'visibilitynoinfomessage';
             const message = await getString(stringKey, 'mod_oercollection', count);
-            addToast(message, {
+            await addToast(message, {
                 type: "success",
                 delay: 5000
             });
+            setTimeout(() => {
+                const wrapper = document.querySelector('.toast-wrapper');
+                const toastEl = wrapper?.firstElementChild;
+                if (toastEl) {
+                    toastEl.style.maxWidth = '95vw';
+                    toastEl.style.width = 'fit-content';
+                }
+            }, 0);
         } catch (error) {
             notification.exception(error);
         }
@@ -239,10 +256,18 @@ export const init = () => {
 
             // Show notification
             const message = await getString('deleteinfomessage', 'mod_oercollection', count);
-            addToast(message, {
+            await addToast(message, {
                 type: "success",
                 delay: 5000
             });
+            setTimeout(() => {
+                const wrapper = document.querySelector('.toast-wrapper');
+                const toastEl = wrapper?.firstElementChild;
+                if (toastEl) {
+                    toastEl.style.maxWidth = '95vw';
+                    toastEl.style.width = 'fit-content';
+                }
+            }, 0);
         } catch (error) {
             notification.exception(error);
         }
@@ -266,18 +291,34 @@ export const init = () => {
                     const added = nadded - returnval.incollectionnr;
                     const notadded = returnval.incollectionnr;
                     getString('multiaddedinfomessage', 'mod_oercollection', {added: added, notadded: notadded}).then(
-                        function(infomessage) {
-                            addToast(infomessage, {
-                            type: "success",
-                            delay: 5000
-                        });
+                        async function(infomessage) {
+                            await addToast(infomessage, {
+                                type: "success",
+                                delay: 5000
+                            });
+                            setTimeout(() => {
+                                const wrapper = document.querySelector('.toast-wrapper');
+                                const toastEl = wrapper?.firstElementChild;
+                                if (toastEl) {
+                                    toastEl.style.maxWidth = '95vw';
+                                    toastEl.style.width = 'fit-content';
+                                }
+                            }, 0);
                         });
                 } else {
-                    getString('addedinfomessage', 'mod_oercollection', nadded).then(function(infomessage) {
-                        addToast(infomessage, {
+                    getString('addedinfomessage', 'mod_oercollection', nadded).then(async function(infomessage) {
+                        await addToast(infomessage, {
                             type: "success",
                             delay: 5000
                         });
+                        setTimeout(() => {
+                            const wrapper = document.querySelector('.toast-wrapper');
+                            const toastEl = wrapper?.firstElementChild;
+                            if (toastEl) {
+                                toastEl.style.maxWidth = '95vw';
+                                toastEl.style.width = 'fit-content';
+                            }
+                        }, 0);
                     });
                 }
             },

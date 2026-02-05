@@ -60,7 +60,7 @@ $string['modulenameplural'] = 'OER-Kollektionen';
 $string['move'] = 'Verschieben';
 $string['movedinfomessage'] = 'Eine Ressource wurde verschoben.';
 $string['moveresource'] = 'Ressource verschieben';
-$string['multiaddedinfomessage'] = '{$a->added} Ressource(n) wurde(n) zur Kollektion hinzugefügt. <br> {$a->notadded} Ressource(n) ist/sind bereits in der Kollektion vorhanden und wurde(n) daher ignoriert.';
+$string['multiaddedinfomessage'] = '{$a->added} Ressource(n) wurde(n) zur Kollektion hinzugefügt. <br>{$a->notadded} Ressource(n) ist/sind bereits in der Kollektion vorhanden und wurde(n) daher ignoriert.';
 $string['newpage'] = 'Auf separater Seite';
 $string['nofilters'] = 'Keine Filter';
 $string['noresources'] = 'Zur Zeit sind keine Ressourcen verfügbar.';
@@ -86,7 +86,7 @@ $string['overviewinfo'] = '<details><summary> <i class="icon fa fa-info-circle f
 $string['pagetitle'] = 'OER-Kollektion';
 $string['pluginadministration'] = 'OER-Kollektion - Administration';
 $string['pluginname'] = 'OER-Kollektion';
-$string['popupblockmessage'] = '<strong>ACHTUNG:</strong> Ihr Pop-up-Blocker ist aktiviert! Um mehrere Ressourcen gleichzeitig zu öffnen, müssen Sie für diese Seite Popups erlauben.';
+$string['popupblockmessage'] = '<strong>ACHTUNG:</strong> Ihr Pop-up-Blocker ist aktiviert!<br>Um mehrere Ressourcen gleichzeitig zu öffnen, müssen Sie für diese Seite Popups erlauben.';
 $string['privacy:metadata'] = 'Das Plugin \'OER-Kollektion\' speichert keine personenbezogenen Daten.';
 $string['removeoer'] = 'Aus Kollektion entfernen';
 $string['removeselected'] = 'Aus Kollektion entfernen';

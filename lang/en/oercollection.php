@@ -60,7 +60,7 @@ $string['modulenameplural'] = 'OER Collections';
 $string['move'] = 'Move';
 $string['movedinfomessage'] = 'A resource has been moved.';
 $string['moveresource'] = 'Move resource';
-$string['multiaddedinfomessage'] = '{$a->added} resource(s) has(have) been added to the collection. <br> {$a->notadded} resource(s) already exist(s) in the collection and has(have) therefore been ignored.';
+$string['multiaddedinfomessage'] = '{$a->added} resource(s) has(have) been added to the collection. <br>{$a->notadded} resource(s) already exist(s) in the collection and has(have) therefore been ignored.';
 $string['newpage'] = 'On new page';
 $string['nofilters'] = 'No filters';
 $string['noresources'] = 'There are no resources available at the moment.';
@@ -86,7 +86,7 @@ $string['overviewinfo'] = '<details><summary> <i class="icon fa fa-info-circle f
 $string['pagetitle'] = 'OER Collection';
 $string['pluginadministration'] = 'OER Collection Administration';
 $string['pluginname'] = 'OER Collection';
-$string['popupblockmessage'] = '<strong>ATTENTION:</strong> Your pop-up blocker is activated! To open several resources at the same time, you must allow pop-ups for this site.';
+$string['popupblockmessage'] = '<strong>ATTENTION:</strong> Your pop-up blocker is activated!<br>To open several resources at the same time, you must allow pop-ups for this site.';
 $string['privacy:metadata'] = 'The OER collection resource plugin does not store any personal data.';
 $string['removeoer'] = 'Remove from collection';
 $string['removeselected'] = 'Remove from collection';

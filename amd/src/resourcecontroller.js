@@ -28,10 +28,18 @@ const showNotification = async (
     ) => {
     try {
         const message = await getString(stringKey, 'mod_oercollection', param);
-        addToast(message, {
+        await addToast(message, {
             type: type,
             delay: 5000
         });
+        setTimeout(() => {
+            const wrapper = document.querySelector('.toast-wrapper');
+            const toastEl = wrapper?.firstElementChild;
+            if (toastEl) {
+                toastEl.style.maxWidth = '95vw';
+                toastEl.style.width = 'fit-content';
+            }
+        }, 0);
     } catch (error) {
         notification.exception(error);
     }
