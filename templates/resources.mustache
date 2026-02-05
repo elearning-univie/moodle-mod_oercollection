@@ -85,15 +85,40 @@
 {{> mod_oercollection/api_warning }}
 
 {{#resourcecount}}
-    <div class="row py-1">
-        <div class="col-auto">
-            <a role="button" class="oer-action" data-action="select-all" data-select="true">
+    <div class="row py-1 align-items-center flex-wrap">
+        <div class="col-auto ms-1">
+            <a role="button" class="btn btn-secondary btn-sm oer-action me-1" data-action="select-all" data-select="true">
                 {{#str}} checkall, mod_oercollection {{/str}}
             </a>
-            <span class="text-primary mx-1">/</span>
-            <a role="button" class="oer-action" data-action="select-all" data-select="false">
+            <span class="me-1">|</span>
+            <a role="button" class="btn btn-secondary btn-sm oer-action" data-action="select-all" data-select="false">
                 {{#str}} checknone, mod_oercollection {{/str}}
             </a>
+        </div>
+        <div class="col-auto mb-1">
+            <label class="bg ms-3 me-2" for="editoptionselect">
+                {{#str}} selectdotdot, mod_oercollection {{/str}}
+            </label>
+            <select class="form-select d-inline-block w-auto" id="editoptionselect">
+                <option value="1">{{#str}} openselected, mod_oercollection {{/str}}</option>
+                <option value="2">{{#str}} showselected, mod_oercollection {{/str}}</option>
+                <option value="3">{{#str}} hideselected, mod_oercollection {{/str}}</option>
+                <option value="4">{{#str}} removeselected, mod_oercollection {{/str}}</option>
+            </select>
+        </div>
+        <div class="col-auto mb-1">
+            <a class="btn btn-primary oer-action" role="button" id="bulkbutton"
+               data-action="bulk-action"
+               data-oer-id="{{oerid}}"
+               data-bs-toggle="tooltip" title="Hooray!">
+                {{#str}} start, mod_oercollection {{/str}}
+            </a>
+        </div>
+        <div class="col-auto mb-1">
+            <div class="text-danger d-none" id="nothingselectedwarning"
+                 style="padding-bottom: 6px; padding-top: 6px;">
+                {{#str}} selectionwarning, mod_oercollection {{/str}}
+            </div>
         </div>
     </div>
 {{/resourcecount}}
