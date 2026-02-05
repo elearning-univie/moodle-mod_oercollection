@@ -23,36 +23,6 @@
     }
 }}
 
-<div class="row py-1">
-    <div class="d-flex p-0 flex-wrap">
-        <div class="p-1">
-            <label class="me-1" for="editoptionselect">
-                {{#str}} selectdotdot, mod_oercollection {{/str}}
-            </label>
-            <select class="form-select d-inline-block w-auto" id="editoptionselect">
-                <option value="1">{{#str}} openselected, mod_oercollection {{/str}}</option>
-                <option value="2">{{#str}} showselected, mod_oercollection {{/str}}</option>
-                <option value="3">{{#str}} hideselected, mod_oercollection {{/str}}</option>
-                <option value="4">{{#str}} removeselected, mod_oercollection {{/str}}</option>
-            </select>
-        </div>
-        <div class="p-1 ms-1 flex-grow-1">
-            <a class="btn btn-primary oer-action" role="button" id="bulkbutton"
-               data-action="bulk-action"
-               data-oer-id="{{oerid}}"
-               data-bs-toggle="tooltip" title="Hooray!">
-                {{#str}} start, mod_oercollection {{/str}}
-            </a>
-        </div>
-        <div class="p-1 ms-1 flex-grow-1">
-            <div class="text-danger d-none" id="nothingselectedwarning"
-                 style="padding-bottom: 6px; padding-top: 6px;">
-                {{#str}} selectionwarning, mod_oercollection {{/str}}
-            </div>
-        </div>
-    </div>
-</div>
-
 <div class="row py-1 mt-4">
     <h4>
         <a class="icons-collapse-expand notextdecoration" data-bs-toggle="collapse" href="#collapseOptions"

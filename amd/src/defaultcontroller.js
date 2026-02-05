@@ -26,11 +26,7 @@ export const init = () => {
         });
         const nothingselected = document.getElementById("nothingselectedwarning");
         if (nothingselected) {
-            if (status) {
-                nothingselected.classList.add("d-none");
-            } else {
-                nothingselected.classList.remove("d-none");
-            }
+            nothingselected.classList.add("d-none");
         }
     };
 
