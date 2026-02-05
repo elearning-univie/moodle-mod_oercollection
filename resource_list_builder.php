@@ -239,3 +239,16 @@ function oercollection_validate_perpage($perpage) {
     $validperpages = [5, 10, 20, 50, 100, 5000];
     return in_array($perpage, $validperpages, true) ? $perpage : DEFAULT_PAGE_SIZE;
 }
+
+/**
+ * Get perpage value from URL param or user preference, validate and save.
+ *
+ * @return int Valid page size
+ */
+function oercollection_get_perpage() {
+    $perpagedefault = (int) get_user_preferences('mod_oercollection_perpage', DEFAULT_PAGE_SIZE);
+    $perpage = optional_param('perpage', $perpagedefault, PARAM_INT);
+    $perpage = oercollection_validate_perpage($perpage);
+    set_user_preference('mod_oercollection_perpage', $perpage);
+    return $perpage;
+}
