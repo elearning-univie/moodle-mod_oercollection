@@ -35,15 +35,14 @@ $searchstring = optional_param('searchstring', null, PARAM_TEXT);
 $filter = optional_param('filterdata', null, PARAM_TEXT);
 $page = optional_param('page', 0, PARAM_INT);
 $reset = optional_param('reset', null, PARAM_TEXT);
-$perpage = optional_param('perpage', DEFAULT_PAGE_SIZE, PARAM_INT);
 
 list ($course, $cm) = get_course_and_cm_from_cmid($id, 'oercollection');
 $context = context_module::instance($cm->id);
 
-$perpage = oercollection_validate_perpage($perpage);
-
 require_login($course, true, $cm);
 oercollection_require_capability($context, $cm->id);
+
+$perpage = oercollection_get_perpage();
 
 $oercollection = $DB->get_record('oercollection', ['id' => $cm->instance]);
 

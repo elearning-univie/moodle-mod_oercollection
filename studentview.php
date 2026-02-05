@@ -32,7 +32,6 @@ require_once(__DIR__ . '/resource_list_builder.php');
 global $PAGE, $OUTPUT, $DB;
 
 $id = required_param('id', PARAM_INT);
-$perpage = optional_param('perpage', DEFAULT_PAGE_SIZE, PARAM_INT);
 $pg = optional_param('page', 0, PARAM_INT);
 $filter = optional_param('oerefilter', 1, PARAM_INT);
 
@@ -40,10 +39,10 @@ list ($course, $cm) = get_course_and_cm_from_cmid($id, 'oercollection');
 
 $context = context_module::instance($cm->id);
 
-$perpage = oercollection_validate_perpage($perpage);
-
 require_login($course, false, $cm);
 require_capability('mod/oercollection:view', $context);
+
+$perpage = oercollection_get_perpage();
 
 $oercollection = $DB->get_record('oercollection', ['id' => $cm->instance]);
 

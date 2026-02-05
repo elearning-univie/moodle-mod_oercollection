@@ -32,13 +32,12 @@ global $PAGE, $OUTPUT, $DB, $CFG;
 $cmid = required_param('id', PARAM_INT);
 $filter = optional_param('oerefilter', 1, PARAM_INT);
 $page = optional_param('page', 0, PARAM_INT);
-$perpage = optional_param('perpage', DEFAULT_PAGE_SIZE, PARAM_INT);
 $deleted = optional_param('del', 0, PARAM_INT);
-
-$perpage = oercollection_validate_perpage($perpage);
 
 list ($course, $cm) = get_course_and_cm_from_cmid($cmid, 'oercollection');
 require_login($course, false, $cm);
+
+$perpage = oercollection_get_perpage();
 
 $context = context_module::instance($cm->id);
 oercollection_require_capability($context, $cmid);
