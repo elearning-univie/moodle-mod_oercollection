@@ -44,5 +44,6 @@ $string['uploaddate'] = 'Veröffentlicht am:&nbsp;';
 $string['disciplines'] = 'Disziplin';
 $string['mediatype'] = 'Medientyp';
 $string['languages'] = 'Sprache';
+$string['resourcetype'] = 'Material';
 $string['resourceunavailable'] = 'Ressourcendaten sind derzeit nicht verfügbar. Bitte kontaktieren Sie Ihren Administrator.';
 $string['resourceloadfailed'] = 'Ressourcendaten konnten nicht geladen werden. Möglicherweise liegt ein Problem mit der OERhub-Server-URL-Konfiguration vor. Bitte kontaktieren Sie Ihren Administrator.';
