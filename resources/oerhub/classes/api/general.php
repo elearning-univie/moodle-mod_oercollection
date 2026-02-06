@@ -83,6 +83,10 @@ class general extends \mod_oercollection\api\general {
                 $decodedvalues['disciplines'] = [['id' => $filteroptions['disciplines']]];
             }
 
+            if (!empty($filteroptions['resourcetype'])) {
+                $decodedvalues['learningRTs'] = [['id' => $filteroptions['resourcetype']]];
+            }
+
             if (!empty($filteroptions['mediatype']) && $filteroptions['mediatype'] != '') {
                 $decodedvalues['mediaTypes'] = [$filteroptions['mediatype']];
             }
@@ -114,6 +118,7 @@ class general extends \mod_oercollection\api\general {
         $response = $this->call_repo($searchstring);
 
         $jsondata = json_decode($response, true);
+
         $results = [];
 
         if ($response !== false && $jsondata !== null && isset($jsondata['data']['hits']['hits'])) {
@@ -166,6 +171,7 @@ class general extends \mod_oercollection\api\general {
             'actionurl' => $this->baseurl,
             'filteroptions' => [
                 $this->create_filter_option('disciplines', $jsondata['disciplines'], $filteroptions['disciplines'][0] ?? null, 'id', $namelang),
+                $this->create_filter_option('resourcetype', $jsondata['learningRTs'] ?? [], $filteroptions['learningRTs'][0] ?? null, 'id', $namelang),
                 $this->create_filter_option('mediatype', $jsondata['mediaType'], $filteroptions['mediaTypes'][0] ?? null),
                 $this->create_filter_option('languages', $jsondata['languages'], $filteroptions['languages'][0] ?? null, 'id', $namelang),
             ],
@@ -177,17 +183,22 @@ class general extends \mod_oercollection\api\general {
     }
 
     private function create_filter_option($name, $data, $selectedOption = null, $valueKey = null, $labelKey = null) {
-        $options = array_map(function($item) use ($selectedOption, $valueKey, $labelKey) {
+        $options = [];
+        foreach ($data as $item) {
             $value = $valueKey ? $item[$valueKey] : $item;
             $optionlabel = $labelKey ? $item[$labelKey] : $item;
 
-            return [
+            // Skip items with empty labels, created empty fields in the dropdown.
+            if ($labelKey && empty(trim($optionlabel))) {
+                continue;
+            }
+
+            $options[] = [
                 'value' => $value,
                 'optionlabel' => $optionlabel,
                 'selected' => $selectedOption && ($selectedOption['id'] ?? $selectedOption) == $value
             ];
-        }, $data);
-
+        }
         return [
             'name' => $name,
             'label' => get_string($name, 'oerapi_oerhub'),
