@@ -319,7 +319,7 @@ class general extends \mod_oercollection\api\general {
         ];
 
         if (!is_null($resourceid)) {
-            $serverurl .= $resourceid;
+            $serverurl = rtrim($serverurl, '/') . '/' . $resourceid;
             $curloptions[CURLOPT_CUSTOMREQUEST] = 'GET';
         } else {
             $curloptions[CURLOPT_CUSTOMREQUEST] = 'POST';

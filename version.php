@@ -31,7 +31,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'mod_oercollection';
-$plugin->version = 2025080801.09;
-$plugin->release = 'v5.0-r2';
+$plugin->version = 2025080801.1;
+$plugin->release = 'v5.1-r2';
 $plugin->requires = 2025041400;
 $plugin->maturity = MATURITY_STABLE;

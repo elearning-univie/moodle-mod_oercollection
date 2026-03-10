@@ -45,7 +45,7 @@ Configuration
 The following admin settings are available under *Site administration > Plugins > Activity modules > OER Collection*:
 
 * **Active OER API provider** (`mod_oercollection/activeoerapi`): If two OER API providers are present due to duplicate installation or previous versions: select which OER API provider plugin should be set active.
-* **Request URL** (`oerapi_oerhub/requesturl`): The URL of the OERhub server. Default: `https://oerhub.at/search/`
+* **Request URL** (`oerapi_oerhub/requesturl`): The URL of the OERhub server. Default: `https://portal.oerhub.at/search`
 * **Filter media type** (`oerapi_oerhub/filtermediatype`): Optional. Restrict displayed media types by entering a comma-separated list of file extensions (e.g. `mp4,pdf`). If left empty, all media types are shown.
 * **Media type icon** (`oerapi_oerhub/mediatypeicon`): Optional. Define icons for each displayed media type as a key/value pair in JSON style, where key is the mediatype in OERhub and value is the Moodle icon (e.g. `{"pdf":"f/pdf"}`). If left empty, OER will be displayed without an icon.
 
