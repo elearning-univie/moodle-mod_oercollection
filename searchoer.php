@@ -73,6 +73,7 @@ $PAGE->add_body_class('limitedwidth');
 $PAGE->requires->js_call_amd('mod_oercollection/searchcontroller', 'init');
 $PAGE->requires->js_call_amd('mod_oercollection/resourcecontroller', 'init');
 $PAGE->requires->js_call_amd('mod_oercollection/defaultcontroller', 'init');
+$PAGE->requires->js_call_amd('mod_oercollection/sync_controller', 'init');
 
 
 $renderer = $PAGE->get_renderer('core');

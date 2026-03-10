@@ -24,7 +24,7 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-$defaultrequesturl = 'https://oerhub.at/search/';
+$defaultrequesturl = 'https://portal.oerhub.at/search/';
 $settings->add(new admin_setting_configtext('oerapi_oerhub/requesturl', get_string('requesturlsetting', 'oerapi_oerhub'),
     get_string('requesturlsettingdesc', 'oerapi_oerhub'), $defaultrequesturl, PARAM_URL));
 

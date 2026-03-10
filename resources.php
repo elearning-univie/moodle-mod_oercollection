@@ -133,6 +133,7 @@ $templatecontext['page'] = $pagedresources;
 
 $PAGE->requires->js_call_amd('mod_oercollection/resourcecontroller', 'init');
 $PAGE->requires->js_call_amd('mod_oercollection/defaultcontroller', 'init');
+$PAGE->requires->js_call_amd('mod_oercollection/sync_controller', 'init');
 
 // Output rendering
 echo $OUTPUT->header();

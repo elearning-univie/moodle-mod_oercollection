@@ -25,11 +25,11 @@
 
 <div class="row py-1 align-items-center flex-wrap">
     <div class="col-auto ms-1">
-        <a role="button" class="btn btn-secondary btn-sm oer-action me-1" data-action="select-all" data-select="true">
+        <a href="#" data-action="select-all" data-select="true">
             {{#str}}checkall, mod_oercollection{{/str}}
         </a>
-        <span class="me-1">|</span> 
-        <a role="button" class="btn btn-secondary btn-sm oer-action" data-action="select-all" data-select="false">
+        <span class="ms-1 me-1">/</span> 
+        <a href="#" data-action="select-all" data-select="false">
             {{#str}}checknone, mod_oercollection{{/str}}
         </a>
     </div>
@@ -95,6 +95,32 @@
         </div>
     </div>
 {{/oersearchresultlist}}
+
+{{#foundcount}}
+<div class="row py-1 align-items-center flex-wrap">
+    <div class="col-auto mb-1">
+        <label class="ms-3 me-2" for="editoptionselect_mirror">
+            {{#str}} selectdotdot, mod_oercollection {{/str}}
+        </label>
+        <select class="form-select d-inline-block w-auto" id="editoptionselect_mirror">
+            <option value="1">{{#str}} openselected, mod_oercollection {{/str}}</option>
+            <option value="5">{{#str}} addselected, mod_oercollection {{/str}}</option>
+        </select>
+    </div>
+    <div class="col-auto mb-1">
+        <a role="button" class="btn btn-primary oer-action" id="bulkbutton_mirror"
+           data-action="bulk-action"
+           data-oer-id="{{oerid}}">
+            {{#str}} start, mod_oercollection {{/str}}
+        </a>
+    </div>
+    <div class="col-auto mb-1">
+        <div class="text-danger d-none" id="nothingselectedwarning_mirror" style="padding-bottom: 6px; padding-top: 6px;">
+            {{#str}} selectionwarning, mod_oercollection {{/str}}
+        </div>
+    </div>
+</div>
+{{/foundcount}}
 
 <div class="row py-1 mt-4">
     <h4>
