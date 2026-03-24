@@ -42,7 +42,10 @@ $context = context_module::instance($cm->id);
 require_login($course, true, $cm);
 oercollection_require_capability($context, $cm->id);
 
-$perpage = oercollection_get_perpage();
+$perpagedefault = (int) get_user_preferences('mod_oercollection_perpage', 20);
+$perpage = optional_param('perpage', $perpagedefault, PARAM_INT);
+$perpage = oercollection_validate_perpage($perpage);
+set_user_preference('mod_oercollection_perpage', $perpage);
 
 $oercollection = $DB->get_record('oercollection', ['id' => $cm->instance]);
 

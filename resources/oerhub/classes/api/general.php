@@ -76,7 +76,7 @@ class general extends \mod_oercollection\api\general {
         $decodedvalues = ['query' => $searchstring, 'size' => $size, 'page' => $page];
         $showfilter = null;
 
-        if ($filteroptions != '{}' && !is_null($filteroptions)) {
+        if (!empty($filteroptions) && $filteroptions !== '{}') {
             $filteroptions = json_decode($filteroptions, true);
 
             if (!empty($filteroptions['disciplines'])) {

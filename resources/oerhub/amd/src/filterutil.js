@@ -63,6 +63,27 @@ export const init = () => {
         }
     };
 
+    let preserveFilter = false;
+
+    // Clear filter when a new search is submitted.
+    const form = document.getElementById('searchform');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            if (preserveFilter) {
+                preserveFilter = false;
+                return;
+            }
+            const isFilterSubmit = e.submitter && e.submitter.id === 'submitfilter';
+            const isResetSubmit = e.submitter && e.submitter.name === 'reset';
+            if (!isFilterSubmit && !isResetSubmit) {
+                const filterInput = document.getElementById('filterdata');
+                if (filterInput) {
+                    filterInput.value = '';
+                }
+            }
+        });
+    }
+
     attachEvent('submitfilter', 'click', function(e) {
         if (!readFilter()) {
             e.preventDefault();
@@ -71,6 +92,7 @@ export const init = () => {
 
     attachEvent('perpage', 'change', function () {
         if (readFilter()) {
+            preserveFilter = true;
             this.form.submit();
         }
     });
