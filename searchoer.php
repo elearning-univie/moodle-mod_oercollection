@@ -111,6 +111,7 @@ if ($searchform === null) {
     }
 }
 
+$PAGE->activityheader->set_description('');
 echo $OUTPUT->header();
 echo $OUTPUT->render_from_template('mod_oercollection/searchoer', $templatecontext);
 

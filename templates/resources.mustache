@@ -33,7 +33,35 @@
         "oerid": 123
     }
 }}
-<div class="row mt-1 mb-3">
+<div class="row py-3">
+    <div class="col">
+        <h3 class="h5 mb-0">
+            {{#str}} resources, mod_oercollection {{/str}}
+        </h3>
+    </div>
+</div>
+
+<div class="row py-1">
+    <div class="col">
+        {{#oerexists}}
+            <span class="fw-bold" id="oer-resource-counts"
+                data-total="{{oernumber}}"
+                data-hidden="{{oernumberhidden}}"
+                data-string-key="availableresourcesnumberinfo">
+                {{#str}}
+                    availableresourcesnumberinfo, mod_oercollection, { "total": {{oernumber}}, "hidden": {{oernumberhidden}} }
+                {{/str}}
+            </span>
+        {{/oerexists}}
+        {{^oerexists}}
+            <span class="fw-bold">
+                {{#str}} noresources, mod_oercollection {{/str}}
+            </span>
+        {{/oerexists}}
+    </div>
+</div>
+
+<div class="row mt-2 mb-3">
     <div class="col-auto">
         {{#searchoer}}
             <a class="btn btn-primary me-2" href="{{searchoer}}">
@@ -45,40 +73,6 @@
                 {{#str}} studentpreviewlink, mod_oercollection {{/str}}
             </a>
         {{/studentpreviewlink}}
-    </div>
-</div>
-
-<div class="row py-3">
-    <div class="col">
-        <h3 class="h5 mb-0">
-            {{#str}} resources, mod_oercollection {{/str}}
-        </h3>
-    </div>
-</div>
-
-<div class="row py-0">
-    <div class="table-responsive">
-        <table class="table table-borderless mb-0">
-            <tbody>
-            <tr>
-                {{#oerexists}}
-                    <td class="fw-bold ps-0 w-100" id="oer-resource-counts"
-                        data-total="{{oernumber}}"
-                        data-hidden="{{oernumberhidden}}"
-                        data-string-key="availableresourcesnumberinfo">
-                        {{#str}}
-                            availableresourcesnumberinfo, mod_oercollection, { "total": {{oernumber}}, "hidden": {{oernumberhidden}} }
-                        {{/str}}
-                    </td>
-                {{/oerexists}}
-                {{^oerexists}}
-                    <td class="fw-bold ps-0 w-100">
-                        {{#str}} noresources, mod_oercollection {{/str}}
-                    </td>
-                {{/oerexists}}
-            </tr>
-            </tbody>
-        </table>
     </div>
 </div>
 
