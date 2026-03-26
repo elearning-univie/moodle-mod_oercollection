@@ -136,6 +136,7 @@ $PAGE->requires->js_call_amd('mod_oercollection/defaultcontroller', 'init');
 $PAGE->requires->js_call_amd('mod_oercollection/sync_controller', 'init');
 
 // Output rendering
+$PAGE->activityheader->set_description('');
 echo $OUTPUT->header();
 echo $OUTPUT->render_from_template('mod_oercollection/resources', $templatecontext);
 echo $OUTPUT->paging_bar($filteredcount, $page, $perpage, $homeurl);
