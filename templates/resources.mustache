@@ -80,17 +80,9 @@
 
 {{#resourcecount}}
     <div class="row py-1 align-items-center flex-wrap">
-        <div class="col-auto ms-1">
-            <a href="#" data-action="select-all" data-select="true">
-                {{#str}} checkall, mod_oercollection {{/str}}
-            </a>
-            <span class="ms-1 me-1">/</span>
-            <a href="#" data-action="select-all" data-select="false">
-                {{#str}} checknone, mod_oercollection {{/str}}
-            </a>
-        </div>
+        
         <div class="col-auto mb-1">
-            <label class="bg ms-3 me-2" for="editoptionselect">
+            <label class="bg ms-2 me-2" for="editoptionselect">
                 {{#str}} selectdotdot, mod_oercollection {{/str}}
             </label>
             <select class="form-select d-inline-block w-auto" id="editoptionselect">
@@ -111,6 +103,17 @@
             <div class="text-danger d-none" id="nothingselectedwarning"
                  style="padding-bottom: 6px; padding-top: 6px;">
                 {{#str}} selectionwarning, mod_oercollection {{/str}}
+            </div>
+        </div>
+        <div>
+            <div class="col-auto ms-2">
+                <a href="#" data-action="select-all" data-select="true">
+                    {{#str}} checkall, mod_oercollection {{/str}}
+                </a>
+                <span class="ms-1 me-1">/</span>
+                <a href="#" data-action="select-all" data-select="false">
+                    {{#str}} checknone, mod_oercollection {{/str}}
+                </a>
             </div>
         </div>
     </div>
@@ -249,7 +252,7 @@
 {{#resourcecount}}
     <div class="row py-1 align-items-center flex-wrap">
         <div class="col-auto mb-1">
-            <label class="bg ms-3 me-2" for="editoptionselect_mirror">
+            <label class="bg ms-2 me-2" for="editoptionselect_mirror">
                 {{#str}} selectdotdot, mod_oercollection {{/str}}
             </label>
             <select class="form-select d-inline-block w-auto" id="editoptionselect_mirror">
