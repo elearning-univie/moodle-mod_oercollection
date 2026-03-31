@@ -12,9 +12,13 @@ v5.1-r1 (2026-02-06)
 * [FEATURE] Change notifications to use toast notifications
 * [FEATURE] Updates to the plugin css for the resource cards
 * [FEATURE] Centralized code for resources
+* [FEATURE] Further changes to the implementation of the subplugin  
+* [FEATURE] Update langstrings and readme for OERhub relaunch
 * [FIX] Fix filter not visible is no results
 * [FIX] Fix date-to filter to include the search year
 * [FIX] Fix warnings if OERhub is not available
+* [FIX] Remove unneeded hover text of a button
+* [FIX] Fix resource page layout (CSS further changes)
 
 ## v5.0-r3 (2026-04-01)
 -----------
