@@ -17,7 +17,7 @@
 /**
  * Admin settings of the wordcloud plugin
  *
- * @package    mod_wordcloud
+ * @package    oerapi_oerhub
  * @copyright  2020 University of Vienna
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
