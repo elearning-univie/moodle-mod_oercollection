@@ -1,7 +1,7 @@
 # CHANGELOG
 ===================
 
-v5.1-r1 (2026-02-06)
+v5.1-r1 (2026-03-31)
 -----------
 * Moodle 5.1 compatible version
 * [FEATURE] Merged oerapi_oerhub subplugin into main repository (#105)
