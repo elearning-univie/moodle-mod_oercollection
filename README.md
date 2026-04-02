@@ -3,7 +3,7 @@ OER Collection
 
 This file is part of the mod_oercollection plugin for Moodle - <http://moodle.org/>
 
-*Author:* Angela Baier, Adrian Czermak
+*Author:* Angela Baier, Adrian Czermak, Karri Pajarinen
 
 *Copyright:* 2024 [University of Vienna](https://www.univie.ac.at/)
 
@@ -11,14 +11,24 @@ This file is part of the mod_oercollection plugin for Moodle - <http://moodle.or
 
 Description
 -----------
-With the OER collection resource, you can search for and find available Open Educational Resources (OER) from the [OERhub](https://oerhub.at) and embed them directly into a Moodle course.
+The OER Collection plugin enables teachers to easily search, select, and integrate Open Educational Resources (OER) directly within Moodle courses. By connecting to the external repository [OER-Directory](https://portal.oerhub.at/en/) (part of the Austrian [OERhub](https://www.oerhub.at/en/)), it provides seamless access to quality-assured, openly licensed materials and supports their didactic integration into teaching scenarios.
 
 Usage
 -----------
-Teachers want to search for published Open Educational Resources (OER) via [OERhub](https://oerhub.at) to use them in their own lecture, such as documents, videos, podcasts or other materials. In order to refine their search, it is possible to filter the results according to various criteria: discipline, media type, language and published from/ to.
-OER of choice can be added easily to the OER Collection and can be supplemented with further notes for didactic purpose.
+The OER Collection allows teachers to create and manage collections of OER from external OER infrastructures and make them easily available for students:
 
-Students can access the related OER directly via the provided link in the module.
+* **Search and discover OER** within Moodle using a centralized interface
+* **Filter results** based on relevant metadata such as format, subject or licensing
+* **Preview and select resources** without leaving the learning environment
+* **Integrate OER directly into courses** as structured learning elements
+* **Provide didactic context**, such as assignments, learning goals, or instructions
+
+Furthermore, the plugin ensures **transparency of licensing information**, including Creative Commons licenses, helping users to understand reuse conditions and comply with legal requirements.
+
+**Example use cases**
+* A lecturer searches for openly licensed videos on a specific topic and embeds them directly into a Moodle course with guiding questions.
+* A course designer integrates multiple OER into a structured learning sequence, adding context and tasks for students.
+* A teacher reuses existing OER and adapts them for a specific teaching scenario without leaving Moodle.
 
 Requirements
 -----------
@@ -28,7 +38,7 @@ The plugin is available for Moodle 4.4+.
 
 Installation
 -----------
-* Copy the code directly to the mod/oercollection directory.
+* Copy the code directly to the moodleroot/mod/oercollection directory.
 * Log into Moodle as administrator.
 * Open the administration area (http://your-moodle-site/admin) to start the installation automatically.
 
