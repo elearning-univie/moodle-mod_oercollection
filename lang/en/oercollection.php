@@ -55,7 +55,7 @@ $string['linkhiddenresources'] = '{$a} - hidden for students';
 $string['linkvisibleresources'] = '{$a} - visible for students';
 $string['manageoerapiplugins'] = 'Manage OER-API plugins';
 $string['modulename'] = 'OER Collection';
-$string['modulename_help'] = 'With the OER collection activity, you can search for and find available Open Educational Resources (OER) from the <a href="https://oerhub.at">OERhub</a> and embed them directly into a Moodle course.';
+$string['modulename_help'] = 'The OER Collection plugin enables teachers to easily search, select, and integrate Open Educational Resources (OER) directly within Moodle courses. By connecting to the external repository <a href="https://portal.oerhub.at/en/" target="_blank">OER-Directory</a> (part of the Austrian <a href="https://www.oerhub.at/en/" target="_blank">OERhub</a>), it provides seamless access to quality-assured, openly licensed materials and supports their didactic integration into teaching scenarios.';
 $string['modulenameplural'] = 'OER Collections';
 $string['move'] = 'Move';
 $string['movedinfomessage'] = 'A resource has been moved.';
@@ -75,30 +75,14 @@ $string['oercommentdescription_help'] = 'Add specific information to a resource 
 $string['oercommentname'] = 'Annotation name';
 $string['oercommentname_help'] = 'Define an individual name for your annotations. You can use this to indicate specifically what type of information is contained in the description of the annotations.';
 $string['oerresourcelink'] = 'Edit resources';
-$string['oersearchlink'] = 'Search in OERHub';
+$string['oersearchlink'] = 'Search in OER-Directory';
 $string['of'] = ', of:';
 $string['onlyhidden'] = 'Hidden resources';
 $string['onlyvisible'] = 'Visible resources';
 $string['openresource'] = 'Open resource';
 $string['openselected'] = 'Open selected resources';
 $string['options'] = 'Options';
-$string['overviewinfo'] = '<details><summary> <i class="icon fa fa-info-circle fa-fw" aria-hidden="true"></i>What are OER and what can you use them for?</summary>
-<p dir="ltr" style="text-align: left;">
-</p>
-<p><strong>Open Educational Resources (OER)</strong></p>
-<ul>
-  <li>OER are made available for free to use, edit and redistribute.</li>
-  <li>Special licence models that regulate the further use of the material are used.</li>
-</ul>
-<p>
-  <br><strong>OER in your Moodle course</strong>
-  <br>You can link suitable resources in your Moodle course in just a few steps and make them available to your students:</p>
-<ol>
-  <li>Enter a search term and select optional filters if desired.</li>
-  <li>Select suitable resources.</li>
-  <li>Add contextualisation.</li>
-</ol>
-</details>';
+$string['overviewinfo'] = '<details><summary> <i class="icon fa fa-info-circle fa-fw" aria-hidden="true"></i>What are OER and what can you use them for?</summary> <p dir="ltr" style="text-align: left;"> </p> <p><strong>Open Educational Resources (OER)</strong></p> <ul> <li>OER are made available for free to use, edit and redistribute.</li> <li>Special licence models that regulate the further use of the material are used.</li> </ul> <p> <br><strong>OER in your Moodle course</strong> <br>You can link suitable resources in your Moodle course in just a few steps and make them available to your students:</p> <ol> <li>Enter a search term and select optional filters if desired.</li> <li>Select suitable resources.</li> <li>Add contextualisation.</li> </ol></details>';
 $string['pagetitle'] = 'OER Collection';
 $string['pluginadministration'] = 'OER Collection Administration';
 $string['pluginname'] = 'OER Collection';
@@ -109,17 +93,14 @@ $string['removeselected'] = 'Remove from collection';
 $string['resourceexistsinfomessage'] = 'This resource has already been added to the collection.';
 $string['resources'] = 'Resources';
 $string['resourcesperpage'] = 'Entries per page';
-$string['searchoerhub'] = 'Search in OERhub';
-$string['searchoerhub_help'] = 'The <a href="https://oerhub.at">OERhub</a> is a search engine for OER from the Austrian higher education sector, to which the archive systems of the following universities are connected: University of Graz, University of Innsbruck, University of Klagenfurt, University of Vienna, Graz University of Technology';
+$string['searchoerhub'] = 'Search in OER-Directory';
+$string['searchoerhub_help'] = 'The <a href="https://portal.oerhub.at/en/" target="_blank">OER-Directory</a> is a search engine for OER from the Austrian higher education sector. It is part of the Austrian <a href="https://www.oerhub.at/en/" target="_blank">OERhub</a> to which the archive systems of the following universities are connected: University of Graz, University of Innsbruck, University of Klagenfurt, University of Vienna, Graz University of Technology';
 $string['selectdotdot'] = 'With selected...';
 $string['selectionwarning'] = 'Select one/more resource(s)!';
 $string['showoer'] = 'Show';
 $string['showselected'] = 'Show selected resources';
 $string['start'] = 'Start';
-$string['studentinfodetailed'] = '<details><summary> <i class="icon fa fa-info-circle fa-fw" aria-hidden="true"></i>Find out more about the open educational resources displayed here.</summary>
-<p title=""></p>
-<p>The Open Educational Resources (OER) shown here are made available to you via the OERhub - the open search engine for OER from the Austrian higher education sector. As a students, you can use the OERhub to research further materials, but also for personal further education.</p>
-<p><a href="https://oerhub.at">Further information about the OERhub</a></p></details>';
+$string['studentinfodetailed'] = '<details><summary> <i class="icon fa fa-info-circle fa-fw" aria-hidden="true"></i>Find out more about the open educational resources displayed here.</summary> <p title=""></p> <p>The Open Educational Resources (OER) shown here are made available to you via the <a href="https://portal.oerhub.at/en/" target="_blank">OER-Directory</a>, the open search engine for OER from the Austrian higher education sector, which is part of the Austrian <a href="https://www.oerhub.at/en/" target="_blank">OERhub</a>. As a students, you can use the OER-Directory to research further materials, but also for personal further education.</p></details>';
 $string['studentpreviewlink'] = 'Student preview';
 $string['subplugintype_oerapi'] = 'OER-API';
 $string['subplugintype_oerapi_plural'] = 'OER-APIs';
