@@ -1,7 +1,7 @@
-CHANGELOG
+# CHANGELOG
 ===================
 
-v5.1-r1 (2026-03-31)
+##v5.1-r1 (2026-03-31)
 -----------
 * Moodle 5.1 compatible version
 * [FEATURE] Merged oerapi_oerhub subplugin into main repository (#105)
@@ -20,13 +20,17 @@ v5.1-r1 (2026-03-31)
 * [FIX] Remove unneeded hover text of a button
 * [FIX] Fix resource page layout (CSS further changes)
 
-v5.0-r2 (2025-12-29)
+## v5.0-r3 (2026-04-01)
+-----------
+* [FEATURE] Minor update related to the relaunch of OERhub
+
+## v5.0-r2 (2025-12-29)
 -----------
 * [FIX] Fixed some CSS/Boostrap bugs
 * [FEATURE] Changed gitignore to keep the subplugin folder [github PR #1 @Menrath]
 * [FIX] Fixed filter and options dropdown function (oerapi_oerhub)
 
-v5.0-r1 (2025-08-08)
+## v5.0-r1 (2025-08-08)
 -----------
 * Moodle 5.0 compatible version
 * [FIX] Fixed bug with pagination of ressources on the student view
@@ -34,14 +38,14 @@ v5.0-r1 (2025-08-08)
 * [FIX] Fixed that support for privacy API is accepted in Moodle
 * [FIX] Fixed incorrect langstring (oerapi_oerhub) 
 
-v4.5-r3 (2025-05-21)
+## v4.5-r3 (2025-05-21)
 -----------
 * [FIX] Bugfix double occurance in admin tree
 * [FEATURE] Add headline to student preview page
 * [FIX] Correction of details on installation (readme.md) (oerapi_oerhub)
 * [FEATURE] Add default value for admin setting 'requesturl' (oerapi_oerhub) 
 
-v4.5-r2 (2025-03-07)
+## v4.5-r2 (2025-03-07)
 -----------
 * [FIX] Change the position of the Student preview - button
 * [FIX] Bugfix for add/ edit annotations of resources
@@ -55,11 +59,11 @@ v4.5-r2 (2025-03-07)
 * [FEATURE] Implement check to the published from/ published to - filter for results (oerapi_oerhub)
 * [FEATURE] Add readme and changelog to the plugin repository (oerapi_oerhub)
 
-v4.5-r1 (2025-02-14)
+## v4.5-r1 (2025-02-14)
 -----------
 * [FIX] Minor bug fixes
 * Moodle 4.5 compatible version
 
-v4.4-r1 (2025-02-14)
+## v4.4-r1 (2025-02-14)
 -----------
 * Moodle 4.4 compatible version
