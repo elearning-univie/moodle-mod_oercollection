@@ -25,7 +25,6 @@
 * [FEATURE] Minor update related to the relaunch of OERhub
 
 ## v5.0-r2 (2025-12-29)
------------
 * [FIX] Fixed some CSS/Boostrap bugs
 * [FEATURE] Changed gitignore to keep the subplugin folder [github PR #1 @Menrath]
 * [FIX] Fixed filter and options dropdown function (oerapi_oerhub)
